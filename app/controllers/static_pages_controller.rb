@@ -88,6 +88,13 @@ class StaticPagesController < ApplicationController
   def contact
   end
 
+  def privacy
+  end
+
+  def terms
+  end
+
+
   def create_payment_intent    
     Stripe.api_key = ENV['STRIPE_SECRET_KEY_VOCALVOTERS']
     

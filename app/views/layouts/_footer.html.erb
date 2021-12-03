@@ -1,12 +1,20 @@
-<footer class="footer">
-  <small>
-    VocalVoters.com by Metacortex
-  </small>
+<footer class="footer">  
   <nav>
-    <ul>
-      <li><%= link_to "About",   about_path %></li>
-      <li><%= link_to "Contact", contact_path %></li>
-      <li><%= link_to "Login",   login_path %></li>
-    </ul>
+    <div class="col-md-4">
+      <%= link_to "Privacy Policy", privacy_path, target: "_blank" %>
+      |
+      <%= link_to "Terms of Use", terms_path, target: "_blank" %>
+    </div>
+    <div class="col-md-4">
+      <center>
+      </center>
+    </div>
+    <div class="col-md-4">
+      <ul>
+	<li><%= link_to "About",   about_path %></li>
+	<li><%= link_to "Contact", contact_path %></li>
+	<li><%= link_to "Login",   login_path %></li>
+      </ul>
+    </div>
   </nav>
 </footer>
