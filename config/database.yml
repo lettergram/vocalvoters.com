@@ -25,6 +25,6 @@ production:
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   database: vocalvoters_production
-  username: vocalvoters_app
+  username: vocalvoters_app  
   password: <%= ENV['VOCALVOTERS_DATABASE_PASSWORD'] %>
 
