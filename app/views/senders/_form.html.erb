@@ -1,0 +1,66 @@
+<%= form_with(model: sender) do |form| %>
+  <% if sender.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sender.errors.count, "error") %> prohibited this sender from being saved:</h2>
+
+      <ul>
+        <% sender.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :name %>
+	<%= form.text_field :name, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :email %>
+	<%= form.text_field :email, class: 'form-control' %>
+      </div>
+    </div>    
+
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :zipcode %>
+	<%= form.number_field :zipcode, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :county %>
+	<%= form.text_field :county, class: 'form-control' %>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :district %>
+	<%= form.text_field :district, class: 'form-control' %>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :state %>
+	<%= form.text_field :state, class: 'form-control' %>
+      </div>
+    </div>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="field">
+	<%= form.submit yield(:button_text), class: "btn btn-primary" %>
+      </div>
+    </div>    
+  </div>
+<% end %>

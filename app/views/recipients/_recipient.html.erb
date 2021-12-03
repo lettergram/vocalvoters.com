@@ -1,0 +1,65 @@
+<div class="recipient_card <%= recipient.position %>_card"
+     id="recipient_card_<%= recipient.id %>"
+     value="<%= recipient.id %>" style="cursor:pointer">
+  <%= recipient.name %>,
+  <% if recipient.level == 'federal' %>US<% else %><%= recipient.state %><% end %>
+  <%= recipient.position.capitalize %>
+  <br>
+  <% if recipient.level == 'federal' %>
+    <% if recipient.position == 'senator' %>
+      US
+      <%= recipient.position.capitalize %> from
+      <%= recipient.state %>
+    <% else %>
+      <%= recipient.state %>
+      <%= recipient.district.to_i.ordinalize %>
+      Congressional District
+    <% end %>
+  <% else %>
+    <%= recipient.state %>
+    <% if recipient.position != 'governor' %>
+      <% if recipient.position == 'senator' %>
+        Senator District
+      <% else %>
+        House District          
+      <% end %>
+      <%= recipient.district.to_i.ordinalize %>
+    <% else %>
+      Governor
+    <% end %>
+  <% end %>
+  <br>Phone #:
+  <%= number_to_phone(recipient.number_phone, area_code: true) %><br>
+  <% if recipient.contact_form.present? %>
+    Contact Form: <%=link_to 'Link',
+			     recipient.contact_form, target: "_blank" %>
+    <br>  
+  <% end %>
+  Mail: 
+    <%= recipient.address_line_1 %><br>
+    <%= recipient.address_city %>
+    <%= recipient.address_state %> <%= recipient.address_zipcode %>
+    <span id="recipient_address_<%= recipient.id %>"
+	  value="<%= recipient.address_line_1 %> <%= recipient.address_city %>
+		 <%= recipient.address_state %> <%= recipient.address_zipcode %>"></span>
+    <span id="recipient_name_<%= recipient.id %>" value="<%= recipient.name %>"></span>
+    
+    <span id="recipient_level_<%= recipient.id %>"
+	  value="<%= recipient.level %>"></span>
+    <span id="recipient_position_<%= recipient.id %>"
+	  value="<%= recipient.position %>"></span>
+    <span id="recipient_district_<%= recipient.id %>"
+	  value="<%= recipient.district %>"></span>
+
+    <span id="email_<%= recipient.id %>" 
+	  value="<%= recipient.email_address %>"></span>
+    <span id="fax_<%= recipient.id %>" 
+	  value="<%= recipient.number_fax %>"></span>
+    <span id="letter_<%= recipient.id %>" 
+	  value="<%= recipient.address_line_1 %> <%= recipient.address_city %>
+		 <%= recipient.address_state %> <%= recipient.address_zipcode %>"></span>
+    <span id="priority_<%= recipient.id %>" 
+	  value="<%= recipient.address_line_1 %> <%= recipient.address_city %>
+		 <%= recipient.address_state %> <%= recipient.address_zipcode %>"></span>
+    
+</div>

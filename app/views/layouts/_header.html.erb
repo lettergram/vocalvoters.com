@@ -1,0 +1,65 @@
+<nav class="navbar navbar-fixed-top navbar-default scroll-nav">  
+  <div class="container-fluid", style="width:80%">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle"
+	      data-toggle="collapse" data-target="#mynavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      	<%= link_to image_tag("vocalvoters_logos/vocalvoters.png",
+	  alt:"VocalVoters Logo", size: "132x27"),
+	  root_path, id: "logo",
+	  data: { no_turbolink: true },
+	    class: "navbar-brand-logo" %>
+    </div>
+    <div id="mynavbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+          <% if logged_in? %>
+	    <% if current_user.admin %>
+	      <li class="dropdown">
+		<a id="account" href="#" class="dropdown-toggle" data-toggle="dropdown">
+		  Data <b class="caret"></b>
+		</a>
+		<ul class="dropdown-menu">
+		  <li><%= link_to "Letters", letters_path %></li>
+		  <li><%= link_to "Senders", senders_path %></li>
+		  <li><%= link_to "Recipients", recipients_path %></li>
+		</ul>
+	      </li>
+	      <li class="dropdown">
+		<a id="account" href="#" class="dropdown-toggle" data-toggle="dropdown">
+		  Communications <b class="caret"></b>
+		</a>
+		<ul class="dropdown-menu">
+		  <li><%= link_to "Fax", faxes_path %></li>
+		  <li><%= link_to "Post", posts_path %></li>
+		  <li><%= link_to "Email", emails_path %></li>
+		</ul>
+	      </li>
+	    <% end %>
+	    <li class="dropdown">
+	      <a id="account" href="#" class="dropdown-toggle" data-toggle="dropdown">
+		Account <b class="caret"></b>
+	      </a>
+	      <ul class="dropdown-menu">
+		<% if current_user.admin %>
+		  <li><%= link_to "Users", users_path %></li>
+		<% end %>
+		<li><%= link_to "Profile", current_user %></li>
+		<li><%= link_to "Settings", edit_user_path(current_user) %></li>
+		<li class="divider"></li>
+		<li>
+                  <%= link_to "Log out", logout_path, method: :delete %>
+		</li>
+              </ul>
+            </li>
+          <% else %>
+	      <li><%= link_to "About", about_path %></li>
+	      <li><%= link_to "Add Your Concerns", contact_path %></li>
+	      <li><%= link_to "Free the Code", "https://github.com/lettergram/vocalvoters.com" %></li>
+          <% end %>
+	</ul>
+      </div>
+  </div>
+</nav>

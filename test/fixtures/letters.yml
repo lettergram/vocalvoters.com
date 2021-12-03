@@ -1,0 +1,26 @@
+
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+letter_one:
+  category: Guns
+  policy_or_law: 13A-11-7
+  tags: guns
+  sentiment: 1.0
+  body: This is my gun. Come and take it.
+  user: one
+
+letter_two:
+  category: Guns
+  policy_or_law: 14A-12-5
+  tags: guns
+  sentiment: 0.5
+  body: I don't like guns, but support peoples right.
+  user: two
+
+letter_three:
+  category: Voting
+  policy_or_law: HR1
+  tags: voting  
+  sentiment: 1.0
+  body: I'm pro voting year round!
+  user: two

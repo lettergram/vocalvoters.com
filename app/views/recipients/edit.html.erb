@@ -1,0 +1,12 @@
+<% provide(:title, 'Edit Recipient') %>
+<% provide(:button_text, 'Save changes') %>
+<h1>Editing Recipient</h1>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <%= render 'form', recipient: @recipient %>
+  </div>
+</div>
+
+<%= link_to 'Show', @recipient %> |
+<%= link_to 'Back', recipients_path %>

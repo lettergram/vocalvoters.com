@@ -1,0 +1,14 @@
+<% provide(:title, 'Edit Letter') %>
+<% provide(:button_text, 'Save changes') %>
+
+<h1>Editing Sender</h1>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <%= render 'form', sender: @sender %>
+  </div>
+</div>
+
+
+<%= link_to 'Show', @sender %> |
+<%= link_to 'Back', senders_path %>

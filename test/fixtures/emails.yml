@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email_address: MyString
+  sender: one
+  recipient: one
+  letter: one
+  payment: one
+
+two:
+  email_address: MyString
+  sender: two
+  recipient: two
+  letter: two
+  payment: two

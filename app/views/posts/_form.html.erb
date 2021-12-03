@@ -1,0 +1,62 @@
+<%= form_with(model: post) do |form| %>
+  <% if post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+        <% post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :address_line_1 %>
+    <%= form.text_field :address_line_1 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :address_line_2 %>
+    <%= form.text_field :address_line_2 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :address_city %>
+    <%= form.text_field :address_city %>
+  </div>
+
+  <div class="field">
+    <%= form.label :address_state %>
+    <%= form.text_field :address_state %>
+  </div>
+
+  <div class="field">
+    <%= form.label :address_zipcode %>
+    <%= form.text_field :address_zipcode %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sender_id %>
+    <%= form.text_field :sender_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :recipient_id %>
+    <%= form.text_field :recipient_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :letter_id %>
+    <%= form.text_field :letter_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :payment_id %>
+    <%= form.text_field :payment_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

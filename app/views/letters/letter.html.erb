@@ -1,0 +1,78 @@
+<style>
+  
+  <% if @template.present? %>
+    .from {
+      display: block;
+      padding-top: 2em;
+      min-height: 8em;
+      font-size: 1.1em;
+    }
+    .to {
+      display: block;
+      padding-top: 4em;
+      min-height: 15em;
+      font-size: 1.1em;
+    }
+    .recipient { display: none }
+  <% else %>
+    .to {
+      display: block;
+      padding-top: 4em;
+      min-height: 10em;
+      font-size: 1.1em;
+    }
+  <% end %>
+
+  .sender { display: none; }  
+  .main {
+      font-size: 1.1em;
+  },
+</style>
+
+<div class="from">
+  <div class="sender">
+  </div>
+</div>
+<div class="to">
+  <div class="recipient">
+    <%= @recipient_position.html_safe %> <%= @recipient_name.html_safe %><br>
+    <%= @recipient_location.html_safe %><br>
+    <% if @recipient.present? %>
+      <%= @recipient.address_line_1 %><br>
+      <%= @recipient.address_line_2 %>
+      <%= @recipient.address_city %> <%= @recipient.address_state %>,
+      <%= @recipient.address_zipcode %>
+    <% end %>
+  </div>
+</div>
+
+<div class="main">
+  <p>
+    <%= @recipient_name.html_safe %>,
+  </p>
+  
+  <p>
+    My name is <%= @sender_name.html_safe %> and I am writing to express that I 
+    <b><%= @sentiment %> <%= @letter.category %></b>.
+  </p>
+  
+  <p>  
+    Particlulary, I <b><%= @sentiment %> <%= @letter.policy_or_law %></b>.
+  </p>
+  
+  <%= simple_format(@letter.body) %>
+  
+  <p>
+    Thank you,<br>
+    <%= @sender_name.html_safe %><br>  
+    <%= @sender_region.html_safe %>
+    <%= @sender_region_verified.html_safe %>
+  </p>
+</div>
+
+<footer>
+  <center>
+    <small>
+    </small>
+  </center>
+</footer>

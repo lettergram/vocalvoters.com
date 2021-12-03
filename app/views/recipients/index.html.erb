@@ -1,0 +1,65 @@
+<% provide(:title, 'Recipients') %>
+
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+  <h1>
+  <div class="col-md-6 col-md-offset-3">
+    Recipients
+  </div>
+  <div class="col-md-3">
+    <%= link_to 'New Recipient', new_recipient_path %>
+  </div>
+  </h1>
+  <div class="col-md-12">
+    <hr>
+  </div>
+</div>
+
+<div class="row">
+  <table>
+    <thead>
+      <tr>
+	<th>Retired</th>
+	<th>Name</th>
+	<th>Position</th>
+	<th>Level</th>
+	<th>District</th>
+	<th>State</th>
+	<th>Number fax</th>
+	<th>Number phone</th>
+	<th>Email address</th>
+	<th>Address line 1</th>
+	<th>Address line 2</th>
+	<th>Address city</th>
+	<th>Address state</th>
+	<th>Address zipcode</th>
+	<th colspan="3"></th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% @recipients.each do |recipient| %>
+        <tr>
+	  <td><%= recipient.retired %></td>
+          <td><%= recipient.name %></td>
+          <td><%= recipient.position %></td>
+          <td><%= recipient.level %></td>
+          <td><%= recipient.district %></td>
+          <td><%= recipient.state %></td>
+          <td><%= recipient.number_fax %></td>
+          <td><%= recipient.number_phone %></td>
+          <td><%= recipient.email_address %></td>
+          <td><%= recipient.address_line_1 %></td>
+          <td><%= recipient.address_line_2 %></td>
+          <td><%= recipient.address_city %></td>
+          <td><%= recipient.address_state %></td>
+          <td><%= recipient.address_zipcode %></td>
+          <td><%= link_to 'Show', recipient %></td>
+          <td><%= link_to 'Edit', edit_recipient_path(recipient) %></td>
+          <td><%= link_to 'Destroy', recipient, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	</tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

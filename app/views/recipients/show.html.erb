@@ -1,0 +1,80 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @recipient.name %>
+</p>
+
+<p>
+  <strong>Retired:</strong>
+  <%= @recipient.retired %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @recipient.position %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @recipient.level %>
+</p>
+
+<p>
+  <strong>District:</strong>
+  <%= @recipient.district %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @recipient.state %>
+</p>
+
+<p>
+  <strong>Number fax:</strong>
+  <%= @recipient.number_fax %>
+</p>
+
+<p>
+  <strong>Number phone:</strong>
+  <%= @recipient.number_phone %>
+</p>
+
+<p>
+  <strong>Email address:</strong>
+  <%= @recipient.email_address %>
+</p>
+
+<p>
+  <strong>Contact form:</strong>
+  <%= @recipient.contact_form %>
+</p>
+
+<p>
+  <strong>Address line 1:</strong>
+  <%= @recipient.address_line_1 %>
+</p>
+
+<p>
+  <strong>Address line 2:</strong>
+  <%= @recipient.address_line_2 %>
+</p>
+
+<p>
+  <strong>Address city:</strong>
+  <%= @recipient.address_city %>
+</p>
+
+<p>
+  <strong>Address state:</strong>
+  <%= @recipient.address_state %>
+</p>
+
+<p>
+  <strong>Address zipcode:</strong>
+  <%= @recipient.address_zipcode %>
+</p>
+
+<%= link_to 'Edit', edit_recipient_path(@recipient) %> |
+<%= link_to 'Back', recipients_path %> |
+<%= link_to 'New Recipient', new_recipient_path %>

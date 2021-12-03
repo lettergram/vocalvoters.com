@@ -1,0 +1,114 @@
+<%= form_with(model: letter) do |form| %>
+  <% if letter.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(letter.errors.count, "error") %> prohibited this letter from being saved:</h2>
+
+      <ul>
+        <% letter.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6">
+      <%= form.label :category %>
+      <%= form.text_field :category, class: 'form-control' %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :policy_or_law %>
+      <%= form.text_field :policy_or_law, class: 'form-control' %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :tags %>
+      <%= form.text_field :tags, class: 'form-control' %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :sentiment %>
+      <%= form.select :sentiment,
+	  options_for_select([['Very Positive', 1.0], ['Positive', 0.5],
+	  ['Neutral', 0],['Negative', -0.5], ['Very Negative', -1.0]],
+	  @letter.sentiment), {}, { :class => 'form-control' } %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :target_level %>
+      <%= form.select :target_level,
+	 options_for_select([['All', 'all'], ['Federal', 'federal'],
+	 ['State', 'state'],['Local', 'local']], @letter.target_level),
+	 {}, { :class => 'form-control' } %>
+    </div>
+
+    <div class="col-md-6">
+      <%= form.label :target_state %>
+      <%= form.select :target_state,
+	  options_for_select([
+	  ['All', 'all'],
+	  ['Alabama', 'alabama'],
+	  ['Alaska', 'alaska'],
+	  ['Arizona', 'arizona'],
+	  ['Arkansas', 'arkansas'],
+	  ['California', 'california'],
+	  ['Colorado', 'colorado'],
+	  ['Connecticut', 'connecticut'],
+	  ['Delaware', 'delaware'],
+	  ['Florida', 'florida'],
+	  ['Georgia', 'georgia'],
+	  ['Hawaii', 'hawaii'],
+	  ['Idaho', 'idaho'],
+	  ['Illinois', 'illinois'],
+	  ['Indiana', 'indiana'],
+	  ['Iowa', 'iowa'],
+	  ['Kansas', 'kansas'],
+	  ['Kentucky', 'kentucky'],
+	  ['Louisiana', 'louisiana'],
+	  ['Maine', 'maine'],
+	  ['Maryland', 'maryland'],
+	  ['Massachusetts', 'massachusetts'],
+	  ['Michigan', 'michigan'],
+	  ['Minnesota', 'minnesota'],
+	  ['Mississippi', 'mississippi'],
+	  ['Missouri', 'missouri'],
+	  ['Montana', 'montana'],
+	  ['Nebraska', 'nebraska'],
+	  ['Navada', 'navada'],
+	  ['New Hampshire', 'new hampshire'],
+	  ['New Jersey', 'new jersey'],
+	  ['New Mexico', 'new mexico'],
+	  ['New York', 'new york'],
+	  ['North Carolina', 'north carolina'],
+	  ['North Dakota', 'north dakota'],
+	  ['Ohio', 'ohio'],
+	  ['Oklahoma', 'oklahoma'],
+	  ['Oregon', 'oregon'],
+	  ['Pennsylvania', 'pennsylvania'],
+	  ['Rhode Island', 'rhode island'],
+	  ['South Carolina', 'south carolina'],
+	  ['South Dakota', 'south dakota'],
+	  ['Tennessee', 'tennessee'],
+	  ['Texas', 'texas'],
+	  ['Utah', 'utah'],
+	  ['Vermont', 'vermont'],
+	  ['Virginia', 'virginia'],
+	  ['Washington', 'washington'],
+	  ['West Virginia', 'west virginia'],
+	  ['Wisconsin', 'wisconsin'],
+	  ['Wyoming', 'wyoming']], @letter.target_state),
+	  {}, { :class => 'form-control' } %>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12">
+      <%= form.label :body %>
+      <%= form.text_area :body, class: 'form-control' %>
+    </div>
+    <div class="col-md-4 col-md-offset-4">
+      <%= form.submit yield(:button_text), class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

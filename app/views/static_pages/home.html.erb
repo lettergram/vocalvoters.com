@@ -1,0 +1,235 @@
+<% provide(:title, "Home") %>
+<div class="center jumbotron">
+  <h1>
+    <%= image_tag 'vocalvoters_logos/vocalvoters-beta.png',
+	style: 'width:50%', class: "spashlogo" %>
+  </h1>  
+  <h2>
+    Share Your Opinion With Your Representatives<br>
+    <small>Send a Letter or Fax in 30 Seconds or Less</small>
+  </h2>
+</div>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <%= form_with url: govlookup_path, method: :get do |form| %>
+      <div class="row" id="address_form">
+	<div class="col-md-3">
+	  <div id='name_container' class="form-group" >
+	    <%= form.text_field :name,
+		placeholder: 'Your Full Name',
+		class: 'form-control' %>
+	  </div>
+	</div>
+	<div class="col-md-3">
+	  <div id='email_container' class="form-group" >
+	    <%= form.text_field :email,
+		placeholder: '@Email',
+		class: 'form-control' %>
+	  </div>
+	</div>
+	<div class="col-md-6">
+	  <div id='address_container' class="form-group" >
+	    <%= form.text_field :address,
+		placeholder: 'Address: 123 Street Address, ST 11111',
+		style: 'margin-bottom:1px',
+		class: 'form-control' %>
+	  </div>
+	</div>
+      </div>
+     <% end %>
+     <div class='row'>
+       <div class="col-md-4 col-md-offset-4">
+	 <center>
+	   <%= button_tag 'Contact Legislators',
+	       id: 'legislator_button',
+	       style: 'margin-top:1em;',
+	       data: { disable_with: "Please wait..." },
+	       class: "btn btn-primary" %>
+	 </center>
+       </div>
+     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <div id="legislator_selection"></div>
+  </div>
+</div>
+
+
+<div class="row" >
+  <div class="col-md-8 col-md-offset-2" id="concerns_selection" style="display:none;">
+    <br>
+    <br>
+    <h3>
+      <center>
+	<b>Select Concern for Legislation</b><br>
+      </center>
+    </h3>
+    <%= form_with url: govlookup_path, method: :get do |form| %>    
+      <div class="row" id="concerns_form">
+	<div class="col-md-3">
+	  <div id='category_container' class="form-group" >
+	    <%= form.select :category,
+		options_for_select(@options_category,
+		:selected => @selected_category),
+		{ :prompt => "Select Concern" },
+	        { :class => 'form-control' } %>
+	  </div>
+	</div>
+	<div class="col-md-3">
+	  <div id='sentiment_container' class="form-group" >
+	    <%= form.select :sentiment,
+		options_for_select(@options_sentiment,
+		:selected => @selected_sentiment),
+	        { :prompt => "Select Sentiment" },
+	        { :class => 'form-control' } %>
+	  </div>
+	</div>	
+	<div class="col-md-6">
+	  <div id='policy_or_law_container' class="form-group" >
+	    <%= form.select :policy_or_law,
+		options_for_select(@options_policy_or_law,
+		:selected => @selected_policy_or_law),
+		{ :prompt => "Select Policy" },	      
+	        { :class => 'form-control' } %>
+	  </div>
+	</div>
+      </div>
+    <% end %>
+    <div id="concerns_selection_bottom_buffer">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>    
+    </div>
+  </div>
+</div>
+
+<div class="row">  
+  <div class="col-md-6 col-md-offset-3" id="communications_selection" style="display:none;">
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+	<h3>
+	  <center>
+            <b>Send Concerns via</b><br>
+            <small style="font-size:0.5em">
+              ( Priority Mail $5 / Letter $3 / Fax $2 )
+            </small>
+	  </center>
+	</h3>
+      </div>
+      <div class="col-md-10 col-md-offset-1">
+	<div class="col-md-4">
+	  <center>
+            <%= button_tag 'Priority Mail', id: 'priority',
+		style: "font-size:1.5em;padding:0em 0.7em 0em 0.7em;margin:0.5em 0 0 0;",
+		class: 'btn btn-info send_button' %><br>
+            <small>
+              (Price: $<span id="priority_price">0</span>)
+            </small>
+	  </center>
+	</div>
+	<div class="col-md-4">
+	  <center>
+            <%= button_tag 'Letter', id: 'letter',
+		style: "font-size:1.5em;padding:0em 2em 0em 2em;margin:0.5em 0 0 0;",
+		class: 'btn btn-info send_button' %><br>
+            <small>
+              (Price: $<span id="letter_price">0</span>)
+            </small>
+	  </center>
+	</div>
+	<div class="col-md-4">
+	  <center>
+            <%= button_tag 'Fax', id: 'fax',
+		style: "font-size:1.5em;padding:0em 2em 0em 2em;margin:0.5em 0 0 0;",
+		class: 'btn btn-info send_button' %><br>
+            <small>(Price: $<span id="fax_price">0</span>)</small>
+	  </center>
+	</div>
+	<div class="col-md-4" style="display:none;">
+	  <center>
+            <%= button_tag 'Email', id: 'email',
+		style: "font-size:1.5em;padding:0em 2em 0em 2em;margin:0.5em 0 0 0;",
+		class: 'btn btn-info send_button' %><br>
+            <small>(Coming Soon<span style="display:none;" id="email_price">0</span>)</small>
+	  </center>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+<div id="payment_container" class="row" style="display:none;">
+  <br>
+  <br>
+  <br>
+  <div class="col-md-6 col-md-offset-3">
+    <br>
+    <br>
+    <h3>
+      <center>
+	<b>
+	  Pay
+	  <span id="price_to_send"></span>
+	  to Send
+	  <span id="communication_mode", value=""></span>
+	</b>
+	<br>
+      </center>
+    </h3>
+  </div>
+  <div class="col-md-4 col-md-offset-4">
+    <div id="payment_info">
+      <form id="payment-form">
+	<div id="card-element"><!--Stripe.js injects the Card Element--></div>
+	<button id="submit">
+	  <div class="spinner hidden" id="spinner"></div>
+	  <span id="button-text">Pay now</span>
+	</button>
+	<p id="card-error" role="alert"></p>
+	
+	<p>
+	  <div class="result-message hidden">
+	    <center>
+	      Payment succeeded!<br>
+	      We will send a confirmation email shortly.
+	      <br>
+	    </center>
+	  </div>
+	</p>
+      </form>
+    </div>
+    <div id="share_container" style="vertical-align:center;">
+      <center>
+	<b>Share this policy
+	<%= button_tag 'Copy Link', id: 'share_button',
+	    style: "font-size:0.8em;padding:0.2em 0.2em 0.2em 0.2em;margin:0.1em 0.1em 0.1em; 0.1em;",
+	    class: 'btn btn-default' %>
+	</b>
+      </center>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div id="iframe_container" class="col-md-8 col-md-offset-2" style="display:none;">
+    <h3>
+      <small><b>Sample of Communication</b></small>
+    </h3>
+    <iframe id="pdf_view" style="border:none;"></iframe>
+  </div>
+</div>
+
+<span id="stripe_pk" value="<%= @stripe_pk %>"></span>
+<%= javascript_pack_tag 'landing_page' %>

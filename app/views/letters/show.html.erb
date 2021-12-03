@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @letter.category %><br>
+  <strong>Policy or law:</strong>
+  <%= @letter.policy_or_law %><br>
+  <strong>Target Level:</strong>
+  <%= @letter.target_level %><br>
+  <strong>Target State:</strong>
+  <%= @letter.target_state %><br>
+  <strong>Created by:</strong>
+  <%= User.find_by(id: @letter.user_id).name %>
+</p>
+
+<p>
+  <strong>Sentiment:</strong>
+  <%= @letter.sentiment %>
+</p>
+
+<p>
+  <strong>Body:</strong><br>
+  <%= @letter.body %>
+</p>
+
+<p>
+  <b>Letter</b>:<br>
+  <iframe
+    src='/letters/<%= @letter.id %>.pdf' width="100%" height="780"
+    style="border:none;"></iframe>    
+</p>
+
+
+<%= link_to 'Edit', edit_letter_path(@letter) %> |
+<%= link_to 'Back', letters_path %>

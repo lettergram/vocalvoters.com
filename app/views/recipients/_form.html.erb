@@ -1,0 +1,202 @@
+<%= form_with(model: recipient) do |form| %>
+  <% if recipient.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(recipient.errors.count, "error") %> prohibited this recipient from being saved:</h2>
+
+      <ul>
+        <% recipient.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="field">
+	<%= form.label :name %>
+	<%= form.text_field :name, class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-4">      
+      <div class="field">
+	<%= form.label :level %>
+	<%= form.select :level,
+	    [['Local', 'local'],
+	    ['State', 'state'],
+	    ['Federal', 'federal']],
+	    { include_blank: true }, { class: 'form-control' } %>
+      </div>
+    </div>    
+
+    <div class="col-md-4">      
+      <div class="field">
+	<%= form.label :position %>
+	<%= form.select :position,
+	    [['Representative', 'representative'],
+	    ['Senator', 'senator'],
+	    ['Governor', 'governor']],
+	    { include_blank: true }, { class: 'form-control' } %>
+
+      </div>
+    </div>
+
+    <div class="col-md-4">      
+      <div class="field">
+	<%= form.label :state %>
+	<%= form.select :state,
+	    [['Alabama', 'AL'],
+	    ['Alaska', 'AK'],
+	    ['Arizona', 'AZ'],
+	    ['Arkansas', 'AR'],
+	    ['California', 'CA'],
+	    ['Colorado', 'CO'],
+	    ['Connecticut', 'CT'],
+	    ['Delaware', 'DE'],
+	    ['Florida', 'FL'],
+	    ['Georgia', 'GA'],
+	    ['Hawaii', 'HI'],
+	    ['Idaho', 'ID'],
+	    ['Illinois', 'IL'],
+	    ['Indiana', 'IN'],
+	    ['Iowa', 'IA'],
+	    ['Kansas', 'KS'],
+	    ['Kentucky', 'KY'],
+	    ['Louisiana', 'LA'],
+	    ['Maine', 'ME'],
+	    ['Maryland', 'MD'],
+	    ['Massachusetts', 'MA'],
+	    ['Michigan', 'MI'],
+	    ['Minnesota', 'MN'],
+	    ['Mississippi', 'MS'],
+	    ['Missouri', 'MO'],
+	    ['Montana', 'MT'],
+	    ['Nebraska', 'NE'],
+	    ['Navada', 'NV'],
+	    ['New Hampshire', 'NH'],
+	    ['New Jersey', 'NJ'],
+	    ['New Mexico', 'NM'],
+	    ['New York', 'NY'],
+	    ['North Carolina', 'NC'],
+	    ['North Dakota', 'ND'],
+	    ['Ohio', 'OH'],
+	    ['Oklahoma', 'OK'],
+	    ['Oregon', 'OR'],
+	    ['Pennsylvania', 'PA'],
+	    ['Rhode Island', 'RI'],
+	    ['South Carolina', 'SC'],
+	    ['South Dakota', 'SD'],
+	    ['Tennessee', 'TN'],
+	    ['Texas', 'TX'],
+	    ['Utah', 'UT'],
+	    ['Vermont', 'VT'],
+	    ['Virginia', 'VA'],
+	    ['Washington', 'WA'],
+	    ['West Virginia', 'WV'],
+	    ['Wisconsin', 'WI'],
+	    ['Wyoming', 'WY']],
+	    { include_blank: true }, { class: 'form-control' } %>
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-md-offset-2">    
+      <div class="field">
+	<%= form.label :district %>
+	<%= form.text_field :district, class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="field">
+	<%= form.label :retirement_status %>
+	<%= form.select :retired,
+	    [['Active', false], ['Retired', true]],
+	    { include_blank: true }, { class: 'form-control' } %>
+      </div>
+    </div>
+    
+    <div class="col-md-12">
+      <hr>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :number_phone %>
+	<%= form.number_field :number_phone, class: 'form-control' %>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :number_fax %>
+	<%= form.number_field :number_fax, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :email_address %>
+	<%= form.text_field :email_address, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :contact_form %>
+	<%= form.text_field :contact_form, class: 'form-control' %>
+      </div>
+    </div>
+    
+    <div class="col-md-12">
+      <hr>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :address_line_1 %>
+	<%= form.text_field :address_line_1, class: 'form-control' %>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :address_line_2 %>
+	<%= form.text_field :address_line_2, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-6">    
+      <div class="field">
+	<%= form.label :address_city %>
+	<%= form.text_field :address_city, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :address_state %>
+	<%= form.text_field :address_state, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="field">
+	<%= form.label :address_zipcode %>
+	<%= form.text_field :address_zipcode, class: 'form-control' %>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <%= form.submit yield(:button_text), class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
