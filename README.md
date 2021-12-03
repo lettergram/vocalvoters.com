@@ -17,15 +17,20 @@ The objective is to enable anyone to easily communicate with their representativ
 
 Required environment variables for 3rd party services / API keys:
 
-```
-#  https://www.geocod.io/
-export GEOCODIO_API_KEY=
+* [Used to determine the district(s) of a given address](https://www.geocod.io/)
 
-# https://www.clicksend.com/us/
+```
+export GEOCODIO_API_KEY=
+```
+
+* [Used to send a Letter, Fax or Email](https://www.clicksend.com/us/)
+```
 export CLICKSEND_USERNAME=
 export CLICKSEND_PASSWORD=
+```
 
-# https://stripe.com/
+* [Used for payment processing](https://stripe.com/)
+```
 export STRIPE_PUBLISHABLE_KEY_VOCALVOTERS=
 export STRIPE_SECRET_KEY_VOCALVOTERS=
 ```
