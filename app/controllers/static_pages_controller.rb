@@ -1,9 +1,10 @@
 require 'stripe'
-
+include ApplicationHelper
 class StaticPagesController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => [:create_payment_intent]
   
   def home
+    
     @stripe_pk = ENV['STRIPE_PUBLISHABLE_KEY_VOCALVOTERS']
 
     @sentiment_val_map = {
