@@ -8,6 +8,7 @@
     "@rails/webpacker": "5.4.0",
     "bootstrap": "3.4.1",
     "jquery": "3.5.1",
+    "signature_pad": "4.0.0",
     "turbolinks": "^5.2.0",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"

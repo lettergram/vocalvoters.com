@@ -33,6 +33,34 @@ function validate_form(ids_to_validate){
     return safe_flag
 }
 
+function create_signature(){
+
+    if (document.getElementById('signature_container').style.display != 'inline') {
+	document.getElementById('signature_container').style.display = 'inline';
+	
+	const SignaturePad = require("signature_pad").default;
+	var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+	    backgroundColor: 'rgba(255, 255, 255, 0)',
+	    penColor: 'rgb(0, 0, 0)'
+	});
+
+	var submitButton = document.getElementById('submit-signature');	
+	submitButton.addEventListener('click', function (event) {
+	    const data = signaturePad.toData()
+	    // save data to backend
+	    // load data for PDF
+	});
+	
+	var cancelButton = document.getElementById('reset-signature');	
+	cancelButton.addEventListener('click', function (event) {
+	    signaturePad.clear();
+	});
+
+	attach_stripe_checkout_on_click();
+    }
+    window.location.hash = "#signature_container";
+}
+
 /* If enter, update   */
 $('#address,#name').keyup(function(e) {
     if (e.which == 13) {
@@ -195,12 +223,27 @@ function find_legislators(){
 	cache: false,
 	success: function(html){
 	    
+	    document.querySelector("#privacy_terms_box").classList.add("hidden");
+
 	    $("#legislator_selection").html(html);
 	    document.getElementById('legislator_button').disabled = false;
 	    document.getElementById('legislator_button').innerText = "Lookup Legislators"
 
-	    attach_stripe_checkout_on_click();
 
+	    $('.send_button').click(function(e) {
+
+		// Clear any old selections
+		selected_buttons = document.getElementsByClassName("selected_button");
+		for (var i = 0; i < selected_buttons.length; i++) {
+		    selected_buttons[i].classList.remove('selected_button');
+		}
+		
+		// Add selected button to later retrieve 
+		e.currentTarget.classList.add('selected_button');
+
+		create_signature();
+	    });
+	    
 	    sender_address = document.getElementById('sender_address').getAttribute('value')
 	    sender_state = document.getElementById('sender_state').getAttribute('value')
 	    sender_district_federal = document.getElementById('sender_district_federal').getAttribute('value')
@@ -336,16 +379,19 @@ function update_prices() {
 }
 
 function attach_stripe_checkout_on_click() {
-    $('.send_button').click(function(e) {
+
+    $('#submit-signature,#skip-signature').click(function(e) {
 		
 	send_buttons = document.getElementsByClassName("send_button");
 	for (var i = 0; i < send_buttons.length; i++) {
 	    send_buttons[i].classList.remove('selected_card');
 	}
 
-	id = e.currentTarget.id;
-	e.currentTarget.classList.add('selected_card');
+	id = document.getElementsByClassName("selected_button")[0].id;
+	document.getElementsByClassName("selected_button")[0].classList.add('selected_card');
+	
 	count = update_checkout_price(id);
+	
 	load_stripe_checkout(
 	    document.getElementById('communication_mode').innerText,
 	    document.getElementById('email').value,
@@ -357,6 +403,7 @@ function attach_stripe_checkout_on_click() {
 	    document.getElementById('payment_container').style.display = 'none';
 	}
     })
+    
 }
 
 function update_checkout_price(id=null) {
@@ -440,8 +487,8 @@ function load_stripe_checkout(id=null, email=null, count=null) {
     window.location.hash = "#payment_container";
 
     // A reference to Stripe.js initialized with your real test publishable API key.
-    stripe_pk = document.getElementById('stripe_pk').getAttribute('value');
-    var stripe = Stripe(stripe_pk);
+    // stripe_pk = document.getElementById('stripe_pk').getAttribute('value');
+    // var stripe = Stripe(stripe_pk);
     
     // The items the customer wants to buy
     // TODO: Confirm email as required
@@ -450,59 +497,74 @@ function load_stripe_checkout(id=null, email=null, count=null) {
 	email: email,
 	count: count
     };
+
     
     // Disable the button until we have Stripe set up on the page
     document.querySelector("#submit").disabled = true;
+    
     fetch("/create-payment-intent.json", {
 	method: "POST",
 	headers: {
 	    "Content-Type": "application/json"
 	},
 	body: JSON.stringify(purchase)
-    })
-	.then(function(result) {
-	    return result.json();
-	})
-	.then(function(data) {
-	    
-	    var elements = stripe.elements();
-	    
-	    var style = {
-		base: {
-		    color: "#32325d",
-		    fontFamily: 'Arial, sans-serif',
-		    fontSmoothing: "antialiased",
-		    fontSize: "16px",
-		    "::placeholder": {
-			color: "#32325d"
-		    }
-		},
-		invalid: {
-		    fontFamily: 'Arial, sans-serif',
-		    color: "#fa755a",
-		    iconColor: "#fa755a"
+    }).then(function(result) {
+	return result.json();
+    }).then(function(data) {
+
+	// A reference to Stripe.js initialized with your real test publishable API key.
+	stripe_pk = document.getElementById('stripe_pk').getAttribute('value');
+	var stripe = Stripe(stripe_pk);
+
+	// Clear card elements in case anything is already there (happens on reload)
+	cardElements = document.getElementById("card-element");
+	while (cardElements.firstChild) {
+	    cardElements.removeChild(cardElements.lastChild);
+	}
+	var elements = stripe.elements();
+
+	var style = {
+	    base: {
+		color: "#32325d",
+		fontFamily: 'Arial, sans-serif',
+		fontSmoothing: "antialiased",
+		fontSize: "16px",
+		"::placeholder": {
+		    color: "#32325d"
 		}
-	    };
-	    
-	    var card = elements.create("card", { style: style });
-	    
-	    // Stripe injects an iframe into the DOM
-	    card.mount("#card-element");
-	    
-	    card.on("change", function (event) {
-		// Disable the Pay button if there are no card details in the Element
-		document.querySelector("#submit").disabled = event.empty;
-		document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
-	    });
-	    
-	    var form = document.getElementById("payment-form");
-	    form.addEventListener("submit", function(event) {
-		event.preventDefault();
-		
-		// Complete payment when the submit button is clicked
-		payWithCard(stripe, card, data.clientSecret);
-	    });
+	    },
+	    invalid: {
+		fontFamily: 'Arial, sans-serif',
+		color: "#fa755a",
+		iconColor: "#fa755a"
+	    }
+	};
+	
+	var card = elements.create("card", { style: style });
+	
+	// Stripe injects an iframe into the DOM
+	card.mount("#card-element");
+	
+	card.on("change", function (event) {
+	    // Disable the Pay button if there are no card details in the Element
+	    document.querySelector("#submit").disabled = event.empty;
+	    document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
 	});
+
+	
+	var form = document.getElementById("payment-form");
+
+
+	// Remove and add new
+	form.removeEventListener('submit', arguments.callee, false);
+	
+	form.addEventListener("submit", function(event) {
+	    event.preventDefault();
+	
+	    // Complete payment when the submit button is clicked
+	    payWithCard(stripe, card, data.clientSecret);
+	});
+    });
     
     // Calls stripe.confirmCardPayment
     // If the card requires authentication Stripe shows a pop-up modal to

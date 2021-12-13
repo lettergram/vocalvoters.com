@@ -48,14 +48,16 @@
 	       data: { disable_with: "Please wait..." },
 	       class: "btn btn-primary" %>
 	 </center>
-	 <center>
-	   <br><br>
-	   <small>
-	     <%= link_to "Privacy Policy", privacy_path, target: "_blank" %>
-	     &
-	     <%= link_to "Terms of Use", terms_path, target: "_blank" %>
-	   </small>
-	 </center>
+	 <span id="privacy_terms_box">
+	   <center>
+	     <br><br>
+	     <small>
+	       <%= link_to "Privacy Policy", privacy_path, target: "_blank" %>
+	       &
+	       <%= link_to "Terms of Use", terms_path, target: "_blank" %>
+	     </small>
+	   </center>
+	 </span>
        </div>
      </div>
   </div>
@@ -66,7 +68,6 @@
     <div id="legislator_selection"></div>
   </div>
 </div>
-
 
 <div class="row" >
   <div class="col-md-8 col-md-offset-2" id="concerns_selection" style="display:none;">
@@ -178,7 +179,54 @@
     </div>
   </div>
 </div>
-    
+
+
+<div id="signature_container" class="row" style="display:none;">
+  <h3>
+    <br><br>
+    <center>
+      <b>Sign Letter</b>
+    </center>
+  </h3>
+  <div id="signature-pad-box" class="col-md-6 col-md-offset-3">
+    <center>
+      <canvas id="signature-pad" class="signature-pad"
+	      width=500 height=150 ></canvas>
+    </center>
+  </div>
+  
+  <div class="signature-pad-footer">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="description">
+	Sign Above (Optional)
+      </div>
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4 col-md-offset-4">
+      <center>
+
+	<%= button_tag 'Submit',
+	    id: 'submit-signature',
+	    style: 'font-size:0.9em',
+	    data: { disable_with: "Please wait..." },
+	    class: "btn btn-primary" %>
+	
+	<%= button_tag 'Skip Signature',
+	    id: 'skip-signature',
+	    style: 'font-size:0.9em;',
+	    data: { disable_with: "Please wait..." },
+	    class: "btn btn-info" %>
+
+	<%= button_tag 'Clear',
+	    id: 'reset-signature',
+	    style: 'font-size:0.9em',
+	    data: { disable_with: "Please wait..." },
+	    class: "btn btn-default" %>
+      </center>
+    </div>
+  </div>
+</div>
+
 
 <div id="payment_container" class="row" style="display:none;">
   <br>
@@ -220,6 +268,7 @@
 	</p>
       </form>
     </div>
+
     <div id="share_container" style="vertical-align:center;">
       <center>
 	<b>Share this policy

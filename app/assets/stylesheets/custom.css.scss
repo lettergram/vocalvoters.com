@@ -1619,3 +1619,25 @@ input {
 	color: #F08199;
 	font-weight: bold;
 }
+
+.signature-pad {
+	
+	font-size: 10px;
+	border: 1px solid #e8e8e8;
+	background-color: #fff;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 10px rgba(0, 0, 0, 0.08) inset;
+	border-radius: 4px;
+	
+}
+
+.description {
+	color: #C3C3C3;
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: -2em;
+	margin-bottom: 1em;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
