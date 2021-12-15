@@ -32,7 +32,8 @@ class SendersController < ApplicationController
       :zipcode => sender_params[:zipcode],
       :county => sender_params[:county],
       :district => sender_params[:district],
-      :state => sender_params[:state])
+      :state => sender_params[:state],
+      :signature => sender_params[:signature])
     
     if not @sender.present?
       @sender = Sender.new(sender_params)
@@ -86,6 +87,6 @@ class SendersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def sender_params
       params.require(:sender)
-        .permit(:name, :email, :zipcode, :county, :district, :state)
+        .permit(:name, :email, :zipcode, :county, :district, :state, :signature)
     end
 end

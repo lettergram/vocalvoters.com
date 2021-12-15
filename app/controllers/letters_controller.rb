@@ -80,6 +80,11 @@ class LettersController < ApplicationController
       @sender_region += region
     end
 
+    @sender_signature = nil
+    if params.has_key?(:signature)
+      @sender_signature = params[:signature].gsub(' ', '+')
+    end
+
     recipient_state = nil
     if params.has_key?(:sender_state)
 

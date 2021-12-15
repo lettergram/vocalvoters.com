@@ -46,7 +46,25 @@ function create_signature(){
 
 	var submitButton = document.getElementById('submit-signature');	
 	submitButton.addEventListener('click', function (event) {
-	    const data = signaturePad.toData()
+	    // const data = signaturePad.toData() // saves more detailed data
+	    const data = signaturePad.toDataURL() // save data as base64
+	    document.getElementById('signature-data').value = data;
+
+	    sender_name = document.getElementById('name').value;
+	    sender_state = document.querySelector('#sender_state').getAttribute('value');
+	    selected_cards = document.getElementsByClassName('recipient_card selected_card');
+	    
+	    recipient_id = selected_cards[0].getAttribute('value');
+	    
+	    district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
+	    name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
+	    position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
+	    level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+	    signature = data;
+	
+	    update_pdf(letter_id, sender_name, sender_state,
+		       district, name, position, level, signature);
+	    
 	    // save data to backend
 	    // load data for PDF
 	});
@@ -154,8 +172,10 @@ function generate_concerns() {
 	name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
 	position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
 	level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+	signature = null;
+	
 	update_pdf(letter_id, sender_name, sender_state,
-		   district, name, position, level);
+		   district, name, position, level, signature);
 
 	// Hide bottom buffer once communications_selection displayed
 	$("#concerns_selection_bottom_buffer").attr('style', 'display:none');
@@ -292,7 +312,8 @@ function find_legislators(){
 }
 
 function update_pdf(letter_id, sender_name, sender_state, sender_district,
-		    recipient_name, recipient_position, recipient_level) {
+		    recipient_name, recipient_position, recipient_level,
+		    signature) {
 
     src_url  = '/letters/' + letter_id + '.pdf?sender_name=' + sender_name;
     src_url += '&sender_state='+sender_state;
@@ -302,6 +323,11 @@ function update_pdf(letter_id, sender_name, sender_state, sender_district,
     src_url += '&recipient_level='+recipient_level;
     src_url += '&recipient_position='+recipient_position;
 
+    if (signature != null) {
+	// Split: data:image/png <here, take --> base64,iVBOrw....
+	src_url += '&signature='+JSON.stringify(signature).split(';')[1]
+    }
+    
     src_url += '&sender_verified=true'
 
     $('#pdf_view').attr('src', src_url);
@@ -640,6 +666,7 @@ function load_stripe_checkout(id=null, email=null, count=null) {
 }
 
 var sendCommunication = function(paymentIntentId, method) {
+
     data = {
 	'method': method,
 	'sender': {
@@ -655,6 +682,7 @@ var sendCommunication = function(paymentIntentId, method) {
 	    'district_federal': document.querySelector('#sender_district_federal').getAttribute('value'),
 	    'district_state_senate': document.querySelector('#sender_district_senate').getAttribute('value'),
 	    'district_state_representative': document.querySelector('#sender_district_representative').getAttribute('value'),
+	    'signature': JSON.stringify(document.getElementById('signature-data').value)
 	},
 	'recipients': [],
 	'letter': {
@@ -674,7 +702,7 @@ var sendCommunication = function(paymentIntentId, method) {
 	    data['recipients'].push(element.getAttribute('value'));
 	}
     }
-
+        
     send_communication_url = '/send_communication'
     $.post({
         url: send_communication_url,
@@ -682,11 +710,6 @@ var sendCommunication = function(paymentIntentId, method) {
 	data: data
     })
     
-    /* done - Sender: name, email, zipcode, county, district, state */
-    /* done - Recipients: id */
-    /* done - Letter: id, cat, sent, policy */
-    /* done - PaymentId: log payment intent for later queries */
-    /* send to URL for logging Communication: priority, letter, fax, email */
 }
 
 function copyLetterToClipboard(){
@@ -708,5 +731,3 @@ function copyLetterToClipboard(){
 
     document.getElementById("share_button").innerHTML = "Copied Link!"
 }
-
-

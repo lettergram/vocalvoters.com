@@ -30,9 +30,10 @@ class SendCommunicationController < ApplicationController
       sender_city = params['sender']['city'].presence || ''
       sender_state = params['sender']['state'].presence || ''
       sender_zipcode = params['sender']['zipcode'].presence || ''
+      sender_signature = params['sender']['signature'].presence || ''
 
       # Create sender
-      sender = Sender.find_by(email: sender_params[:email])
+      sender = Sender.find_by(email: sender_params[:email])        
       if not sender.present?
         sender = Sender.create!(sender_params)
       end
@@ -148,8 +149,8 @@ class SendCommunicationController < ApplicationController
   private
 
     def sender_params
-      params.require(:sender).permit(:name, :email, :zipcode,
-                                     :county, :district, :state)
+      params.require(:sender).permit(
+        :name, :email, :zipcode, :county, :district, :state, :signature)
     end
 
     def letter_params

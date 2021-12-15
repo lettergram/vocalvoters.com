@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_051914) do
+ActiveRecord::Schema.define(version: 2021_12_14_020015) do
 
   create_table "emails", force: :cascade do |t|
     t.string "email_address"
@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_051914) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "email"
+    t.text "signature"
     t.index ["user_id"], name: "index_senders_on_user_id"
   end
 
