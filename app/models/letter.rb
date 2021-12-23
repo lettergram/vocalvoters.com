@@ -1,4 +1,5 @@
 class Letter < ApplicationRecord
+
   belongs_to :user
   before_save :downcase_fields
 
