@@ -6,7 +6,11 @@ class LettersController < ApplicationController
   # GET /letters
   # GET /letters.json
   def index
-    @letters = Letter.all
+    if current_user.admin?
+      @letters = Letter.all
+    else 
+      @letters = Letter.where(organization: current_user.organization)
+    end
   end
 
   # GET /letters/1
@@ -232,6 +236,7 @@ class LettersController < ApplicationController
         .permit(:category, :policy_or_law, :tags, :sentiment, :body,
                 :target_level, :target_state)
         .merge(user_id: current_user.id)
+        .merge(organization_id: current_user.organization.id)
     end
 
 end

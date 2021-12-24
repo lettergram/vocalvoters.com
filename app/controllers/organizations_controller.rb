@@ -1,4 +1,6 @@
 class OrganizationsController < ApplicationController
+  before_action :logged_in_admin
+  before_action :logged_in_user, only: [:show]
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
 
   # GET /organizations

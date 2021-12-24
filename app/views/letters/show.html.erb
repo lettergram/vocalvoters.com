@@ -9,8 +9,15 @@
   <%= @letter.target_level %><br>
   <strong>Target State:</strong>
   <%= @letter.target_state %><br>
+  <strong>Organization:</strong>
+  <% if @letter.organization.present? %>
+    <%= @letter.organization.name %>
+  <% else %>
+    No Organizational Affiliation
+  <% end %><br>
   <strong>Created by:</strong>
   <%= User.find_by(id: @letter.user_id).name %>
+
 </p>
 
 <p>

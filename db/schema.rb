@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_23_050913) do
+ActiveRecord::Schema.define(version: 2021_12_24_022006) do
 
   create_table "emails", force: :cascade do |t|
     t.string "email_address"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 2021_12_23_050913) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "target_level", default: "all"
     t.string "target_state", default: "all"
+    t.integer "organization_id"
+    t.index ["organization_id"], name: "index_letters_on_organization_id"
     t.index ["user_id"], name: "index_letters_on_user_id"
   end
 
@@ -164,7 +166,10 @@ ActiveRecord::Schema.define(version: 2021_12_23_050913) do
     t.datetime "activated_at"
     t.string "reset_digest"
     t.datetime "reset_sent_at"
+    t.boolean "org_admin"
+    t.integer "organization_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["organization_id"], name: "index_users_on_organization_id"
   end
 
   add_foreign_key "emails", "letters"
@@ -173,9 +178,11 @@ ActiveRecord::Schema.define(version: 2021_12_23_050913) do
   add_foreign_key "faxes", "letters"
   add_foreign_key "faxes", "recipients"
   add_foreign_key "faxes", "senders"
+  add_foreign_key "letters", "organizations"
   add_foreign_key "letters", "users"
   add_foreign_key "posts", "letters"
   add_foreign_key "posts", "recipients"
   add_foreign_key "posts", "senders"
   add_foreign_key "senders", "users"
+  add_foreign_key "users", "organizations"
 end
