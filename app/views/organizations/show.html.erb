@@ -17,9 +17,12 @@
 
 <p>
   <strong>Associated Users:</strong><br>
-  <% @organization.users.each do |user| %>
-    - <%= user.name %>, <%= user.email %><br>
-  <% end %>
+  <ul>
+    <% @organization.users.each do |user| %>
+       <li><%= user.org_admin %> <%= user.name %>, <%= user.email %></li>
+    <% end %>
+  </ul>
+  <br>
 </p>
 
 <%= link_to 'Edit', edit_organization_path(@organization) %> |
