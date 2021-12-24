@@ -1,0 +1,29 @@
+
+<p id="notice"><%= notice %></p>
+<p>
+  <strong>Name:</strong>
+  <%= @organization.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @organization.description %>
+</p>
+
+<p>
+  <strong>Approvals required:</strong>
+  <%= @organization.approvals_required %>
+</p>
+
+<p>
+  <strong>Associated Users:</strong><br>
+  <ul>
+    <% @organization.users.each do |user| %>
+       <li><%= user.org_admin %> <%= user.name %>, <%= user.email %></li>
+    <% end %>
+  </ul>
+  <br>
+</p>
+
+<%= link_to 'Edit', edit_organization_path(@organization) %> |
+<%= link_to 'Back', organizations_path %>

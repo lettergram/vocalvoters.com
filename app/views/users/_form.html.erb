@@ -7,6 +7,20 @@
   <%= f.label :email %>
   <%= f.email_field :email, class: 'form-control' %>
 
+  <% if current_user.admin? %>
+     <%= f.label :organization %>
+     <%= f.collection_select :organization_id,
+	 Organization.all, :id, :name,
+	 { include_blank: false }, class: 'form-control' %>
+
+     <strong>Organization Admin</strong>: 
+     <%= f.select :org_admin,
+	 options_for_select(
+	 [['True', true], ['False', false]], @user.org_admin),
+	 {}, { :class => 'form-control' } %>
+     
+  <% end %>
+
   <%= f.label :password %>
   <%= f.password_field :password, class: 'form-control' %>
 

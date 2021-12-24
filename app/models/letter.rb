@@ -1,5 +1,7 @@
 class Letter < ApplicationRecord
+
   belongs_to :user
+  belongs_to :organization
   before_save :downcase_fields
 
   private
