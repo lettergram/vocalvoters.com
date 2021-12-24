@@ -1,5 +1,5 @@
-<p id="notice"><%= notice %></p>
 
+<p id="notice"><%= notice %></p>
 <p>
   <strong>Name:</strong>
   <%= @organization.name %>
@@ -13,6 +13,13 @@
 <p>
   <strong>Approvals required:</strong>
   <%= @organization.approvals_required %>
+</p>
+
+<p>
+  <strong>Associated Users:</strong><br>
+  <% @organization.users.each do |user| %>
+    - <%= user.name %>, <%= user.email %><br>
+  <% end %>
 </p>
 
 <%= link_to 'Edit', edit_organization_path(@organization) %> |
