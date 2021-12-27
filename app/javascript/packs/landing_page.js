@@ -138,6 +138,12 @@ $("#policy_or_law").change(function(e) {
     if(generate_concerns()) {
 	
 	// Display pdf & communication section
+	org = $("#policy_or_law").find(":selected").attr('org')
+	if (!!org) {
+	    $('#org_letter').text("Content Managed by " + org)
+	} else {
+	    $('#org_letter').text("")	    
+	}
 	window.location.hash = "#communications_selection";
     }
         
@@ -366,10 +372,21 @@ function update_options(category=null, sentiment=null, policy_or_law=null) {
 	    sentiment_options = $("#sentiment");
 
 	    if (policy_or_law === null) {
-		options = policy_list.map(x => [x[0], x[3]]);
+
+		/*
+		// Can add organization references to policies 
+		for (var i = 0, size = policy_list.length; i < size; i++ ) {
+		    if(!!policy_list[i][4]) {
+			policy_list[i][3] += ' - Written by ' + policy_list[i][4]
+		    }
+		}
+		*/
+		
+		options = policy_list.map(x => [x[0], x[3], x[4]]);
 		$.each(options, function(key, value) {
 		    policy_or_law_options.append(
-			$('<option></option>').val(value[0]).html(value[1])
+			$('<option></option>')
+			    .val(value[0]).html(value[1]).attr('org', value[2])
 		    );
 		});
 	    }

@@ -60,8 +60,8 @@ class User < ApplicationRecord
   end
 
   # Sends activation email.
-  def send_activation_email
-    UserMailer.account_activation(self).deliver_now
+  def send_activation_email(inviting_user=false)
+    UserMailer.account_activation(self, inviting_user).deliver_now
   end
 
   # Sets the password reset attributes.
