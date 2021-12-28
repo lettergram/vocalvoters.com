@@ -140,7 +140,7 @@ $("#policy_or_law").change(function(e) {
 	// Display pdf & communication section
 	org = $("#policy_or_law").find(":selected").attr('org')
 	if (!!org) {
-	    $('#org_letter').text("Content Managed by " + org)
+	    $('#org_letter').text("Template Created by " + org)
 	} else {
 	    $('#org_letter').text("")	    
 	}
@@ -438,7 +438,8 @@ function attach_stripe_checkout_on_click() {
 	load_stripe_checkout(
 	    document.getElementById('communication_mode').innerText,
 	    document.getElementById('email').value,
-	    $('.recipient_card.selected_card').length
+	    $('.recipient_card.selected_card').length,
+	    $("#policy_or_law").find(":selected").attr('org')
 	);
 
 	recipient_count = $('.recipient_card.selected_card').length;
@@ -524,7 +525,7 @@ var disableCommunications = function() {
     document.querySelector('button#email').disabled = true;
 }
 
-function load_stripe_checkout(id=null, email=null, count=null) {
+function load_stripe_checkout(id=null, email=null, count=null, org=null) {
 
     document.getElementById('payment_container').style.display = 'block';
     window.location.hash = "#payment_container";
@@ -538,7 +539,8 @@ function load_stripe_checkout(id=null, email=null, count=null) {
     var purchase = {
 	item: id,
 	email: email,
-	count: count
+	count: count,
+	org: org
     };
 
     

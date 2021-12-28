@@ -21,18 +21,8 @@ class LettersController < ApplicationController
     if params.has_key?(:template)
       @template = true
     end
-    
-    if @letter.sentiment > 0.5
-      @sentiment = 'strongly support'
-    elsif @letter.sentiment > 0
-      @sentiment = 'support'
-    elsif @letter.sentiment == 0
-      @sentiment = 'am indifferent to'
-    elsif @letter.sentiment < -0.5
-      @sentiment = 'strongly oppose'
-    elsif @letter.sentiment < 0
-      @sentiment = 'oppose'
-    end
+
+    @sentiment = @letter.sentiment_in_text()
 
     @recipient_name = "[[ insert government official name ]]"
     recipient_name = nil

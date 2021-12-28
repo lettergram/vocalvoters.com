@@ -11,6 +11,7 @@ import "signature_pad";
 import 'jquery';
 import "channels";
 import "bootstrap";
+import "chartkick/chart.js"
 
 Rails.start()
 Turbolinks.start()
