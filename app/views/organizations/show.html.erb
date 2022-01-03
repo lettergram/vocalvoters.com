@@ -3,10 +3,7 @@
   <div class="col-md-12">
     <p>
       <strong>Name:</strong>
-      <%= @organization.name %>
-    </p>
-    
-    <p>
+      <%= @organization.name %><br>      
       <strong>Description:</strong>
       <%= @organization.description %>
     </p>
@@ -26,20 +23,28 @@
 	    <% if user.org_admin %>
 	      <b>Org Admin</b> - 
 	    <% end %>
-	    <%= user.name %>, <%= user.email %> - 
-	    <small>
-	      <%= link_to "Remove", remove_user_from_org_path(
-		  user_id: user.id, id: @organization.id) %>
-	    </small>
+	    <%= user.name %>, <%= user.email %>
+	    <% if current_user.org_admin or current_user.admin %>
+	      -
+	      <small>
+		<%= link_to "Remove", remove_user_from_org_path(
+		    user_id: user.id, id: @organization.id) %>
+	      </small>
+	    <% end %>
 	  </li>
 	<% end %>
       </ul>
       <br>
     </p>
-    <br>
-    <hr>
-    <br>
   </div>
+</div>
+<div class="row">
+  <% if current_user.org_admin or current_user.admin %>
+    <%= link_to 'Edit Organization Settings', edit_organization_path(@organization) %>
+  <% end %>
+  <br>
+  <hr>
+  <br>  
 </div>
 <div class="row">
   <div class="col-md-6">
@@ -67,8 +72,4 @@
 	title: "Total Letters by Type", xtitle: "Count", ytitle: "Letter Type",
 	stacked: true, height: "425px" %>
   </div>
-</div>
-<div class="row">
-  <%= link_to 'Edit', edit_organization_path(@organization) %> |
-  <%= link_to 'Back', organizations_path %>
 </div>

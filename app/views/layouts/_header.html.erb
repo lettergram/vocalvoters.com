@@ -37,8 +37,8 @@
 		  <li><%= link_to "Email", emails_path %></li>
 		</ul>
 	      </li>
-	    <% elsif current_user.organization.present? and current_user.org_admin %>
-	      <li><%= link_to "Organization", organization_path(current_user.organization) %></li>
+	    <% elsif current_user.organization.present? or current_user.admin? %>
+	       <li><%= link_to "Organization", organization_path(current_user.organization) %></li>
 	    <% end %>  
 	    <li class="dropdown">
 	      <a id="account" href="#" class="dropdown-toggle" data-toggle="dropdown">

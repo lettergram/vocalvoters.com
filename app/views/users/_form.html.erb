@@ -17,19 +17,25 @@
 	  Organization.all, :id, :name,
 	  { include_blank: false }, class: 'form-control' %>
       
+    <% else %>
+    
+      <%= f.collection_select :organization_id,
+	  Organization.where(id: current_user.organization_id), :id, :name,
+	  {}, class: 'form-control' %>
+    
+    <% end %>
+
+
+    <% if current_user.org_admin? or current_user.admin? %>
+
       <strong>Organization Admin</strong>: 
       <%= f.select :org_admin,
 	  options_for_select(
 	  [['True', true], ['False', false]], @user.org_admin),
 	  {}, { :class => 'form-control' } %>
       
-    <% else %>
-    
-      <%= f.collection_select :organization_id,
-	  Organization.where(id: current_user.organization_id), :id, :name,
-	  { include_blank: true }, class: 'form-control' %>
-    
     <% end %>
+      
   <% end %>
     
   <% if not current_user.present? or edit %>

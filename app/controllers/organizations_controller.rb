@@ -1,8 +1,9 @@
 class OrganizationsController < ApplicationController
   before_action :logged_in_user, only: [:show]
-  before_action :logged_in_admin, except: [:show]
   before_action :set_organization, only: [:show, :edit, :update, :destroy, :remove_user_from_org]
-  before_action :logged_in_org_admin, only: [:show]
+  before_action :belongs_to_org, only: [:show, :edit, :update, :destroy, :remove_user_from_org]
+  before_action :logged_in_admin, except: [:show, :remove_user_from_org]
+  before_action :logged_in_org_admin, only: [:remove_user_from_org]
 
   # GET /organizations
   # GET /organizations.json
@@ -113,6 +114,12 @@ class OrganizationsController < ApplicationController
       @organization = Organization.find(params[:id])
     end
 
+    def belongs_to_org
+      if current_user.organization_id != @organization.id and not current_user.admin
+        flash[:warning] = "Only members of the organization view that information."
+        redirect_back(fallback_location: root_path)
+      end
+    end
 
     def logged_in_org_admin
       

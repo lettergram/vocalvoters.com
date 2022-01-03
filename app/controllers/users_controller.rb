@@ -70,10 +70,16 @@ class UsersController < ApplicationController
           
           params[:user] = params[:user].merge(:password => password,
                                               :password_confirmation => password)
-          
-          params.require(:user).permit(:name, :email,
-                                       :organization_id, :org_admin,
-                                       :password, :password_confirmation)
+
+          if current_user.org_admin
+            params.require(:user).permit(:name, :email,
+                                         :organization_id, :org_admin,
+                                         :password, :password_confirmation)
+          else
+            params.require(:user).permit(:name, :email,
+                                         :organization_id,
+                                         :password, :password_confirmation)
+          end
 
       else
         params.require(:user).permit(:name, :email,
