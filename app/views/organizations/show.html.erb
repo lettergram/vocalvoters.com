@@ -19,7 +19,9 @@
     </p>
     
     <p>
-      <strong>Associated Users:</strong><br>
+      <strong>Associated Users:</strong>
+      -> <u><b><%= link_to "Invite New User", new_user_path  %></b></u>
+      <br>
       <ul>
 	<% @organization.users.each do |user| %>
 	  <li>
