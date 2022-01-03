@@ -4,6 +4,22 @@ class Letter < ApplicationRecord
   belongs_to :organization
   before_save :downcase_fields
 
+  def sentiment_in_text
+    
+    if self.sentiment > 0.5
+      return 'strongly support'
+    elsif self.sentiment > 0
+      return 'support'
+    elsif self.sentiment == 0
+      return 'am indifferent to'
+    elsif self.sentiment < -0.5
+      return 'strongly oppose'
+    elsif self.sentiment < 0
+      return 'oppose'
+    end
+
+  end
+  
   private
 
     def downcase_fields

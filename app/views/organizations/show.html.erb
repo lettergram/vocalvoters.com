@@ -1,29 +1,75 @@
 
-<p id="notice"><%= notice %></p>
-<p>
-  <strong>Name:</strong>
-  <%= @organization.name %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @organization.description %>
-</p>
-
-<p>
-  <strong>Approvals required:</strong>
-  <%= @organization.approvals_required %>
-</p>
-
-<p>
-  <strong>Associated Users:</strong><br>
-  <ul>
-    <% @organization.users.each do |user| %>
-       <li><%= user.org_admin %> <%= user.name %>, <%= user.email %></li>
-    <% end %>
-  </ul>
+<div class="row">
+  <div class="col-md-12">
+    <p>
+      <strong>Name:</strong>
+      <%= @organization.name %><br>      
+      <strong>Description:</strong>
+      <%= @organization.description %>
+    </p>
+    
+    <p>
+      <strong>Approvals required:</strong>
+      <%= @organization.approvals_required %>
+    </p>
+    
+    <p>
+      <strong>Associated Users:</strong>
+      -> <u><b><%= link_to "Invite New User", new_user_path  %></b></u>
+      <br>
+      <ul>
+	<% @organization.users.each do |user| %>
+	  <li>
+	    <% if user.org_admin %>
+	      <b>Org Admin</b> - 
+	    <% end %>
+	    <%= user.name %>, <%= user.email %>
+	    <% if current_user.org_admin or current_user.admin %>
+	      -
+	      <small>
+		<%= link_to "Remove", remove_user_from_org_path(
+		    user_id: user.id, id: @organization.id) %>
+	      </small>
+	    <% end %>
+	  </li>
+	<% end %>
+      </ul>
+      <br>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <% if current_user.org_admin or current_user.admin %>
+    <%= link_to 'Edit Organization Settings', edit_organization_path(@organization) %>
+  <% end %>
   <br>
-</p>
-
-<%= link_to 'Edit', edit_organization_path(@organization) %> |
-<%= link_to 'Back', organizations_path %>
+  <hr>
+  <br>  
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <%= column_chart @letters_by_month, title: "Letters Sent by Month",
+	xtitle: "Month", ytitle: "Count", stacked: true, height: "425px" %>
+    <hr>
+    <%= column_chart @letters_by_day,
+	title: "Letters Sent by Day", xtitle: "Day", ytitle: "Count",
+	stacked: true, height: "425px" %>
+    <hr>
+    <%= column_chart @letters_by_day_of_week,
+	title: "Letters by Day of Week", xtitle: "Day of Week", ytitle: "Count",
+	stacked: true, height: "425px" %>
+  </div>
+  <div class="col-md-6">
+    <%= column_chart @letters_by_state, title: "Total Letters Sent by State",
+	xtitle: "State", ytitle: "Count", stacked: true, height: "425px" %>
+    <hr>
+    <%= column_chart @letters_by_target_level,
+	title: "Total Letters Sent by Target Level",
+	xtitle: "Target Level (Local, State, Federal)",
+	ytitle: "Count", stacked: true, height: "425px" %>
+    <hr>
+    <%= column_chart @letters_by_type,
+	title: "Total Letters by Type", xtitle: "Count", ytitle: "Letter Type",
+	stacked: true, height: "425px" %>
+  </div>
+</div>

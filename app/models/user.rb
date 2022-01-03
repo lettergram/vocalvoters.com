@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  belongs_to :organization
+  belongs_to :organization, required: false
   
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
@@ -60,8 +60,8 @@ class User < ApplicationRecord
   end
 
   # Sends activation email.
-  def send_activation_email
-    UserMailer.account_activation(self).deliver_now
+  def send_activation_email(inviting_user=false)
+    UserMailer.account_activation(self, inviting_user).deliver_now
   end
 
   # Sets the password reset attributes.

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/terms',      to: 'static_pages#terms'
   
   get '/signup',     to: 'users#new'
+  get '/remove_user_from_org', to: 'organizations#remove_user_from_org'
 
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'

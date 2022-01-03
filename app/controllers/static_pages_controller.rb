@@ -101,11 +101,18 @@ class StaticPagesController < ApplicationController
     
     # Create a PaymentIntent with amount and currency
     # TODO: Make more robust
+    org = 'VocalVoters'
+    if params.has_key? 'org'
+      org = params['org']
+    end
+    
     payment_intent = Stripe::PaymentIntent.create({
       amount: calculate_order_amount(params['item'], params['count']),
       currency: 'usd',
       payment_method_types: ['card'],
-      receipt_email: params['email']
+      receipt_email: params['email'],
+      description: org,
+      metadata: { organization: org }
     })
     
     @payment_info = payment_intent['client_secret']

@@ -21,18 +21,8 @@ class LettersController < ApplicationController
     if params.has_key?(:template)
       @template = true
     end
-    
-    if @letter.sentiment > 0.5
-      @sentiment = 'strongly support'
-    elsif @letter.sentiment > 0
-      @sentiment = 'support'
-    elsif @letter.sentiment == 0
-      @sentiment = 'am indifferent to'
-    elsif @letter.sentiment < -0.5
-      @sentiment = 'strongly oppose'
-    elsif @letter.sentiment < 0
-      @sentiment = 'oppose'
-    end
+
+    @sentiment = @letter.sentiment_in_text()
 
     @recipient_name = "[[ insert government official name ]]"
     recipient_name = nil
@@ -206,7 +196,7 @@ class LettersController < ApplicationController
     sentiment = params[:sentiment]
     policy_or_law = params[:policy_or_law]
 
-    @policy_or_laws = Letter
+    @policy_or_laws = Letter.left_outer_joins(:organization)
     
     if category.present?
       @policy_or_laws = @policy_or_laws.where(
@@ -221,7 +211,7 @@ class LettersController < ApplicationController
     end
 
     @policy_or_laws = @policy_or_laws.distinct.pluck(
-      :id, :sentiment, :category, :policy_or_law)
+      :id, :sentiment, :category, :policy_or_law, :name)
   end
   
   private

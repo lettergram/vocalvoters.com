@@ -26,11 +26,12 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  def create
-    @user = User.new(user_params)
+  def create    
+    @user = User.new(new_user_params)
     if @user.save
-      @user.send_activation_email
-      flash[:info] = "Please check your email to activate your account."
+      inviting_user = current_user.present?
+      @user.send_activation_email(inviting_user)
+      flash[:info] = "Please check email to activate the account."
       redirect_to root_url
     else
       render 'new'
@@ -43,7 +44,7 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
-    if @user.update(user_params)
+    if @user.update(update_user_params)
       flash[:success] = "Profile updated"
       redirect_to @user      
     else
@@ -60,14 +61,42 @@ class UsersController < ApplicationController
 
   private
 
-    def user_params
-      if current_user.admin? 
-        params.require(:user).permit(:name, :email,
-                                     :organization_id, :org_admin,
-                                     :password, :password_confirmation)
+    def new_user_params
+      if current_user.present?
+        params.require(:user).permit(:name, :email, :organization_id)          
+        
+          string_length = 16
+          password = rand(36**string_length).to_s(36)
+          
+          params[:user] = params[:user].merge(:password => password,
+                                              :password_confirmation => password)
+
+          if current_user.org_admin
+            params.require(:user).permit(:name, :email,
+                                         :organization_id, :org_admin,
+                                         :password, :password_confirmation)
+          else
+            params.require(:user).permit(:name, :email,
+                                         :organization_id,
+                                         :password, :password_confirmation)
+          end
+
       else
         params.require(:user).permit(:name, :email,
                                      :password, :password_confirmation)
+      end
+    end
+    
+    def update_user_params
+      if current_user.present?
+        if current_user.admin?          
+          params.require(:user).permit(:name, :email,
+                                       :organization_id, :org_admin,
+                                       :password, :password_confirmation)
+        else
+          params.require(:user).permit(:name, :email,
+                                       :password, :password_confirmation)
+        end
       end
     end
 

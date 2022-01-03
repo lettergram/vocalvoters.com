@@ -7,25 +7,46 @@
   <%= f.label :email %>
   <%= f.email_field :email, class: 'form-control' %>
 
-  <% if current_user.admin? %>
-     <%= f.label :organization %>
-     <%= f.collection_select :organization_id,
-	 Organization.all, :id, :name,
-	 { include_blank: false }, class: 'form-control' %>
+  <% if current_user.present? %>
 
-     <strong>Organization Admin</strong>: 
-     <%= f.select :org_admin,
-	 options_for_select(
-	 [['True', true], ['False', false]], @user.org_admin),
-	 {}, { :class => 'form-control' } %>
+    <%= f.label :organization %>
+  
+    <% if current_user.admin? %>
+
+      <%= f.collection_select :organization_id,
+	  Organization.all, :id, :name,
+	  { include_blank: false }, class: 'form-control' %>
+      
+    <% else %>
+    
+      <%= f.collection_select :organization_id,
+	  Organization.where(id: current_user.organization_id), :id, :name,
+	  {}, class: 'form-control' %>
+    
+    <% end %>
+
+
+    <% if current_user.org_admin? or current_user.admin? %>
+
+      <strong>Organization Admin</strong>: 
+      <%= f.select :org_admin,
+	  options_for_select(
+	  [['True', true], ['False', false]], @user.org_admin),
+	  {}, { :class => 'form-control' } %>
+      
+    <% end %>
+      
+  <% end %>
+    
+  <% if not current_user.present? or edit %>
+  
+     <%= f.label :password %>
+     <%= f.password_field :password, class: 'form-control' %>
+  
+     <%= f.label :password_confirmation %>
+     <%= f.password_field :password_confirmation, class: 'form-control' %>
      
   <% end %>
-
-  <%= f.label :password %>
-  <%= f.password_field :password, class: 'form-control' %>
-
-  <%= f.label :password_confirmation %>
-  <%= f.password_field :password_confirmation, class: 'form-control' %>
-
+  
   <%= f.submit yield(:button_text), class: "btn btn-primary" %>
 <% end %>
