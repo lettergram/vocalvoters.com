@@ -1,6 +1,6 @@
 class LettersController < ApplicationController
   before_action :logged_in_user, except: [:show, :find_policy]
-  before_action	:logged_in_admin, except: [:show, :find_policy]  
+  before_action	:logged_in_admin, only: [:edit, :update, :destroy]
   before_action :set_letter, only: [:show, :edit, :update, :destroy]
 
   # GET /letters
