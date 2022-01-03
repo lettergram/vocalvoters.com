@@ -26,8 +26,7 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
-  def create
-    
+  def create    
     @user = User.new(new_user_params)
     if @user.save
       inviting_user = current_user.present?

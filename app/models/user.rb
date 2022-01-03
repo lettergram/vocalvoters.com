@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  belongs_to :organization
+  belongs_to :organization, required: false
   
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email

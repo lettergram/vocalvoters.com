@@ -1,6 +1,4 @@
 
-<p id="notice"><%= notice %></p>
-
 <div class="row">
   <div class="col-md-12">
     <p>
@@ -28,7 +26,11 @@
 	    <% if user.org_admin %>
 	      <b>Org Admin</b> - 
 	    <% end %>
-	    <%= user.name %>, <%= user.email %>
+	    <%= user.name %>, <%= user.email %> - 
+	    <small>
+	      <%= link_to "Remove", remove_user_from_org_path(
+		  user_id: user.id, id: @organization.id) %>
+	    </small>
 	  </li>
 	<% end %>
       </ul>

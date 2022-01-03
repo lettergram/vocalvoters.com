@@ -1,7 +1,7 @@
 class OrganizationsController < ApplicationController
   before_action :logged_in_user, only: [:show]
   before_action :logged_in_admin, except: [:show]
-  before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :set_organization, only: [:show, :edit, :update, :destroy, :remove_user_from_org]
   before_action :logged_in_org_admin, only: [:show]
 
   # GET /organizations
@@ -84,6 +84,28 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def remove_user_from_org
+    
+    respond_to do |format|
+      if params.has_key?(:user_id)
+        user = User.find(params[:user_id])
+        
+        user.organization_id = nil # Remove user from organization
+        user.org_admin = false
+        user.save!
+        
+        format.html {
+          redirect_to @organization,
+          notice: 'Organization was successfully updated, removed user: ' + user.email
+        }
+        format.json { render :show, status: :ok, location: @organization }
+      else
+        format.html { render @organization, notice: 'Organization not updated.' }
+        format.json { render json: @organization.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+  
   private
   
     # Use callbacks to share common setup or constraints between actions.
