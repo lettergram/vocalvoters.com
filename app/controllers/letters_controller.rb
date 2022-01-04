@@ -7,9 +7,10 @@ class LettersController < ApplicationController
   # GET /letters.json
   def index
     if current_user.admin?
-      @letters = Letter.all
+      @letters = Letter.where(derived_from: nil)
     else 
       @letters = Letter.where(organization: current_user.organization)
+                   .where(derived_from: nil)
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_04_044410) do
+ActiveRecord::Schema.define(version: 2022_01_04_054022) do
 
   create_table "emails", force: :cascade do |t|
     t.string "email_address"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2022_01_04_044410) do
     t.string "target_state", default: "all"
     t.integer "organization_id"
     t.boolean "editable", default: true
+    t.integer "derived_from"
     t.index ["organization_id"], name: "index_letters_on_organization_id"
     t.index ["user_id"], name: "index_letters_on_user_id"
   end
