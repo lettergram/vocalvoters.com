@@ -21,7 +21,9 @@
       <%= form.label :policy_or_law %>
       <%= form.text_field :policy_or_law, class: 'form-control' %>
     </div>
-
+  </div>
+  
+  <div class="row">
     <div class="col-md-6">
       <%= form.label :tags %>
       <%= form.text_field :tags, class: 'form-control' %>
@@ -34,8 +36,10 @@
 	  ['Neutral', 0],['Negative', -0.5], ['Very Negative', -1.0]],
 	  @letter.sentiment), {}, { :class => 'form-control' } %>
     </div>
-
-    <div class="col-md-6">
+  </div>
+  
+  <div class="row">
+    <div class="col-md-4">
       <%= form.label :target_level %>
       <%= form.select :target_level,
 	 options_for_select([['All', 'all'], ['Federal', 'federal'],
@@ -43,7 +47,7 @@
 	 {}, { :class => 'form-control' } %>
     </div>    
 
-    <div class="col-md-6">
+    <div class="col-md-4">
       <%= form.label :target_state %>
       <%= form.select :target_state,
 	  options_for_select([
@@ -100,6 +104,13 @@
 	  ['Wyoming', 'wyoming']], @letter.target_state),
 	  {}, { :class => 'form-control' } %>
     </div>
+
+    <div class="col-md-4">
+      <%= form.label :Editable_by_Sender %>
+      <%= form.select :editable,
+	  options_for_select([['True', true], ['False', false]], @letter.editable),
+	  {}, { :class => 'form-control' } %>
+    </div>    
   </div>
   
   <div class="row">
