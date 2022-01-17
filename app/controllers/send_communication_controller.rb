@@ -71,21 +71,26 @@ class SendCommunicationController < ApplicationController
         when "priority"
           
           letter_url += "&template=true"
-          return_address_id = create_return_address(sender.name, sender_line_1,
-                                                    sender_line_2, sender_city,
-                                                    sender_state, sender_zipcode)
-
-          success_flag = send_post(
+          return_address_id = Post.get_return_address_id(sender.name,
+                                                         sender_line_1,
+                                                         sender_line_2,
+                                                         sender_city,
+                                                         sender_state,
+                                                         sender_zipcode)
+          
+          success_flag = Post.send_post(
             letter_url, recipient[:name], return_address_id,
             recipient[:address_line_1], recipient[:address_line_2],
             recipient[:address_city], recipient[:address_state],
             address_zipcode, priority_flag=1)
+          
 
           Post.create!(address_line_1: recipient[:address_line_1],
                        address_line_2: recipient[:address_line_2],
                        address_city: recipient[:address_city],
                        address_state: recipient[:address_state],
                        address_zipcode: address_zipcode,
+                       return_address_id: return_address_id,
                        priority: true,
                        sender: sender,
                        recipient: recipient,
@@ -96,11 +101,14 @@ class SendCommunicationController < ApplicationController
         when "letter"
           
           letter_url += "&template=true"
-          return_address_id = create_return_address(sender.name, sender_line_1,
-                                                    sender_line_2, sender_city,
-                                                    sender_state, sender_zipcode)
+          return_address_id = Post.get_return_address_id(sender.name,
+                                                         sender_line_1,
+                                                         sender_line_2,
+                                                         sender_city,
+                                                         sender_state,
+                                                         sender_zipcode)
           
-          success_flag = send_post(
+          success_flag = Post.send_post(
             letter_url, recipient[:name], return_address_id,
             recipient[:address_line_1], recipient[:address_line_2],
             recipient[:address_city], recipient[:address_state],
@@ -111,6 +119,7 @@ class SendCommunicationController < ApplicationController
                        address_city: recipient[:address_city],
                        address_state: recipient[:address_state],
                        address_zipcode: address_zipcode,
+                       return_address_id: return_address_id,
                        priority: false,
                        sender: sender,
                        recipient: recipient,
@@ -124,8 +133,8 @@ class SendCommunicationController < ApplicationController
           source_method = "rails"
           from_email = sender.email
           
-          success_flag = send_fax(letter_url, to_fax_number, from,
-                                  source_method, from_email)
+          success_flag = Fax.send_fax(letter_url, to_fax_number, from,
+                                      source_method, from_email)
             
           Fax.create!(number_fax: to_fax_number,
                       sender: sender,
@@ -167,96 +176,6 @@ class SendCommunicationController < ApplicationController
     def send_email(name, email)
       # https://developers.clicksend.com/docs/rest/v3/#send-email
       return false
-    end
-    
-
-    def send_fax(letter_url, to_fax_number, from, source_method, from_email)
-      api_instance = ClickSendClient::FAXApi.new
-      
-      # FaxMessageCollection | FaxMessageCollection model
-      fax_messages = ClickSendClient::FaxMessageCollection.new(
-        "file_url": letter_url,
-        messages: [
-          ClickSendClient::FaxMessage.new(            
-            "to": to_fax_number,
-            "source": source_method,
-            "from": from,
-            "country": 'US',
-            "from_email": from_email,
-            "source": source_method
-          )
-        ]
-      )
-
-      begin
-        # Send a fax using supplied supported file-types.
-        result = api_instance.fax_send_post(fax_messages)
-        return true
-      rescue ClickSendClient::ApiError => e
-        puts "Exception when calling FAXApi->fax_send_post: #{e.response_body}"
-      end
-      return false
-    end
-    
-    def create_return_address(name, line_1, line_2, city, state, zipcode)
-      api_instance = ClickSendClient::PostReturnAddressApi.new
-      
-      # Address | Address model
-      return_address = ClickSendClient::Address.new(
-        "address_postal_code": zipcode,
-        "address_country": "US",
-        "address_line_1": line_1,
-        "address_state": state,
-        "address_name": name,        
-        "address_line_2": line_2,
-        "address_city": city
-      )
-      
-      begin
-        # Create post return address
-        result = api_instance.post_return_addresses_post(return_address)
-        result = JSON.parse(result)
-        return result['data']['return_address_id']
-      rescue ClickSendClient::ApiError => e
-        puts "Exception calling PostReturnAddressApi->post_return_addresses_post: #{e.response_body}"
-      end
-      return false
-    end
-
-    def send_post(letter_url, name, return_address_id, address_line_1, address_line_2,
-                  address_city, address_state, address_zipcode, priority_flag=0)
-
-      # PostLetter | PostLetter model
-      api_instance = ClickSendClient::PostLetterApi.new        
-      post_letter = ClickSendClient::PostLetter.new(
-        "file_url": letter_url,
-        "recipients": [
-                        {
-                          "return_address_id": return_address_id,
-                         "schedule": 0,
-                         "address_name": name,
-                         "address_line_1": address_line_1,
-                         "address_line_2": address_line_2,
-                         "address_city": address_city,
-                         "address_state": address_state,
-                         "address_postal_code": address_zipcode,
-                         "address_country": "US"
-                        }
-                      ],
-        "priority_post": priority_flag,
-        "template_used": 1,
-        "duplex": 0,
-        "colour": 0
-      )
-      
-      begin
-        # Send post letter
-        result = api_instance.post_letters_send_post(post_letter)
-        return true
-      rescue ClickSendClient::ApiError => e
-        puts "Exception calling PostLetterApi->post_letters_send_post: #{e.response_body}"
-      end
-      return false
-    end
+    end    
     
 end
