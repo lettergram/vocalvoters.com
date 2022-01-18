@@ -9,6 +9,8 @@
   <%= @letter.target_level %><br>
   <strong>Target State:</strong>
   <%= @letter.target_state %><br>
+  <strong>Editable by Sender:</strong>
+  <%= @letter.editable %><br>
   <strong>Organization:</strong>
   <% if @letter.organization.present? %>
     <%= @letter.organization.name %>

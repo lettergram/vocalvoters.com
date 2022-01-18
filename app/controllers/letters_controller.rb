@@ -7,9 +7,10 @@ class LettersController < ApplicationController
   # GET /letters.json
   def index
     if current_user.admin?
-      @letters = Letter.all
+      @letters = Letter.where(derived_from: nil)
     else 
       @letters = Letter.where(organization: current_user.organization)
+                   .where(derived_from: nil)
     end
   end
 
@@ -224,7 +225,7 @@ class LettersController < ApplicationController
     def letter_params
       params.require(:letter)
         .permit(:category, :policy_or_law, :tags, :sentiment, :body,
-                :target_level, :target_state)
+                :target_level, :target_state, :editable)
         .merge(user_id: current_user.id)
         .merge(organization_id: current_user.organization.id)
     end

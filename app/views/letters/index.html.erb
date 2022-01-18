@@ -8,7 +8,8 @@
       <th>Category</th>
       <th>Policy or law</th>
       <th>Sentiment</th>
-      <th>Body</th>
+      <th>Editable by Sender</th>
+      <th>Body</th>      
       <th>User</th>
       <th colspan="3"></th>
     </tr>
@@ -20,6 +21,7 @@
         <td><%= letter.category %></td>
         <td><%= letter.policy_or_law %></td>
         <td><%= letter.sentiment %></td>
+	<td><%= letter.editable %></td>
         <td><%= letter.body %></td>
         <td><%= letter.user_id %></td>
         <td><%= link_to 'Show', letter %></td>

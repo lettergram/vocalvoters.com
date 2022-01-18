@@ -6,7 +6,8 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.order(created_at: :desc).all
+               .paginate(page: params[:page]) # Will have to modify
   end
 
   # GET /posts/1
@@ -30,7 +31,8 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
+        format.html { redirect_to @post,
+                                  notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
       else
         format.html { render :new }
@@ -42,9 +44,40 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
+
+    # Change in approval status and not "pending"
+    approval_flag = @post.approval_status != post_params['approval_status'] and
+      post_params['approval_status'] != 'pending'
+    
     respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
+      if @post.update(post_params) # approved update
+        
+        if approval_flag
+          if @post.approval_status == "approved"
+
+            success = Post.send_post(
+              @post.letter_url, @post.recipient.name,
+              @post.return_address_id, @post.address_line_1,
+              @post.address_line_2, @post.address_city,
+              @post.address_state, @post.address_zipcode,
+              @post.priority)
+
+            @post.update!(success: success)
+
+            if success # If successsful remove letter_url
+              @post.update!(letter_url: nil)
+            end
+            
+            flash[:success] = 'Successfully Approved Post - Sending!'
+          elsif @post.approval_status = "declined"
+            @post.update!(letter_url: nil) # Remove as decided
+            flash[:danger] = 'Declined Sending Post'
+          end
+        end
+        
+        format.html {
+          redirect_back(fallback_location: @post)
+        }
         format.json { render :show, status: :ok, location: @post }
       else
         format.html { render :edit }
@@ -70,7 +103,9 @@ class PostsController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def post_params
-      params.require(:post).permit(:address_line_1, :address_line_2, :address_city, :address_state, :address_zipcode, :sender_id, :recipient_id, :letter_id, :payment_id)
+    def post_params      
+      params.require(:post).permit(
+        :address_line_1, :address_line_2, :address_city, :address_state,
+        :address_zipcode, :approval_status, :sender_id, :recipient_id, :letter_id)
     end
 end

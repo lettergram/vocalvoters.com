@@ -1,6 +1,5 @@
-class Email < ApplicationRecord
-  belongs_to :sender
-  belongs_to :recipient
-  belongs_to :letter
+class Email < CommunicationRecord
+
   belongs_to :payment
+
 end

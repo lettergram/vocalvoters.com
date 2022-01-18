@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_24_022006) do
+ActiveRecord::Schema.define(version: 2022_01_18_053859) do
 
   create_table "emails", force: :cascade do |t|
     t.string "email_address"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 2021_12_24_022006) do
     t.string "payment", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "approval_status", default: "pending"
+    t.text "letter_url"
     t.index ["letter_id"], name: "index_emails_on_letter_id"
     t.index ["recipient_id"], name: "index_emails_on_recipient_id"
     t.index ["sender_id"], name: "index_emails_on_sender_id"
@@ -35,6 +37,8 @@ ActiveRecord::Schema.define(version: 2021_12_24_022006) do
     t.integer "letter_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "approval_status", default: "pending"
+    t.text "letter_url"
     t.index ["letter_id"], name: "index_faxes_on_letter_id"
     t.index ["recipient_id"], name: "index_faxes_on_recipient_id"
     t.index ["sender_id"], name: "index_faxes_on_sender_id"
@@ -52,6 +56,8 @@ ActiveRecord::Schema.define(version: 2021_12_24_022006) do
     t.string "target_level", default: "all"
     t.string "target_state", default: "all"
     t.integer "organization_id"
+    t.boolean "editable", default: true
+    t.integer "derived_from"
     t.index ["organization_id"], name: "index_letters_on_organization_id"
     t.index ["user_id"], name: "index_letters_on_user_id"
   end
@@ -114,6 +120,9 @@ ActiveRecord::Schema.define(version: 2021_12_24_022006) do
     t.integer "letter_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "return_address_id"
+    t.string "approval_status", default: "pending"
+    t.text "letter_url"
     t.index ["letter_id"], name: "index_posts_on_letter_id"
     t.index ["recipient_id"], name: "index_posts_on_recipient_id"
     t.index ["sender_id"], name: "index_posts_on_sender_id"

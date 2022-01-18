@@ -6,7 +6,8 @@ class FaxesController < ApplicationController
   # GET /faxes
   # GET /faxes.json
   def index
-    @faxes = Fax.all
+    @faxes = Fax.order(created_at: :desc).all                          
+               .paginate(page: params[:page]) # Will have to modify
   end
 
   # GET /faxes/1
@@ -42,9 +43,33 @@ class FaxesController < ApplicationController
   # PATCH/PUT /faxes/1
   # PATCH/PUT /faxes/1.json
   def update
+
+    # Change in approval status and not "pending" 
+    approval_flag = @fax.approval_status != fax_params['approval_status'] and
+      fax_params['approval_status'] != 'pending'
+    
     respond_to do |format|
-      if @fax.update(fax_params)
-        format.html { redirect_to @fax, notice: 'Fax was successfully updated.' }
+      if @fax.update(fax_params) # approved update        
+        if approval_flag
+          if @fax.approval_status == "approved"
+            
+            success = Fax.send_fax(
+              @fax.letter_url, @fax.number_fax,
+              "from", "VocalVoters", @fax.sender.email)            
+            @fax.update!(success: success)
+            
+            if success # If successsful remove letter_url
+              @fax.update!(letter_url: nil) 
+            end
+            
+            flash[:success] = 'Successfully Approved Fax - Sending!'
+          elsif @fax.approval_status = "declined"
+            @fax.update!(letter_url: nil) # Remove, as decided
+            flash[:danger] = 'Declined Sending Fax'
+          end          
+        end
+        
+        format.html { redirect_back(fallback_location: @fax) }
         format.json { render :show, status: :ok, location: @fax }
       else
         format.html { render :edit }
@@ -71,6 +96,7 @@ class FaxesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def fax_params
-      params.require(:fax).permit(:number_fax, :sender_id, :recipient_id, :letter_id, :payment_id)
+      params.require(:fax).permit(:approval_status,
+        :number_fax, :sender_id, :recipient_id, :letter_id, :payment_id)
     end
 end
