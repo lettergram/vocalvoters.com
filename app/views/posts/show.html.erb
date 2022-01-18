@@ -26,6 +26,11 @@
 </p>
 
 <p>
+  <strong>Approval Status:</strong>
+  <%= @post.approval_status %>
+</p>
+
+<p>
   <strong>Sender:</strong>
   <%= @post.sender_id %>
 </p>
@@ -38,11 +43,6 @@
 <p>
   <strong>Letter:</strong>
   <%= @post.letter_id %>
-</p>
-
-<p>
-  <strong>Payment:</strong>
-  <%= @post.payment_id %>
 </p>
 
 <%= link_to 'Edit', edit_post_path(@post) %> |

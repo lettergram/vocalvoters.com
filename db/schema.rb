@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_17_194840) do
+ActiveRecord::Schema.define(version: 2022_01_18_053859) do
 
   create_table "emails", force: :cascade do |t|
     t.string "email_address"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 2022_01_17_194840) do
     t.string "payment", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "approval_status", default: "pending"
+    t.text "letter_url"
     t.index ["letter_id"], name: "index_emails_on_letter_id"
     t.index ["recipient_id"], name: "index_emails_on_recipient_id"
     t.index ["sender_id"], name: "index_emails_on_sender_id"
@@ -35,6 +37,8 @@ ActiveRecord::Schema.define(version: 2022_01_17_194840) do
     t.integer "letter_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "approval_status", default: "pending"
+    t.text "letter_url"
     t.index ["letter_id"], name: "index_faxes_on_letter_id"
     t.index ["recipient_id"], name: "index_faxes_on_recipient_id"
     t.index ["sender_id"], name: "index_faxes_on_sender_id"
@@ -117,6 +121,8 @@ ActiveRecord::Schema.define(version: 2022_01_17_194840) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "return_address_id"
+    t.string "approval_status", default: "pending"
+    t.text "letter_url"
     t.index ["letter_id"], name: "index_posts_on_letter_id"
     t.index ["recipient_id"], name: "index_posts_on_recipient_id"
     t.index ["sender_id"], name: "index_posts_on_sender_id"

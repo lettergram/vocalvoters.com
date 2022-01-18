@@ -1,37 +1,17 @@
-<p id="notice"><%= notice %></p>
+<% provide(:title, 'Faxes') %>
+<div class="row">
+  <h1>Faxes</h1>
+</div>
+<div class="row">
+  <center><%= will_paginate %></center>
+  <div class="col-md-8 col-md-offset-2">
+    <ul class="users">
+      <%= render @faxes %>
+    </ul>
+  </div>
+  <center><%= will_paginate %></center>
+</div>
+<div class="row">
+  <%= link_to 'New Fax', new_fax_path %>
+</div>
 
-<h1>Faxes</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Number fax</th>
-      <th>Sender</th>
-      <th>Recipient</th>
-      <th>Letter</th>
-      <th>Payment</th>
-      <th>Success</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @faxes.each do |fax| %>
-      <tr>
-        <td><%= fax.number_fax %></td>
-        <td><%= fax.sender_id %></td>
-        <td><%= fax.recipient_id %></td>
-        <td><%= fax.letter_id %></td>
-        <td><%= fax.payment %></td>
-        <td><%= fax.success %></td>	
-        <td><%= link_to 'Show', fax %></td>
-        <td><%= link_to 'Edit', edit_fax_path(fax) %></td>
-        <td><%= link_to 'Destroy', fax, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Fax', new_fax_path %>

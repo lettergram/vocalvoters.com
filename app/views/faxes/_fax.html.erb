@@ -1,0 +1,34 @@
+<li>
+  <div class="col-md-10">
+    <% letter = Letter.find(fax.letter_id) %>
+    Category: <strong><%= letter.category %></strong>;
+    Policy: <strong><%= letter.policy_or_law %></strong><br>
+    Status:<strong><%= fax.approval_status %></strong>;
+    Communication:
+    <% if fax.success %>
+       <strong>Sent</strong>
+    <% else %>
+      <strong>Not Sent</strong>
+    <% end %>
+    <br>
+    <details style="color:black;font-size:1em;">
+      <summary style="color:gray;">> Read Text Body</summary>
+      <pre style="white-space:pre-wrap;">
+        <%= letter.body %>
+      </pre>
+    </details>
+    <br>
+  </div>
+  <div class="col-md-2" style="text-align:center;">
+    <br>
+    <% if fax.approval_status == "pending" %>
+      <%= button_to "Approve", fax, method: :put,
+          params: { 'fax': { 'approval_status': 'approved' } },
+          class: "btn btn-success", style:"margin-bottom:0.5em" %>
+      <%= button_to "decline", fax, method: :put,
+          params: { 'fax': { 'approval_status': 'declined'  } },
+          class: "btn btn-danger", style:"margin-bottom:0.5em" %>
+    <% end %>
+    <br>
+  </div>
+</li>

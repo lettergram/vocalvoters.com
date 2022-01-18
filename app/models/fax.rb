@@ -1,9 +1,6 @@
 require 'clicksend_client'
 
-class Fax < ApplicationRecord
-  belongs_to :sender
-  belongs_to :recipient
-  belongs_to :letter
+class Fax < CommunicationRecord
 
   def self.send_fax(letter_url, to_fax_number, from, source_method, from_email)
       api_instance = ClickSendClient::FAXApi.new
