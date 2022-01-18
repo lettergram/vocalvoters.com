@@ -79,9 +79,9 @@ class SendCommunicationController < ApplicationController
         approval_status = "approved" # send immediately
 
         # Implies letter has been edited
-        # if letter.derived_from != nil
-        approval_status = "pending"
-        # end
+        if letter.derived_from != nil
+          approval_status = "pending"
+        end
         
         case method
         when "priority", "letter"
