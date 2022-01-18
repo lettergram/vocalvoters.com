@@ -63,9 +63,14 @@ class PostsController < ApplicationController
               @post.priority)
 
             @post.update!(success: success)
+
+            if success # If successsful remove letter_url
+              @post.update!(letter_url: nil)
+            end
             
             flash[:success] = 'Successfully Approved Post - Sending!'
           elsif @post.approval_status = "declined"
+            @post.update!(letter_url: nil) # Remove as decided
             flash[:danger] = 'Declined Sending Post'
           end
         end

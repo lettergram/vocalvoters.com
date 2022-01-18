@@ -55,14 +55,18 @@ class FaxesController < ApplicationController
             
             success = Fax.send_fax(
               @fax.letter_url, @fax.number_fax,
-              "from", "VocalVoters", @fax.sender.email)
-            
+              "from", "VocalVoters", @fax.sender.email)            
             @fax.update!(success: success)
+            
+            if success # If successsful remove letter_url
+              @fax.update!(letter_url: nil) 
+            end
             
             flash[:success] = 'Successfully Approved Fax - Sending!'
           elsif @fax.approval_status = "declined"
+            @fax.update!(letter_url: nil) # Remove, as decided
             flash[:danger] = 'Declined Sending Fax'
-          end
+          end          
         end
         
         format.html { redirect_back(fallback_location: @fax) }

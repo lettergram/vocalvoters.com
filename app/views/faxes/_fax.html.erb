@@ -1,5 +1,5 @@
 <li>
-  <div class="col-md-10">
+  <div class="col-md-10" id="<%= fax.id %>">
     <% letter = Letter.find(fax.letter_id) %>
     Category: <strong><%= letter.category %></strong>;
     Policy: <strong><%= letter.policy_or_law %></strong><br>

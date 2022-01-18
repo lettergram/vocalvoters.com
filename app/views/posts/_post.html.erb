@@ -1,5 +1,5 @@
 <li>
-  <div class="col-md-10">
+  <div class="col-md-10" id="<%= post.id %>">
     <% letter = Letter.find(post.letter_id) %>
     Category: <strong><%= letter.category %></strong>;
     Policy: <strong><%= letter.policy_or_law %></strong><br>
