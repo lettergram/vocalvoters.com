@@ -42,7 +42,8 @@ yarn-debug.log*
 
 ## Emacs
 **~
-**#
+**#*
+*.#*
 
 *.lock
 .ruby-version
