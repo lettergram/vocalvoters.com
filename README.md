@@ -46,6 +46,15 @@ username: vocalvoters_app
 password: <%= ENV['VOCALVOTERS_DATABASE_PASSWORD'] %>
 ```
 
+### Initial Setup
+
+1. Launch application, no users or organizations will be present
+2. Signup with a user account
+3. Log into database and make user admin (authenticate if you have not done so)
+4. Create an organization (e.g. "VocalVoters")
+5. Go to user profile and add to organization
+6. Create new letters
+
 ### Disclaimers
 
 None of the letters we host represent the opinions of the authors, creators, committers or even users of Vocal Voters.
