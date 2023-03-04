@@ -28,7 +28,7 @@ WickedPdf.config = {
 
 WickedPdf.config ||= {}
 WickedPdf.config.merge!({
-  layout: "pdf.html.erb",
+  layout: "pdf",
   orientation: "Portrait",
   page_size: "A4",
   zoom: 1,

@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.string "district"
     t.string "state"
     t.integer "number_fax"
-    t.integer "number_phone"
+    t.bigint "number_phone"
     t.string "email_address"
     t.string "address_line_1"
     t.string "address_line_2"

@@ -137,8 +137,7 @@ class LettersController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render template: "letters/letter.html.erb",
-               pdf: "Letter ID: #{@letter.id}"
+        render template: "/letters/letter", pdf: "Letter ID: #{@letter.id}", layout: 'pdf'
       end
     end    
   end
@@ -192,6 +191,7 @@ class LettersController < ApplicationController
     end
   end
 
+  # Search /find_policy.json
   def find_policy
     category = params[:category]
     sentiment = params[:sentiment]
