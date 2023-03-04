@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  get 'generate/letter'
   resources :organizations
   get 'password_resets/new'
   get 'password_resets/edit'

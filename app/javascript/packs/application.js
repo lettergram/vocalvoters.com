@@ -11,8 +11,13 @@ import "signature_pad";
 import 'jquery';
 import "channels";
 import "bootstrap";
-import "chartkick/chart.js"
+import "chartkick/chart.js";
 
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
+require("@rails/ujs").start()
+require("turbolinks").start()
+require("@rails/activestorage").start()
+require("jquery")
+require("channels")

@@ -1,0 +1,1 @@
+<%= render @generated_letter %>

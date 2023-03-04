@@ -5,11 +5,11 @@
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "5.4.0",
+    "@rails/webpacker": "5.4.3",
     "bootstrap": "3.4.1",
     "chart.js": "^3.7.0",
     "chartkick": "^4.1.1",
-    "jquery": "3.5.1",
+    "jquery": "^3.6.3",
     "signature_pad": "4.0.0",
     "turbolinks": "^5.2.0",
     "webpack": "^4.46.0",
@@ -17,6 +17,6 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3"
   }
 }
