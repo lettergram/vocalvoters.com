@@ -46,18 +46,6 @@ username: vocalvoters_app
 password: <%= ENV['VOCALVOTERS_DATABASE_PASSWORD'] %>
 ```
 
-#### Fix for robust signatures
-If people sign documents with many pen strokes the length of the url encoded base64 data will exceed the defaults allowed by the puma server. To fix this, you must increase the size of max string length. Example:
-
-```
-bundle config build.puma "--with-cflags='-D PUMA_REQUEST_PATH_MAX_LENGTH=64000 -D PUMA_REQUEST_URI_MAX_LENGTH=64000 -D PUMA_QUERY_STRING_MAX_LENGTH=64000'"
-```
-
-On heroku:
-```
-heroku config:set BUNDLE_BUILD__PUMA="--with-cflags='-D PUMA_REQUEST_PATH_MAX_LENGTH=64000 -D PUMA_REQUEST_URI_MAX_LENGTH=64000 -D PUMA_QUERY_STRING_MAX_LENGTH=64000'"
-```
-
 ### Initial Setup
 
 1. Launch application, no users or organizations will be present
