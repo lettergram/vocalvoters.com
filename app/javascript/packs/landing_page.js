@@ -41,13 +41,14 @@ function create_signature(){
 	const SignaturePad = require("signature_pad").default;
 	var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
 	    backgroundColor: 'rgba(255, 255, 255, 0)',
-	    penColor: 'rgb(0, 0, 0)'
+	    penColor: 'rgb(0, 0, 0)',
+	    minDistance: 5
 	});
 
 	var submitButton = document.getElementById('submit-signature');	
 	submitButton.addEventListener('click', function (event) {
 	    // const data = signaturePad.toData() // saves more detailed data
-	    const data = signaturePad.toDataURL() // save data as base64
+	    const data = signaturePad.toDataURL() // save data as png base64
 	    document.getElementById('signature-data').value = data;
 
 	    sender_name = document.getElementById('name').value;
