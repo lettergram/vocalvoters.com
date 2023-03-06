@@ -26,18 +26,17 @@ class GenerateController < ApplicationController
           })
         full_response = response["choices"][0]["text"]
         
-        puts full_response
+        letter_text = full_response.split('-------')[0]
         
-        puts "-------------- after ------------"
-          
-        letter_text = full_response.split('-------')[0]          
+        # Remove any start of letter
+        letter_text = letter_text.gsub(/^(dear|Dear)(?<=(Dear|dear))(.*)(?=\n\n)\n\n/, '')
+        letter_text = letter_text.split(/^(sincerely|Sincerely)(?<=(sincerely|Sincerely))(.*)(?=\n\n)\n\n/)[0]
+        letter_text = letter_text.strip
+
+        # Remove any end of letter
         @generated_letter['text'] = letter_text
         
-        puts letter_text
-        
         meta_data = full_response.split('-------')[1]
-        
-        puts meta_data
         
         output = meta_data.gsub("\n", '')
         output_as_list = output.gsub("(", "").gsub(")", "").split(",")
@@ -71,7 +70,7 @@ class GenerateController < ApplicationController
       @topic = ""
       if params.has_key?(:topic)
         @topic = params[:topic]
-        @prompt = "I am a well-respected, highly intelligent bot. I would never threaten violence, call to violence or suggest harm to any specific person or group.\n\nI have been given the task of writing a letter to a congressman #{@topic}. Hide any ideations of ill will. Exclude the introduction and signature, but leave the letter body.\n\nAt the end of the letter, add '-------' then add the topic, sentiment (value must be between -1.0 and 1.0), and policy or law -- in the form: (topic, sentiment, policy or law)"        
+        @prompt = "I am a well-respected, highly intelligent bot. I would never threaten violence, call to violence or suggest harm to any specific person or group.\n\nI have been given the task of writing a letter body to a congress person #{@topic}.\n\nExclude the letter introduction and end signature, keep only the letter body.\n\nAt the end of the letter, add '-------' then add the topic, sentiment (value must be between -1.0 and 1.0), and policy or law -- in the form: (topic, sentiment, policy or law)"        
       end
     end
   
