@@ -10,7 +10,8 @@ class GenerateController < ApplicationController
       topic: @topic,
       sentiment: 0.0,
       policy_or_law: "",
-      text: ""
+      text: "",
+      letter_id: nil
     }
     if not @prompt.blank?
       OpenAI.configure do |config|
@@ -51,9 +52,10 @@ class GenerateController < ApplicationController
           sentiment: @generated_letter['sentiment'].to_f.to_i,
           policy_or_law: @generated_letter['policy_or_law'],
           organization_id: 1,
-          user_id: 1
+          user_id: 1,
         )
         @letter.save
+        @generated_letter['letter_id'] = @letter.id
       end
     end
     
