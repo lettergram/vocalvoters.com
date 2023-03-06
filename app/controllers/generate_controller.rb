@@ -1,3 +1,4 @@
+
 require "openai"
 
 class GenerateController < ApplicationController
@@ -13,42 +14,47 @@ class GenerateController < ApplicationController
     }
     if not @prompt.blank?
       OpenAI.configure do |config|
-        begin
-          config.access_token = ENV.fetch('OPENAI_KEY')
-          client = OpenAI::Client.new
-          response = client.completions(
-            parameters: {
-              model: "text-davinci-003",
-              prompt: @prompt,
-              temperature: 0.1,
-              max_tokens: 450
-            })
-          full_response = response["choices"][0]["text"]
-          
-          letter_text = full_response.split('-------')[0]          
-          @generated_letter['text'] = letter_text
-
-          puts letter_text
-          
-          meta_data = full_response.split('-------')[1]
-
-          puts meta_data
-          
-          output = meta_data.gsub("\n", '')
-          output_as_list = output.gsub("(", "").gsub(")", "").split(",")
-
-          @generated_letter['topic'] = output_as_list[0].strip
-          @generated_letter['sentiment'] = output_as_list[1].strip
-          @generated_letter['policy_or_law'] = output_as_list[2].strip
-        rescue
-          @generated_letter = {
-            topic: @topic,
-            sentiment: 0.0,
-            policy_or_law: "",
-            text: ""
-          }
-        end
         
+        config.access_token = ENV.fetch('OPENAI_KEY')
+        client = OpenAI::Client.new
+        response = client.completions(
+          parameters: {
+            model: "text-davinci-003",
+            prompt: @prompt,
+            temperature: 0.1,
+            max_tokens: 450
+          })
+        full_response = response["choices"][0]["text"]
+        
+        puts full_response
+        
+        puts "-------------- after ------------"
+          
+        letter_text = full_response.split('-------')[0]          
+        @generated_letter['text'] = letter_text
+        
+        puts letter_text
+        
+        meta_data = full_response.split('-------')[1]
+        
+        puts meta_data
+        
+        output = meta_data.gsub("\n", '')
+        output_as_list = output.gsub("(", "").gsub(")", "").split(",")
+        
+        @generated_letter['topic'] = output_as_list[0].strip
+        @generated_letter['sentiment'] = output_as_list[1].strip
+        @generated_letter['policy_or_law'] = output_as_list[2].strip
+        @letter = Letter.new(
+          body: @generated_letter['text'],
+          category:  @generated_letter['topic'],
+          tags:  @generated_letter['topic'],
+          sentiment: @generated_letter['sentiment'].to_f.to_i,
+          policy_or_law: @generated_letter['policy_or_law'],
+          organization_id: 1,
+          user_id: 1
+        )
+        @letter.save
       end
     end
     
