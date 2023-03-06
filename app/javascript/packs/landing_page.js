@@ -751,3 +751,20 @@ function copyLetterToClipboard(){
 
     document.getElementById("share_button").innerHTML = "Copied Link!"
 }
+
+function generate_letter(){
+    topic = document.getElementById('topic_search_bar').value;
+    lookup_url = '/generate/letter.json?topic='+topic
+    console.log(lookup_url)
+    $.ajax({
+        url: lookup_url,
+	cache: false,
+        success: function(json_obj){
+	    console.log(json_obj)
+	}
+    })
+}
+
+$('#generate_letter_button').click(function(e) {
+    generate_letter()
+})
