@@ -29,8 +29,7 @@ class StaticPagesController < ApplicationController
     @options_sentiment = []
 
     @selected_policy_or_law = nil
-    @options_policy_or_law = []      
-          
+    @options_policy_or_law = []
     
     # Don't bother preloading unless category selected
     if @selected_category.present?
