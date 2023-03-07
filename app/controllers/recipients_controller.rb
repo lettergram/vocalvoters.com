@@ -223,7 +223,7 @@ class RecipientsController < ApplicationController
       
       uri = URI(url)
       obj = Net::HTTP.get(uri)
-      
+
       return ActiveSupport::JSON.decode(obj)
     end
 end

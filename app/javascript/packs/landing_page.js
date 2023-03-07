@@ -150,11 +150,15 @@ $("#policy_or_law").change(function(e) {
         
 })
 
-function generate_concerns() {
-    
-    form_element_ids = ['name', 'email', 'address']
-    if(validate_form(form_element_ids)){
+function generate_concerns(letter_id=null){
 
+    // Ensure name, email, address are present
+    form_element_ids = ['name', 'email', 'address']
+    if(!validate_form(form_element_ids)){
+	return false
+    }
+
+    if(!letter_id){
 	category = $('#category').find(":selected").attr('value');
 	sentiment = $('#sentiment').find(":selected").val();
 	policy_or_law = $('#policy_or_law').find(":selected").val();
@@ -168,6 +172,10 @@ function generate_concerns() {
 	if (letter_id == '') {
 	    letter_id = $('#category').find(":selected").attr('value')
 	}
+	
+    }
+
+    if(letter_id){    
 
 	sender_name = document.getElementById('name').value;
 	sender_state = document.querySelector('#sender_state').getAttribute('value');
@@ -197,6 +205,7 @@ function generate_concerns() {
 
     return false
 }
+
 
 $("#sentiment").change(function(e) {
     category_val = $("#category").find(":selected").text()
@@ -416,10 +425,10 @@ function update_prices() {
 	document.getElementById('payment_container').style.display = 'none';
     }
     
-    document.getElementById('email_price').innerText= recipient_count * 1;
-    document.getElementById('fax_price').innerText= recipient_count * 2;
-    document.getElementById('letter_price').innerText= recipient_count * 3;
-    document.getElementById('priority_price').innerText= recipient_count * 5;
+    document.getElementById('email_price').innerText= recipient_count * 1 + 1;
+    document.getElementById('fax_price').innerText= recipient_count * 2 + 1;
+    document.getElementById('letter_price').innerText= recipient_count * 3 + 1;
+    document.getElementById('priority_price').innerText= recipient_count * 5 + 1;
 }
 
 function attach_stripe_checkout_on_click() {
@@ -751,3 +760,34 @@ function copyLetterToClipboard(){
 
     document.getElementById("share_button").innerHTML = "Copied Link!"
 }
+
+function generate_letter(){
+    topic = document.getElementById('topic_search_bar').value;
+    lookup_url = '/generate/letter.json?topic='+topic
+    
+    document.getElementById('generate_letter_button').disabled = true;
+    document.getElementById('generate_letter_button').innerText = "Please wait..."
+    
+    $.ajax({
+        url: lookup_url,
+	cache: false,
+        success: function(json_obj){
+	    document.getElementById('generate_letter_button').disabled = false;
+	    document.getElementById('generate_letter_button').innerText = "Generate Letter"
+	    $('#concerns_selection').attr('style', 'display:block');
+	    generate_concerns(letter_id=json_obj['letter_id'])
+	    window.location.hash = "#communications_selection";
+	}
+    })
+}
+
+$('#generate_letter_button').click(function(e) {
+    generate_letter()
+});
+
+$("#topic_search_bar").on('keyup', function (e) {
+    console.log(e)
+    if (e.key === 'Enter' || e.keyCode === 13) {
+	generate_letter()
+    }
+});
