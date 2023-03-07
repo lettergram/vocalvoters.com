@@ -150,11 +150,15 @@ $("#policy_or_law").change(function(e) {
         
 })
 
-function generate_concerns() {
-    
-    form_element_ids = ['name', 'email', 'address']
-    if(validate_form(form_element_ids)){
+function generate_concerns(letter_id=null){
 
+    // Ensure name, email, address are present
+    form_element_ids = ['name', 'email', 'address']
+    if(!validate_form(form_element_ids)){
+	return false
+    }
+
+    if(!letter_id){
 	category = $('#category').find(":selected").attr('value');
 	sentiment = $('#sentiment').find(":selected").val();
 	policy_or_law = $('#policy_or_law').find(":selected").val();
@@ -168,6 +172,10 @@ function generate_concerns() {
 	if (letter_id == '') {
 	    letter_id = $('#category').find(":selected").attr('value')
 	}
+	
+    }
+
+    if(letter_id){    
 
 	sender_name = document.getElementById('name').value;
 	sender_state = document.querySelector('#sender_state').getAttribute('value');
@@ -197,6 +205,7 @@ function generate_concerns() {
 
     return false
 }
+
 
 $("#sentiment").change(function(e) {
     category_val = $("#category").find(":selected").text()
@@ -755,7 +764,6 @@ function copyLetterToClipboard(){
 function generate_letter(){
     topic = document.getElementById('topic_search_bar').value;
     lookup_url = '/generate/letter.json?topic='+topic
-    console.log(lookup_url)
     
     document.getElementById('generate_letter_button').disabled = true;
     document.getElementById('generate_letter_button').innerText = "Please wait..."
@@ -764,30 +772,10 @@ function generate_letter(){
         url: lookup_url,
 	cache: false,
         success: function(json_obj){
-	    console.log(json_obj)
 	    document.getElementById('generate_letter_button').disabled = false;
 	    document.getElementById('generate_letter_button').innerText = "Generate Letter"
-	    
-	    category=json_obj['topic']
-	    sentiment=json_obj['sentiment']
-	    policy_or_law=json_obj['policy_or_law']
-
-	    update_options(
-		category=category,
-		sentiment=null,
-		policy_or_law=null
-	    );
-	    
-            document.getElementById('category').value = json_obj['topic']
-            document.getElementById('sentiment').value = json_obj['sentiment']
-            document.getElementById('policy_or_law').value = json_obj['policy_or_law']
-
-	    console.log(category)
-	    console.log(document.getElementById('sentiment').value)
-	    console.log(policy_or_law)
-
 	    $('#concerns_selection').attr('style', 'display:block');
-	    generate_concerns()
+	    generate_concerns(letter_id=json_obj['letter_id'])
 
 	}
     })
