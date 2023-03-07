@@ -425,10 +425,10 @@ function update_prices() {
 	document.getElementById('payment_container').style.display = 'none';
     }
     
-    document.getElementById('email_price').innerText= recipient_count * 1;
-    document.getElementById('fax_price').innerText= recipient_count * 2;
-    document.getElementById('letter_price').innerText= recipient_count * 3;
-    document.getElementById('priority_price').innerText= recipient_count * 5;
+    document.getElementById('email_price').innerText= recipient_count * 1 + 1;
+    document.getElementById('fax_price').innerText= recipient_count * 2 + 1;
+    document.getElementById('letter_price').innerText= recipient_count * 3 + 1;
+    document.getElementById('priority_price').innerText= recipient_count * 5 + 1;
 }
 
 function attach_stripe_checkout_on_click() {
