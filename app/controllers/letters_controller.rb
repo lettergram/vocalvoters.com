@@ -126,9 +126,9 @@ class LettersController < ApplicationController
     if params.has_key?(:sender_verified)
       @sender_region_verified = "<br><i><small>"
       if ActiveModel::Type::Boolean.new.cast(params[:sender_verified])
-        @sender_region_verified += "&#10004; Verified "
+        @sender_region_verified += "Verified "
       else
-        @sender_region_verified += "&#10006; Not Verifiably "
+        @sender_region_verified += "Not Verifiably "
       end
       @sender_region_verified += "in District via Billing Address"
       @sender_region_verified += "</small></i>"
