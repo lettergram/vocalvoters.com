@@ -41,15 +41,28 @@ class GenerateController < ApplicationController
         
         output = meta_data.gsub("\n", '')
         output_as_list = output.gsub("(", "").gsub(")", "").split(",")
+
+        x = output_as_list[1].strip.to_f
+        if (x > 0.75)
+          x = 1.0
+        elsif (x > 0.25)
+          x = 0.5
+        elsif (x > -0.25)
+          x = 0
+        elsif (x > -0.75)
+          x = -0.5
+        else
+          x = -1.0
+        end
         
         @generated_letter['topic'] = output_as_list[0].strip
-        @generated_letter['sentiment'] = output_as_list[1].strip
+        @generated_letter['sentiment'] = x
         @generated_letter['policy_or_law'] = output_as_list[2].strip
         @letter = Letter.new(
           body: @generated_letter['text'],
           category:  @generated_letter['topic'],
           tags:  @generated_letter['topic'],
-          sentiment: @generated_letter['sentiment'].to_f.to_i,
+          sentiment: @generated_letter['sentiment'],
           policy_or_law: @generated_letter['policy_or_law'],
           organization_id: 1,
           user_id: 1,

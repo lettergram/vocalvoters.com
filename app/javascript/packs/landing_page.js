@@ -756,15 +756,50 @@ function generate_letter(){
     topic = document.getElementById('topic_search_bar').value;
     lookup_url = '/generate/letter.json?topic='+topic
     console.log(lookup_url)
+    
+    document.getElementById('generate_letter_button').disabled = true;
+    document.getElementById('generate_letter_button').innerText = "Please wait..."
+    
     $.ajax({
         url: lookup_url,
 	cache: false,
         success: function(json_obj){
 	    console.log(json_obj)
+	    document.getElementById('generate_letter_button').disabled = false;
+	    document.getElementById('generate_letter_button').innerText = "Generate Letter"
+	    
+	    category=json_obj['topic']
+	    sentiment=json_obj['sentiment']
+	    policy_or_law=json_obj['policy_or_law']
+
+	    update_options(
+		category=category,
+		sentiment=null,
+		policy_or_law=null
+	    );
+	    
+            document.getElementById('category').value = json_obj['topic']
+            document.getElementById('sentiment').value = json_obj['sentiment']
+            document.getElementById('policy_or_law').value = json_obj['policy_or_law']
+
+	    console.log(category)
+	    console.log(document.getElementById('sentiment').value)
+	    console.log(policy_or_law)
+
+	    $('#concerns_selection').attr('style', 'display:block');
+	    generate_concerns()
+
 	}
     })
 }
 
 $('#generate_letter_button').click(function(e) {
     generate_letter()
-})
+});
+
+$("#topic_search_bar").on('keyup', function (e) {
+    console.log(e)
+    if (e.key === 'Enter' || e.keyCode === 13) {
+	generate_letter()
+    }
+});
