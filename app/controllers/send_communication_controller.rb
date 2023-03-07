@@ -16,10 +16,10 @@ class SendCommunicationController < ApplicationController
     # clicksend setup authorization
     ClickSendClient.configure do |config|
       # Configure HTTP basic authorization: BasicAuth
-      config.username = ENV['CLICKSEND_USERNAME']
-      config.password = ENV['CLICKSEND_PASSWORD']
+      config.username = ENV["CLICKSEND_USERNAME"]
+      config.password = ENV["CLICKSEND_PASSWORD"]
     end
-    
+
     # If paid, then register communication
     if payment['charges']['data'][0]['paid']
       billing_zipcode = payment['charges']['data'][0]['billing_details']['address']['postal_code']
@@ -85,7 +85,7 @@ class SendCommunicationController < ApplicationController
         
         case method
         when "priority", "letter"
-          
+
           letter_url += "&template=true"
           return_address_id = Post.get_return_address_id(
             sender.name, sender_line_1, sender_line_2,

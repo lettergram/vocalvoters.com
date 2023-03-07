@@ -41,6 +41,7 @@ class Post < CommunicationRecord
 
   # Class method
   def self.create_return_address(name, line_1, line_2, city, state, zipcode)
+    
     return_addreess_id = false
     api_instance = ClickSendClient::PostReturnAddressApi.new
     

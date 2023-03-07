@@ -776,7 +776,7 @@ function generate_letter(){
 	    document.getElementById('generate_letter_button').innerText = "Generate Letter"
 	    $('#concerns_selection').attr('style', 'display:block');
 	    generate_concerns(letter_id=json_obj['letter_id'])
-
+	    window.location.hash = "#communications_selection";
 	}
     })
 }
