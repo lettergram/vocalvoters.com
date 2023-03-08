@@ -420,15 +420,20 @@ function update_options(category=null, sentiment=null, policy_or_law=null) {
 }
 
 function update_prices() {
-    recipient_count = $('.recipient_card.selected_card').length;
-    if(recipient_count == 0){
+    r_count = $('.recipient_card.selected_card').length;
+    if(r_count == 0){
 	document.getElementById('payment_container').style.display = 'none';
     }
     
-    document.getElementById('email_price').innerText= recipient_count * 1 + 1;
-    document.getElementById('fax_price').innerText= recipient_count * 2 + 1;
-    document.getElementById('letter_price').innerText= recipient_count * 3 + 1;
-    document.getElementById('priority_price').innerText= recipient_count * 5 + 1;
+    document.getElementById('email_price').setAttribute('value', r_count * 1 + 1);
+    document.getElementById('fax_price').setAttribute('value', r_count * 2 + 1);
+    document.getElementById('letter_price').setAttribute('value', r_count * 3 + 1);
+    document.getElementById('priority_price').setAttribute('value', r_count * 5 + 1);
+
+    document.getElementById('email_price').innerText= r_count.toString()+' x $1 + $1 = $' + (r_count * 1 + 1).toString();
+    document.getElementById('fax_price').innerText= r_count.toString() + ' x $2 + $1 = $' + (r_count * 2 + 1).toString();
+    document.getElementById('letter_price').innerText= r_count.toString() + ' x $3 + $1 = $' + (r_count * 3 + 1).toString();
+    document.getElementById('priority_price').innerText= r_count.toString() + ' x $5 + $1 = $' + (r_count * 5 + 1).toString();
 }
 
 function attach_stripe_checkout_on_click() {
@@ -472,19 +477,19 @@ function update_checkout_price(id=null) {
     multiple_phrasing = "";
     
     if (id == 'email') {
-	price = document.getElementById('email_price').innerText;
+	price = document.getElementById('email_price').getAttribute('value');
 	single_phrasing = "Email";
 	multiple_phrasing = "Emails";
     } else if (id == 'fax') {
-	price = document.getElementById('fax_price').innerText;
+	price = document.getElementById('fax_price').getAttribute('value');
 	single_phrasing = "Fax";
 	multiple_phrasing = "Faxes";
     } else if (id == 'letter') {
-	price = document.getElementById('letter_price').innerText;
+	price = document.getElementById('letter_price').getAttribute('value');
 	single_phrasing = "Letter";
 	multiple_phrasing = "Letters";
     } else if (id == 'priority') {
-	price = document.getElementById('priority_price').innerText;
+	price = document.getElementById('priority_price').getAttribute('value');
 	single_phrasing = "Priority Mail";
 	multiple_phrasing = "Priority Mail";
     }
