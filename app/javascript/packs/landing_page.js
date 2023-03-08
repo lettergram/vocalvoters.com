@@ -786,7 +786,6 @@ $('#generate_letter_button').click(function(e) {
 });
 
 $("#topic_search_bar").on('keyup', function (e) {
-    console.log(e)
     if (e.key === 'Enter' || e.keyCode === 13) {
 	generate_letter()
     }

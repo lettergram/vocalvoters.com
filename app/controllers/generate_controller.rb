@@ -2,8 +2,8 @@
 require "openai"
 
 class GenerateController < ApplicationController
-  before_action :logged_in_user
-  before_action	:logged_in_admin
+  # before_action :logged_in_user
+  #  before_action	:logged_in_admin
   before_action :set_prompt
   def letter    
     @generated_letter = {
@@ -18,14 +18,15 @@ class GenerateController < ApplicationController
         
         config.access_token = ENV.fetch('OPENAI_KEY')
         client = OpenAI::Client.new
-        response = client.completions(
+        response = client.chat(
           parameters: {
-            model: "text-davinci-003",
-            prompt: @prompt,
-            temperature: 0.1,
+            model: "gpt-3.5-turbo",
+            messages: [{ role: "user", content: @prompt }],
+            temperature: 0.2,
             max_tokens: 450
-          })
-        full_response = response["choices"][0]["text"]
+          }
+        )
+        full_response = response.dig("choices", 0, "message", "content")
         
         letter_text = full_response.split('-------')[0]
         
