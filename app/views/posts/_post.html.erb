@@ -1,16 +1,17 @@
 <li>
   <div class="col-md-10" id="<%= post.id %>">
     <% letter = Letter.find(post.letter_id) %>
-    Category: <strong><%= letter.category %></strong>;
-    Policy: <strong><%= letter.policy_or_law %></strong><br>
-    Status:<strong><%= post.approval_status %></strong>;
-    Communication: 
-    <% if post.success %>
-       <strong>Sent</strong>
-    <% else %>
-      <strong>Not Sent</strong>
-    <% end %>
+    <% if post.approval_status == 'pending' or not post.success %>
+       <% recipient = Recipient.find(post.recipient_id) %>
+         To:
+         <strong><%= recipient.name.titleize %></strong>,
+	 <%= recipient.state %>
+	 <%= recipient.level.titleize %>
+	 <%= recipient.position.titleize %>
     <br>
+    <% end %>
+    Category: <strong><%= letter.category %></strong><br>
+    Policy: <strong><%= letter.policy_or_law %></strong><br>    
     <details style="color:black;font-size:1em;">
       <summary style="color:gray;">> Read Text Body</summary>
       <pre style="white-space:pre-wrap;">
@@ -25,10 +26,31 @@
       <%= button_to "Approve", post, method: :put,
 	  params: { 'post': { 'approval_status': 'approved' } },
 	  class: "btn btn-success", style:"margin-bottom:0.5em" %>
-      <%= button_to "decline", post, method: :put,
+      <%= button_to "Decline", post, method: :put,
 	  params: { 'post': { 'approval_status': 'declined'  } },
 	  class: "btn btn-danger", style:"margin-bottom:0.5em" %>
-    <% end %>
+    <% elsif post.approval_status == "approved" and not post.success %>    
+      <%= button_to "Send", post, method: :put,
+	  params: { 'post': { 'approval_status': 'approved', 'resend': true } },
+	  class: "btn btn-success", style:"margin-bottom:0.5em" %>
+      <%= button_to "Dont Send", post, method: :put,
+	  params: { 'post': { 'approval_status': 'declined', 'resend': false  } },
+	  class: "btn btn-danger", style:"margin-bottom:0.5em" %>
+    <% else %>
+      <% if post.approval_status == "approved" %>
+         <strong style="color:green;"><%= post.approval_status.titleize %></strong>
+      <% else %>
+         <strong style="color:red;"><%= post.approval_status.titleize %></strong>
+      <% end %>
+      <br>
+      <% if post.success %>
+        <strong style="color:green;">Sent</strong>
+      <% else %>
+        <strong style="color:red;">Not Sent</strong>
+      <% end %>
+    <br>
+      <% end %>
+      
     <br>
   </div>
 </li>

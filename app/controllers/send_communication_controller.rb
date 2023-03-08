@@ -76,34 +76,35 @@ class SendCommunicationController < ApplicationController
         end
 
         letter = Letter.find_by(id: letter_id)
-        approval_status = "approved" # send immediately
-
-        # Implies letter has been edited
-        if letter.derived_from != nil
-          approval_status = "pending"
+        
+        approval_status = "pending"
+        success_flag = nil
+        if params.has_key?(:approval_status)
+          approval_status = approval_status
         end
         
         case method
         when "priority", "letter"
 
-          letter_url += "&template=true"
-          return_address_id = Post.get_return_address_id(
-            sender.name, sender_line_1, sender_line_2,
-            sender_city, sender_state, sender_zipcode)
-
-          priority_flag = (method == "priority")
-          
-          if approval_status == "pending"            
-            success_flag = nil
-          else
+          # Should only be set to approval once
+          if approval_status == "approved"            
+            letter_url += "&template=true"
+            return_address_id = Post.get_return_address_id(
+              sender.name, sender_line_1, sender_line_2,
+              sender_city, sender_state, sender_zipcode)
+            
+            priority_flag = (method == "priority")
+            
             success_flag = Post.send_post(            
               letter_url, recipient[:name], return_address_id,
               recipient[:address_line_1], recipient[:address_line_2],
               recipient[:address_city], recipient[:address_state],
-              address_zipcode, priority_flag=priority_flag)
-            # letter_url = nil # Set to nil because already send
+              address_zipcode, priority_flag=priority_flag
+            )
           end
           
+          puts letter_url
+
           Post.create!(address_line_1: recipient[:address_line_1],
                        address_line_2: recipient[:address_line_2],
                        address_city: recipient[:address_city],
@@ -125,12 +126,9 @@ class SendCommunicationController < ApplicationController
           from = "from"
           from_email = sender.email
           
-          if approval_status == "pending"            
-            success_flag = nil
-          else
+          if approval_status == "approved"
             success_flag = Fax.send_fax(letter_url, to_fax_number, from,
                                         source_method, from_email)
-            letter_url = nil # Set to nil because already send
           end
           
           Fax.create!(number_fax: to_fax_number,
@@ -146,7 +144,7 @@ class SendCommunicationController < ApplicationController
           # Do nothing ATM
           # send_email(name, email)
         end
-        
+
       }
       
     end
@@ -158,7 +156,8 @@ class SendCommunicationController < ApplicationController
 
     def sender_params
       params.require(:sender).permit(
-        :name, :email, :zipcode, :county, :district, :state, :signature)
+        :name, :email, :zipcode, :county, :district, :state, :signature
+      )
     end
 
     def letter_params

@@ -48,12 +48,14 @@ class PostsController < ApplicationController
     # Change in approval status and not "pending"
     approval_flag = @post.approval_status != post_params['approval_status'] and
       post_params['approval_status'] != 'pending'
-    
+
+    resend_flag = @post.approval_status == "approved" and not post_params[:success]
+
     respond_to do |format|
       if @post.update(post_params) # approved update
         
-        if approval_flag
-          if @post.approval_status == "approved"
+        if approval_flag or resend_flag
+          if @post.approval_status == "approved" 
 
             success = Post.send_post(
               @post.letter_url, @post.recipient.name,
@@ -103,9 +105,9 @@ class PostsController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def post_params      
+    def post_params
       params.require(:post).permit(
         :address_line_1, :address_line_2, :address_city, :address_state,
-        :address_zipcode, :approval_status, :sender_id, :recipient_id, :letter_id)
+        :address_zipcode, :approval_status, :success, :sender_id, :recipient_id, :letter_id)
     end
 end

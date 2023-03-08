@@ -430,10 +430,10 @@ function update_prices() {
     document.getElementById('letter_price').setAttribute('value', r_count * 3 + 1);
     document.getElementById('priority_price').setAttribute('value', r_count * 5 + 1);
 
-    document.getElementById('email_price').innerText= r_count.toString()+' x $1 + $1 = $' + (r_count * 1 + 1).toString();
-    document.getElementById('fax_price').innerText= r_count.toString() + ' x $2 + $1 = $' + (r_count * 2 + 1).toString();
-    document.getElementById('letter_price').innerText= r_count.toString() + ' x $3 + $1 = $' + (r_count * 3 + 1).toString();
-    document.getElementById('priority_price').innerText= r_count.toString() + ' x $5 + $1 = $' + (r_count * 5 + 1).toString();
+    document.getElementById('email_price').innerText = '$' + (r_count * 1 + 1).toString() + ' = ' + r_count.toString()+' x $1 + $1'
+    document.getElementById('fax_price').innerText = '$' + (r_count * 2 + 1).toString() + ' = ' + r_count.toString()+ ' x $2 + $1'
+    document.getElementById('letter_price').innerText = '$' + (r_count * 3 + 1).toString() + ' = ' + r_count.toString()+ ' x $3 + $1'    
+    document.getElementById('priority_price').innerText = '$' + (r_count * 5 + 1).toString() + ' = ' + r_count.toString()+ ' x $5 + $1'        
 }
 
 function attach_stripe_checkout_on_click() {
