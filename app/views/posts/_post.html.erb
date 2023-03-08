@@ -1,14 +1,18 @@
 <li>
   <div class="col-md-10" id="<%= post.id %>">
     <% letter = Letter.find(post.letter_id) %>
-    <% if post.approval_status == 'pending' or not post.success %>
-       <% recipient = Recipient.find(post.recipient_id) %>
-         To:
-         <strong><%= recipient.name.titleize %></strong>,
-	 <%= recipient.state %>
-	 <%= recipient.level.titleize %>
-	 <%= recipient.position.titleize %>
-    <br>
+    <% if post.approval_status == 'pending' or (post.approval_status == "approved" and not post.success) %>
+      <% recipient = Recipient.find(post.recipient_id) %>
+      To:
+      <strong><%= recipient.name.titleize %></strong>,
+      <%= recipient.state %>
+      <%= recipient.level.titleize %>
+      <%= recipient.position.titleize %>
+      <br>
+    <% elsif post.approval_status == "declined" %>
+      <% sender = Sender.find(post.sender_id) %>
+      Issue refund to: <strong><u><%= sender.email %></u></strong>
+      <br>
     <% end %>
     Category: <strong><%= letter.category %></strong><br>
     Policy: <strong><%= letter.policy_or_law %></strong><br>    
