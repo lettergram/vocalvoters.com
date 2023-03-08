@@ -64,6 +64,10 @@ class PostsController < ApplicationController
               config.password = ENV["CLICKSEND_PASSWORD"]
             end
 
+            @post.return_address_id = Post.get_return_address_id(
+              @post.sender_name, @post.sender_line_1, @post.sender_line_2,
+              @post.sender_city, @post.sender_state, @post.sender_zipcode)
+
             success = Post.send_post(
               @post.letter_url, @post.recipient.name,
               @post.return_address_id, @post.address_line_1,
@@ -77,7 +81,10 @@ class PostsController < ApplicationController
               @post.update!(letter_url: nil)
             end
             
+            @post.save # commit changes to the db
+            
             flash[:success] = 'Successfully Approved Post - Sending!'
+            
           elsif @post.approval_status = "declined"
             @post.update!(letter_url: nil) # Remove as decided
             flash[:danger] = 'Declined Sending Post'

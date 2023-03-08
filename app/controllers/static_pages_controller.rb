@@ -7,6 +7,11 @@ class StaticPagesController < ApplicationController
     
     @stripe_pk = ENV['STRIPE_PUBLISHABLE_KEY_VOCALVOTERS']
 
+    @letter_id = ""
+    if params.has_key?(:letter_id)
+      @letter_id = params[:letter_id]
+    end    
+
     @sentiment_val_map = {
       -1.0 => ["Very Opposed", -1.0],
       -0.5 => ["Opposed", -0.5],
@@ -21,11 +26,6 @@ class StaticPagesController < ApplicationController
       "Support" => ["Support", 0.5],
       "Very Supportive" => ["Very Supportive", 1.0]
     }
-
-    @letter_id = ""
-    if params.has_key?(:letter_id)
-      @letter_id = params[:letter_id]
-    end
 
     @selected_category = params[:category]
     @options_category = []+Letter.distinct.pluck('lower(category)')

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_053859) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_03_08_200833) do
   create_table "emails", force: :cascade do |t|
     t.string "email_address"
     t.boolean "success", default: true
@@ -19,8 +18,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.integer "recipient_id", null: false
     t.integer "letter_id", null: false
     t.string "payment", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "approval_status", default: "pending"
     t.text "letter_url"
     t.index ["letter_id"], name: "index_emails_on_letter_id"
@@ -35,8 +34,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.integer "sender_id", null: false
     t.integer "recipient_id", null: false
     t.integer "letter_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "approval_status", default: "pending"
     t.text "letter_url"
     t.index ["letter_id"], name: "index_faxes_on_letter_id"
@@ -51,8 +50,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.float "sentiment"
     t.text "body"
     t.integer "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "target_level", default: "all"
     t.string "target_state", default: "all"
     t.integer "organization_id"
@@ -66,8 +65,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.string "name"
     t.text "description"
     t.boolean "approvals_required", default: true
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pay_charges", force: :cascade do |t|
@@ -81,8 +80,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.string "card_last4"
     t.string "card_exp_month"
     t.string "card_exp_year"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.json "data"
     t.string "currency"
     t.integer "application_fee_amount"
@@ -97,10 +96,10 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.string "processor_id", null: false
     t.string "processor_plan", null: false
     t.integer "quantity", default: 1, null: false
-    t.datetime "trial_ends_at"
-    t.datetime "ends_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "trial_ends_at", precision: nil
+    t.datetime "ends_at", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "status"
     t.json "data"
     t.decimal "application_fee_percent", precision: 8, scale: 2
@@ -118,11 +117,17 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.integer "sender_id", null: false
     t.integer "recipient_id", null: false
     t.integer "letter_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "return_address_id"
     t.string "approval_status", default: "pending"
     t.text "letter_url"
+    t.string "sender_name"
+    t.string "sender_line_1"
+    t.string "sender_line_2"
+    t.string "sender_city"
+    t.string "sender_state"
+    t.string "sender_zipcode"
     t.index ["letter_id"], name: "index_posts_on_letter_id"
     t.index ["recipient_id"], name: "index_posts_on_recipient_id"
     t.index ["sender_id"], name: "index_posts_on_sender_id"
@@ -142,8 +147,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.string "address_city"
     t.string "address_state"
     t.string "address_zipcode"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "contact_form"
     t.boolean "retired", default: false
   end
@@ -155,8 +160,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
     t.string "district"
     t.string "state"
     t.integer "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "email"
     t.text "signature"
     t.index ["user_id"], name: "index_senders_on_user_id"
@@ -165,16 +170,16 @@ ActiveRecord::Schema.define(version: 2022_01_18_053859) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "activation_digest"
     t.boolean "activated", default: false
-    t.datetime "activated_at"
+    t.datetime "activated_at", precision: nil
     t.string "reset_digest"
-    t.datetime "reset_sent_at"
+    t.datetime "reset_sent_at", precision: nil
     t.boolean "org_admin"
     t.integer "organization_id"
     t.index ["email"], name: "index_users_on_email", unique: true

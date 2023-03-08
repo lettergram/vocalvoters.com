@@ -32,6 +32,8 @@ class Post < CommunicationRecord
     begin
       # Send post letter
       result = api_instance.post_letters_send_post(post_letter)
+      logger.info "Sending letter to be posted..."
+      logger.info result
       return true
     rescue ClickSendClient::ApiError => e
       puts "Exception calling PostLetterApi->post_letters_send_post: #{e.response_body}"
