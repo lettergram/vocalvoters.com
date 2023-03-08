@@ -88,13 +88,13 @@ class SendCommunicationController < ApplicationController
         case method
         when "priority", "letter"
 
+          return_address_id = Post.get_return_address_id(
+            sender.name, sender_line_1, sender_line_2,
+            sender_city, sender_state, sender_zipcode)
+          letter_url += "&template=true"          
+          
           # Should only be set to approval once
           if approval_status == "approved"            
-            letter_url += "&template=true"
-            return_address_id = Post.get_return_address_id(
-              sender.name, sender_line_1, sender_line_2,
-              sender_city, sender_state, sender_zipcode)
-            
             priority_flag = (method == "priority")
             
             success_flag = Post.send_post(            
@@ -110,6 +110,12 @@ class SendCommunicationController < ApplicationController
                        address_city: recipient[:address_city],
                        address_state: recipient[:address_state],
                        address_zipcode: address_zipcode,
+                       sender_name: sender.name,
+                       sender_line_1: sender_line_1,
+                       sender_line_2: sender_line_2,
+                       sender_city: sender_city,
+                       sender_state: sender_state,
+                       sender_zipcode: sender_zipcode,
                        return_address_id: return_address_id,
                        priority: priority_flag,
                        approval_status: approval_status,
