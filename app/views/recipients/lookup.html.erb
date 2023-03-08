@@ -41,12 +41,22 @@
   <% state_flag = false %>
   <% for recipient in @recipients %>
      <% if recipient.level == 'federal' and not federal_flag %>
-	  <h3><small><b>Federal Representatives</b></small></h3>
-	</div>
-	<% federal_flag = true %>
+       <h3>
+	 <small>
+	   <b>Federal Representatives</b>
+	   <span style="font-size:0.8em">(Select Multiple)</span>
+	 </small>
+       </h3>
+       </div>
+       <% federal_flag = true %>
      <% elsif recipient.level != 'federal' and not state_flag %>
         <div class='col-md-12'>
-          <h3><small><b>State Representatives</b></small></h3>
+          <h3>
+	    <small>
+	      <b>State Representatives</b>
+	      <span style="font-size:0.8em">(Select Multiple)</span>
+	    </small>
+	  </h3>
 	</div>
 	<% state_flag = true %>
      <% end %>

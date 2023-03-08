@@ -430,10 +430,10 @@ function update_prices() {
     document.getElementById('letter_price').setAttribute('value', r_count * 3 + 1);
     document.getElementById('priority_price').setAttribute('value', r_count * 5 + 1);
 
-    document.getElementById('email_price').innerText = '$' + (r_count * 1 + 1).toString() + ' = ' + r_count.toString()+' x $1 + $1'
-    document.getElementById('fax_price').innerText = '$' + (r_count * 2 + 1).toString() + ' = ' + r_count.toString()+ ' x $2 + $1'
-    document.getElementById('letter_price').innerText = '$' + (r_count * 3 + 1).toString() + ' = ' + r_count.toString()+ ' x $3 + $1'    
-    document.getElementById('priority_price').innerText = '$' + (r_count * 5 + 1).toString() + ' = ' + r_count.toString()+ ' x $5 + $1'        
+    document.getElementById('email_price').innerHTML = 'Price: $' + (r_count * 1 + 1).toString() + ' (x' + r_count.toString()+')';
+    document.getElementById('fax_price').innerHTML = 'Price: $' + (r_count * 2 + 1).toString() + ' (x' + r_count.toString()+ ')';
+    document.getElementById('letter_price').innerHTML = 'Price: $' + (r_count * 3 + 1).toString() + ' (x' + r_count.toString()+ ')';
+    document.getElementById('priority_price').innerHTML = 'Price: $' + (r_count * 5 + 1).toString() + ' (x' + r_count.toString()+ ')';
 }
 
 function attach_stripe_checkout_on_click() {
@@ -771,8 +771,8 @@ function generate_letter(){
     lookup_url = '/generate/letter.json?topic='+topic
     
     document.getElementById('generate_letter_button').disabled = true;
-    document.getElementById('generate_letter_button').innerText = "Please wait..."
-    
+    document.getElementById('generate_letter_button').innerHTML = '<span class="small-loader"></span> Please wait...'
+
     $.ajax({
         url: lookup_url,
 	cache: false,

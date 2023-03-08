@@ -73,6 +73,8 @@ class SendCommunicationController < ApplicationController
           letter_url = "https://vocalvoters.com" + letter_url
           address_zipcode = "11111"
           to_fax_number = "61261111111"
+        elsif ENV.has_key?('ROOT_VOCALVOTERS_URL')
+          letter_url = ENV['ROOT_VOCALVOTERS_URL'] + letter_url
         end
 
         letter = Letter.find_by(id: letter_id)
@@ -103,8 +105,6 @@ class SendCommunicationController < ApplicationController
             )
           end
           
-          puts letter_url
-
           Post.create!(address_line_1: recipient[:address_line_1],
                        address_line_2: recipient[:address_line_2],
                        address_city: recipient[:address_city],
