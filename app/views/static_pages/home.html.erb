@@ -96,6 +96,9 @@
 		style: 'margin-top:1em;',
 		data: { disable_with: "Please wait..." },
 		class: "btn btn-primary" %>
+	    <span id="shared_letter_id"
+		  style="display:none"
+		  value="<%= @shared_letter_id %>"></span>
 	    <br>
 	    <small>
 	      <i>
@@ -106,38 +109,6 @@
 	</div>
       </div>
     </div>
-    <%= form_with url: govlookup_path, method: :get do |form| %>
-      <div class="row" id="concerns_form" style="display:none;">
-	<div class="col-md-3">
-	  <div id='category_container' class="form-group" >
-	    <%= form.select :category,
-		options_for_select(@options_category,
-		:selected => @selected_category),
-		{ :prompt => "Select Concern" },
-	        { :class => 'form-control' } %>
-	  </div>
-	</div>
-	<div class="col-md-3">
-	  <div id='sentiment_container' class="form-group" >
-	    <%= form.select :sentiment,
-		options_for_select(@options_sentiment,
-		:selected => @selected_sentiment),
-	        { :prompt => "Select Sentiment" },
-	        { :class => 'form-control' } %>
-	  </div>
-	</div>	
-	<div class="col-md-6">
-	  <div id='policy_or_law_container' class="form-group" >
-	    <%= form.select :policy_or_law,
-		options_for_select(@options_policy_or_law,
-		:selected => @selected_policy_or_law),
-		{ :prompt => "Select Policy" },	      
-	        { :class => 'form-control' } %>
-	  </div>
-	</div>
-      </div>
-      <span id="shared_letter_id" value="<%= @letter_id %>"></span>
-    <% end %>
     <div id="concerns_selection_bottom_buffer">
       <br>
       <br>
@@ -162,7 +133,7 @@
 	  <center>
             <b>Send Concerns via</b><br>
             <small style="font-size:0.5em">
-              ( Per: $5 Priority / $3 Letter / $2 Fax + $1 Review)
+              ( Per: $5 Priority / $3 Letter / $2 Fax + $2 Review)
             </small>
 	  </center>
 	</h3>

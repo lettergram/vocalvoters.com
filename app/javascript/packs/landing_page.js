@@ -91,63 +91,10 @@ $('#address,#name').keyup(function(e) {
 })
 
 $('#legislator_button').click(function(e) {
-    // 'category', 'sentiment', 'policy_or_law',
     form_element_ids = ['name', 'email', 'address']
     if(validate_form(form_element_ids)){
 	find_legislators()
     }
-})
-
-$("#category").change(function(e) {
-    
-    policy_or_law = $("#policy_or_law");
-    if (policy_or_law.prop("selectedIndex", 0).val() != '') {
-	policy_or_law.empty()	
-    }else{
-	policy_or_law.find('option').not(':first').remove();
-    }
-
-    sentiment = $("#sentiment");
-    if (sentiment.prop("selectedIndex", 0).val() != '') {
-	sentiment.empty()
-    }else{
-	sentiment.find('option').not(':first').remove();
-    }
-
-    category = $("#category").find(":selected").text()
-    
-    update_options(category);
-    
-})
-
-$("#policy_or_law").change(function(e) {
-
-    /*
-    category_val = $("#category").find(":selected").text()
-    policy_or_law = $("#policy_or_law").find(":selected").text()
-
-    sentiment = $("#sentiment");
-    if (sentiment.prop("selectedIndex", 0).val() != '') {
-	sentiment.empty()
-    }else{
-	sentiment.find('option').not(':first').remove();
-    }
-
-    update_options(category_val, sentiment_val=null, policy_or_law);
-    */
-
-    if(generate_concerns()) {
-	
-	// Display pdf & communication section
-	org = $("#policy_or_law").find(":selected").attr('org')
-	if (!!org) {
-	    $('#org_letter').text("Template Created by " + org)
-	} else {
-	    $('#org_letter').text("")	    
-	}
-	window.location.hash = "#communications_selection";
-    }
-        
 })
 
 function generate_concerns(letter_id=null){
@@ -158,68 +105,34 @@ function generate_concerns(letter_id=null){
 	return false
     }
 
-    if(!letter_id){
-	category = $('#category').find(":selected").attr('value');
-	sentiment = $('#sentiment').find(":selected").val();
-	policy_or_law = $('#policy_or_law').find(":selected").val();
+    if(!letter_id){ return false }
 
-	if(!category){ return false }
-	if(!sentiment){ return false }
-	if(!policy_or_law){ return false }
-
-	// Potentially error
-	letter_id = $('#policy_or_law').find(":selected").attr('value')
-	if (letter_id == '') {
-	    letter_id = $('#category').find(":selected").attr('value')
-	}
+    sender_name = document.getElementById('name').value;
+    sender_state = document.querySelector('#sender_state').getAttribute('value');
+    selected_cards = document.getElementsByClassName('recipient_card selected_card');
+    
+    recipient_id = selected_cards[0].getAttribute('value');
 	
+    district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
+    name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
+    position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
+    level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+    signature = null;
+    
+    update_pdf(letter_id, sender_name, sender_state,
+	       district, name, position, level, signature);
+    
+    // Hide bottom buffer once communications_selection displayed
+    $("#concerns_selection_bottom_buffer").attr('style', 'display:none');
+    $('#communications_selection').attr('style', 'display:block');	
+    
+    document.getElementById("share_button").onclick = function(){
+	copyLetterToClipboard();
     }
 
-    if(letter_id){    
+    return true
 
-	sender_name = document.getElementById('name').value;
-	sender_state = document.querySelector('#sender_state').getAttribute('value');
-	selected_cards = document.getElementsByClassName('recipient_card selected_card');
-	
-	recipient_id = selected_cards[0].getAttribute('value');
-	
-	district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
-	name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
-	position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
-	level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
-	signature = null;
-	
-	update_pdf(letter_id, sender_name, sender_state,
-		   district, name, position, level, signature);
-
-	// Hide bottom buffer once communications_selection displayed
-	$("#concerns_selection_bottom_buffer").attr('style', 'display:none');
-	$('#communications_selection').attr('style', 'display:block');	
-
-	document.getElementById("share_button").onclick = function(){
-	    copyLetterToClipboard();
-	}
-
-	return true
-    }
-
-    return false
 }
-
-
-$("#sentiment").change(function(e) {
-    category_val = $("#category").find(":selected").text()
-    sentiment_val = $("#sentiment").find(":selected").val()
-
-    policy_or_law = $("#policy_or_law");
-    if (policy_or_law.prop("selectedIndex", 0).val() != '') {
-	policy_or_law.empty()
-    }else{
-	policy_or_law.find('option').not(':first').remove();
-    }
-
-    update_options(category_val, sentiment_val, policy_or_law=null);
-})
 
 function create_sender(){
     sender_name = document.getElementById('name').value;
@@ -317,11 +230,11 @@ function find_legislators(){
 		    shared_letter_id = document.getElementById('shared_letter_id').getAttribute('value')
 		    if (shared_letter_id) {
 			generate_concerns(letter_id=shared_letter_id)
-			window.location.hash = "#communications_selection";
 		    }else{
-			$('#concerns_selection').attr('style', 'display:block');
 			generate_concerns();
-		    }			
+		    }
+		    $('#concerns_selection').attr('style', 'display:block');
+		    window.location.hash = "#communications_selection";		    
 
 		}	 
 	    }	    
@@ -358,87 +271,22 @@ function update_pdf(letter_id, sender_name, sender_state, sender_district,
     $('#iframe_container').attr('style', 'display:block');
 }
 
-function update_options(category=null, sentiment=null, policy_or_law=null) {
-    
-    policy_url  = '/find_policy.json?'
-    if (!!category) {
-	policy_url += 'category=' + category
-    }
-    if (!!sentiment) {
-	policy_url += '&sentiment=' + sentiment
-    }
-    if (!!policy_or_law) {
-	policy_url += '&policy_or_law=' + policy_or_law
-    }
-
-    sentiment_map = {}
-    sentiment_map[-1] = "Very Opposed"
-    sentiment_map[-0.5] = "Opposed"
-    sentiment_map[0] = "Indifferent"
-    sentiment_map[0.5] = "Supportive"
-    sentiment_map[1] = "Very Supportive"
-
-    $.ajax({
-	url: policy_url,
-	cache: false,
-	success: function(policy_list){
-
-	    policy_or_law_options = $("#policy_or_law");
-	    sentiment_options = $("#sentiment");
-
-	    if (policy_or_law === null) {
-
-		/*
-		// Can add organization references to policies 
-		for (var i = 0, size = policy_list.length; i < size; i++ ) {
-		    if(!!policy_list[i][4]) {
-			policy_list[i][3] += ' - Written by ' + policy_list[i][4]
-		    }
-		}
-		*/
-		
-		options = policy_list.map(x => [x[0], x[3], x[4]]);
-		$.each(options, function(key, value) {
-		    policy_or_law_options.append(
-			$('<option></option>')
-			    .val(value[0]).html(value[1]).attr('org', value[2])
-		    );
-		});
-	    }
-
-	    if (sentiment === null) {
-		options = {}
-		for (var i in policy_list) {
-		    options[policy_list[i][1]] = policy_list[i]
-		}
-		
-		$.each(options, function(key, value) {
-		    sentiment_options.append(
-			$('<option></option>').val(key).html(
-			    sentiment_map[key]
-			)
-		    );
-		});
-	    }
-	}
-    });    
-}
-
 function update_prices() {
     r_count = $('.recipient_card.selected_card').length;
     if(r_count == 0){
 	document.getElementById('payment_container').style.display = 'none';
     }
-    
-    document.getElementById('email_price').setAttribute('value', r_count * 1 + 1);
-    document.getElementById('fax_price').setAttribute('value', r_count * 2 + 1);
-    document.getElementById('letter_price').setAttribute('value', r_count * 3 + 1);
-    document.getElementById('priority_price').setAttribute('value', r_count * 5 + 1);
 
-    document.getElementById('email_price').innerHTML = 'Price: $' + (r_count * 1 + 1).toString() + ' (x' + r_count.toString()+')';
-    document.getElementById('fax_price').innerHTML = 'Price: $' + (r_count * 2 + 1).toString() + ' (x' + r_count.toString()+ ')';
-    document.getElementById('letter_price').innerHTML = 'Price: $' + (r_count * 3 + 1).toString() + ' (x' + r_count.toString()+ ')';
-    document.getElementById('priority_price').innerHTML = 'Price: $' + (r_count * 5 + 1).toString() + ' (x' + r_count.toString()+ ')';
+    var fee = 2
+    document.getElementById('email_price').setAttribute('value', r_count * 1 + fee);
+    document.getElementById('fax_price').setAttribute('value', r_count * 2 + fee);
+    document.getElementById('letter_price').setAttribute('value', r_count * 3 + fee);
+    document.getElementById('priority_price').setAttribute('value', r_count * 5 + fee);
+    
+    document.getElementById('email_price').innerHTML = 'Price: $' + (r_count*1+fee).toString() + ' (x' + r_count.toString()+')';
+    document.getElementById('fax_price').innerHTML = 'Price: $' + (r_count*2+fee).toString() + ' (x' + r_count.toString()+ ')';
+    document.getElementById('letter_price').innerHTML = 'Price: $' + (r_count*3+fee).toString() + ' (x' + r_count.toString()+ ')';
+    document.getElementById('priority_price').innerHTML = 'Price: $' + (r_count*5+fee).toString() + ' (x' + r_count.toString()+ ')';
 }
 
 function attach_stripe_checkout_on_click() {
@@ -459,7 +307,6 @@ function attach_stripe_checkout_on_click() {
 	    document.getElementById('communication_mode').innerText,
 	    document.getElementById('email').value,
 	    $('.recipient_card.selected_card').length,
-	    $("#policy_or_law").find(":selected").attr('org')
 	);
 
 	recipient_count = $('.recipient_card.selected_card').length;
@@ -725,10 +572,7 @@ var sendCommunication = function(paymentIntentId, method) {
 	},
 	'recipients': [],
 	'letter': {
-	    'id': document.querySelector('#pdf_view').getAttribute('value'),
-	    'category': $("#category").find(":selected").text(),
-	    'sentiment': $("#sentiment").find(":selected").text(),
-	    'policy_or_law': $("#policy_or_law").find(":selected").text()
+	    'id': document.querySelector('#pdf_view').getAttribute('value')
 	},
 	'payment': {
 	    'id': paymentIntentId
@@ -753,21 +597,12 @@ var sendCommunication = function(paymentIntentId, method) {
 
 function copyLetterToClipboard(){
 
-    //category = $('#category').find(":selected").attr('value');
-    //sentiment = $('#sentiment').find(":selected").text();
-    //policy_or_law = $('#policy_or_law').find(":selected").text();
     letter_id = $('#pdf_view').attr('value');    
 
     var get_url = window.location;
     var base_url = get_url.protocol + "//" + get_url.host + "?"
     
-    var param_url = ""
-    
-    //param_url += "category=" + encodeURIComponent(category) + "&";
-    //param_url += "sentiment=" +  encodeURIComponent(sentiment) + "&";
-    //param_url += "policy_or_law=" + encodeURIComponent(policy_or_law);
-
-    param_url += "letter_id=" + encodeURIComponent(letter_id)
+    var param_url = "letter_id=" + encodeURIComponent(letter_id)
     navigator.clipboard.writeText(base_url + param_url);
     
     document.getElementById("share_button").innerHTML = "Copied Link!"
@@ -786,9 +621,7 @@ function generate_letter(){
         success: function(json_obj){
 	    document.getElementById('generate_letter_button').disabled = false;
 	    document.getElementById('generate_letter_button').innerText = "Generate Letter"
-	    $('#concerns_selection').attr('style', 'display:block');
 	    generate_concerns(letter_id=json_obj['letter_id'])
-	    window.location.hash = "#communications_selection";
 	}
     })
 }
