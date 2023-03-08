@@ -314,9 +314,15 @@ function find_legislators(){
 
 		    update_checkout_price();
 
-		    $('#concerns_selection').attr('style', 'display:block');
-		    
-		    generate_concerns();
+		    shared_letter_id = document.getElementById('shared_letter_id').getAttribute('value')
+		    console.log(shared_letter_id);
+		    if (shared_letter_id) {
+			generate_concerns(letter_id=shared_letter_id)
+			window.location.hash = "#communications_selection";
+		    }else{
+			$('#concerns_selection').attr('style', 'display:block');
+			generate_concerns();
+		    }			
 
 		}	 
 	    }	    
@@ -747,22 +753,24 @@ var sendCommunication = function(paymentIntentId, method) {
 }
 
 function copyLetterToClipboard(){
-    
-    category = $('#category').find(":selected").attr('value');
-    sentiment = $('#sentiment').find(":selected").text();
-    policy_or_law = $('#policy_or_law').find(":selected").text();
+
+    //category = $('#category').find(":selected").attr('value');
+    //sentiment = $('#sentiment').find(":selected").text();
+    //policy_or_law = $('#policy_or_law').find(":selected").text();
+    letter_id = $('#pdf_view').attr('value');    
 
     var get_url = window.location;
     var base_url = get_url.protocol + "//" + get_url.host + "?"
     
     var param_url = ""
     
-    param_url += "category=" + encodeURIComponent(category) + "&";
-    param_url += "sentiment=" +  encodeURIComponent(sentiment) + "&";
-    param_url += "policy_or_law=" +  encodeURIComponent(policy_or_law);
+    //param_url += "category=" + encodeURIComponent(category) + "&";
+    //param_url += "sentiment=" +  encodeURIComponent(sentiment) + "&";
+    //param_url += "policy_or_law=" + encodeURIComponent(policy_or_law);
 
+    param_url += "letter_id=" + encodeURIComponent(letter_id)
     navigator.clipboard.writeText(base_url + param_url);
-
+    
     document.getElementById("share_button").innerHTML = "Copied Link!"
 }
 

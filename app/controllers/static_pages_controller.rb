@@ -22,6 +22,11 @@ class StaticPagesController < ApplicationController
       "Very Supportive" => ["Very Supportive", 1.0]
     }
 
+    @letter_id = ""
+    if params.has_key?(:letter_id)
+      @letter_id = params[:letter_id]
+    end
+
     @selected_category = params[:category]
     @options_category = []+Letter.distinct.pluck('lower(category)')
     
