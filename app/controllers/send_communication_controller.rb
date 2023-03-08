@@ -101,7 +101,7 @@ class SendCommunicationController < ApplicationController
               recipient[:address_line_1], recipient[:address_line_2],
               recipient[:address_city], recipient[:address_state],
               address_zipcode, priority_flag=priority_flag)
-            letter_url = nil # Set to nil because already send
+            # letter_url = nil # Set to nil because already send
           end
           
           Post.create!(address_line_1: recipient[:address_line_1],
