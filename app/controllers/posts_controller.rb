@@ -51,6 +51,10 @@ class PostsController < ApplicationController
 
     resend_flag = @post.approval_status == "approved" and not post_params[:success]
 
+    puts "\n\nletter url"
+    puts @post.letter_url
+    puts "\n\n"
+
     respond_to do |format|
       if @post.update(post_params) # approved update
         
