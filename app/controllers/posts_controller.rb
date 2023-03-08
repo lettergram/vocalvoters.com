@@ -55,7 +55,14 @@ class PostsController < ApplicationController
       if @post.update(post_params) # approved update
         
         if approval_flag or resend_flag
-          if @post.approval_status == "approved" 
+          if @post.approval_status == "approved"
+            
+            # clicksend setup authorization             
+            ClickSendClient.configure do |config|
+              # Configure HTTP basic authorization: BasicAuth
+              config.username = ENV["CLICKSEND_USERNAME"]
+              config.password = ENV["CLICKSEND_PASSWORD"]
+            end
 
             success = Post.send_post(
               @post.letter_url, @post.recipient.name,

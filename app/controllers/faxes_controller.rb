@@ -52,6 +52,13 @@ class FaxesController < ApplicationController
       if @fax.update(fax_params) # approved update        
         if approval_flag
           if @fax.approval_status == "approved"
+
+            # clicksend setup authorization
+            ClickSendClient.configure do |config|
+              # Configure HTTP basic authorization: BasicAuth 
+              config.username = ENV["CLICKSEND_USERNAME"]
+              config.password = ENV["CLICKSEND_PASSWORD"]
+            end
             
             success = Fax.send_fax(
               @fax.letter_url, @fax.number_fax,
