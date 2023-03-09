@@ -1,9 +1,14 @@
 [VocalVoters.com](https://vocalvoters.com)
 ==========
 
-Generate & Send a Letter, Fax or E-Mail Your Government Representatives in 30 Seconds or Less.
+**Generate & Send a Letter, Fax or E-Mail Your Government Representatives in 30 Seconds or Less.**
 
-How well does it work? See the example below, generated with the prompt: `Free candy on mondays`
+--------------------------
+### Example Letter
+
+How well does it work? 
+
+See the example below, generated with the prompt: `Free candy on mondays`
 
 ![Screenshot from 2023-03-09 12-32-40](https://user-images.githubusercontent.com/1498748/224122005-83166520-8ecf-4fbf-91e1-67cc6a402b27.png)
 
