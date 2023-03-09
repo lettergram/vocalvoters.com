@@ -1435,7 +1435,7 @@ a:hover,a:focus {
   box-shadow: 4px 8px 10px 8px rgba(218, 165, 32, 0.5);
 }
 
-.recipient_card.secretary_of_card.selected_card {
+.recipient_card.secretary_of_state_card.selected_card {
   border-color: rgba(218, 165, 32, 0.8);
   box-shadow: 4px 8px 10px 8px rgba(218, 165, 32, 0.5);
 }
@@ -1454,9 +1454,16 @@ a:hover,a:focus {
 }
 
 .recipient_card.governor_card.selected_card:hover {	 
-  box-shadow: 2px 6px 8px 6px rgba(218, 165, 32, 0.5);
+  box-shadow: 2px 6px 8px 6px rgba(218, 165, 32, 0.2);
 }
 
+.recipient_card.secretary_of_state_card.selected_card:hover {	 
+  box-shadow: 2px 6px 8px 6px rgba(218, 165, 32, 0.2);
+}
+
+.recipient_card.attorney_general_card:hover {
+  box-shadow: 2px 6px 8px 6px rgba(0, 209, 209, 0.2)
+}
 
 .btn.btn-info.send_button.selected_card {  
   box-shadow: 0px 2px 4px 4px rgba(0,0,0,0.4);
