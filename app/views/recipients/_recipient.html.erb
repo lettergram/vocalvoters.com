@@ -3,7 +3,7 @@
      value="<%= recipient.id %>" style="cursor:pointer">
   <%= recipient.name %>,
   <% if recipient.level == 'federal' %>US<% else %><%= recipient.state %><% end %>
-  <%= recipient.position.capitalize %>
+  <%= recipient.position.titleize %>
   <br>
   <% if recipient.level == 'federal' %>
     <% if recipient.position == 'senator' %>
@@ -17,7 +17,7 @@
     <% end %>
   <% elsif recipient.level == 'state' %>
     <%= recipient.state %>
-    <% if recipient.position != 'governor' %>
+    <% if recipient.position == 'governor' %>
       Governor
     <% elsif recipient.position == 'senator' %>
       Senator District
