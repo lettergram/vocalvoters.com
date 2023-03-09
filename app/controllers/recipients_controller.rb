@@ -155,12 +155,25 @@ class RecipientsController < ApplicationController
     level = 'state'
     state_district = obj['results'][0]['fields']['state_legislative_districts']
 
-    # Find state govenor 
     recipient = Recipient.find_by(
       :position => 'governor', :state => @sender_state, :retired => false)
     if recipient.present?
       @recipients.push(recipient)
     end
+    
+    recipient = Recipient.find_by(
+      :position => 'attorney_general', :state => @sender_state, :retired => false)
+    if recipient.present?
+      @recipients.push(recipient)
+    end
+
+    recipient = Recipient.find_by(
+      :position => 'secretary_of_state', :state => @sender_state, :retired => false)
+    if recipient.present?
+      @recipients.push(recipient)
+    end
+
+    
 
     if state_district.has_key? 'house'
       district = state_district['house']['district_number']    
