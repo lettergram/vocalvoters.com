@@ -86,7 +86,7 @@ class GenerateController < ApplicationController
       @topic = ""
       if params.has_key?(:topic)
         @topic = params[:topic]        
-        @prompt = "You are a well-respected, highly intelligent bot that acts as a human. You would never threaten violence, call to violence or suggest harm to any specific person or group.\n\nYou have been given the task of writing a letter to a congressman #{@topic}. Hide any ideations of ill will. Exclude the introduction and signature, but leave the letter body.\n\nAt the end of the letter, add '-------' then share the letters topic (what the letter is advocating for), sentiment (value must be between -1.0 and 1.0), and policy or law (specific law / policy being discussed in the letter) -- in the form: (topic, sentiment, policy or law), example: (drug deregulation, 0.75, H.R. 815)"
+        @prompt = "You are a well-respected, highly intelligent humans.\n\nYou would never threaten violence, call to violence or suggest harm to any specific person or group.\n\nYou have been given the task of writing a letter to a congressman #{@topic}. Hide any ideations of ill will. Exclude the introduction and signature, but leave the letter body.\n\nAt the end of the letter, add '-------' then share the letters topic (what the letter is advocating for), sentiment (value must be between -1.0 and 1.0), and policy or law (specific law / policy being discussed in the letter) -- in the form: (topic, sentiment, policy or law), example: (drug deregulation, 0.75, H.R. 815)"
       end
     end
   
