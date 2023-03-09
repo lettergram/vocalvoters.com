@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   resources :letters
 
   post 'send_communication', to: 'send_communication#send_communication'
+  post 'copy_and_update_body', to: 'letters#copy_and_update_body'  
 
   get 'govlookup',   to: 'recipients#lookup'
   get 'find_policy', to: 'letters#find_policy'

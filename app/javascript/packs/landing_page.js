@@ -178,7 +178,6 @@ function find_legislators(){
 	    document.getElementById('legislator_button').disabled = false;
 	    document.getElementById('legislator_button').innerText = "Lookup Legislators"
 
-
 	    $('.send_button').click(function(e) {
 
 		// Clear any old selections
@@ -302,7 +301,7 @@ function attach_stripe_checkout_on_click() {
 	document.getElementsByClassName("selected_button")[0].classList.add('selected_card');
 	
 	count = update_checkout_price(id);
-	
+
 	load_stripe_checkout(
 	    document.getElementById('communication_mode').innerText,
 	    document.getElementById('email').value,
@@ -409,7 +408,6 @@ function load_stripe_checkout(id=null, email=null, count=null, org=null) {
 	count: count,
 	org: org
     };
-
     
     // Disable the button until we have Stripe set up on the page
     document.querySelector("#submit").disabled = true;
@@ -462,10 +460,8 @@ function load_stripe_checkout(id=null, email=null, count=null, org=null) {
 	    document.querySelector("#submit").disabled = event.empty;
 	    document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
 	});
-
 	
 	var form = document.getElementById("payment-form");
-
 
 	// Remove and add new
 	form.removeEventListener('submit', arguments.callee, false);
@@ -557,7 +553,7 @@ var sendCommunication = function(paymentIntentId, method) {
 	'method': method,
 	'sender': {
 	    'name': document.querySelector('#name').value,
-	    'email': document.querySelector('#email').value,	    
+	    'email': document.querySelector('#email').value,
 	    'line_1': document.querySelector('#sender_line_1').getAttribute('value'),
 	    'line_2': document.querySelector('#sender_line_2').getAttribute('value'),
 	    'city': document.querySelector('#sender_city').getAttribute('value'),
@@ -591,8 +587,7 @@ var sendCommunication = function(paymentIntentId, method) {
         url: send_communication_url,
         cache: false,
 	data: data
-    })
-    
+    })    
 }
 
 function copyLetterToClipboard(){
@@ -635,3 +630,79 @@ $("#topic_search_bar").on('keyup', function (e) {
 	generate_letter()
     }
 });
+
+function insert_letter_text_into_edit_box(letter_id=null) {
+    if (!letter_id){ return false; }
+    letter_url = "letters/"+letter_id+".json"
+    $.ajax({
+        url: letter_url,
+	cache: false,
+        success: function(letter_json_obj){
+	    $('#edit-letter-text-area').val(letter_json_obj['body'])
+	}
+    });
+}
+
+$('#letter_change_button').click(function(e) {
+    document.getElementById('letter_change_button').disabled = true;
+    document.getElementById('letter_change_button').innerHTML = 'Please wait...'
+
+    copy_url = '/copy_and_update_body.json'
+
+    $("body").bind("ajaxSend", function(elm, xhr, s){
+	if (s.type == "POST") {
+	    xhr.setRequestHeader('X-CSRF-Token', document.querySelector('meta[name="csrf-token"]').content);
+	}
+    });
+
+    data = {
+	'derived_from': document.querySelector('#pdf_view').getAttribute('value'),
+	'body': $('#edit-letter-text-area').val(),
+	'email': document.querySelector('#email').value,
+	'CSRF': document.querySelector('meta[name="csrf-token"]').content
+    }
+
+    $.ajax({
+        type: "POST",
+        url: copy_url,
+	cache: false,
+        data: data,
+	success: function(json_obj){
+	    document.getElementById('letter_change_button').disabled = false;
+	    document.getElementById('letter_change_button').innerText = "Submit Changes"
+	    document.getElementById("letter-edit-modal").style.display = "none";
+	    
+	    signature = document.getElementById('signature-data').value
+	    document.getElementById('signature-data').value = data;
+	    sender_name = document.getElementById('name').value;
+	    sender_state = document.querySelector('#sender_state').getAttribute('value');
+	    selected_cards = document.getElementsByClassName('recipient_card selected_card');
+	    recipient_id = selected_cards[0].getAttribute('value');
+	    district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
+	    name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
+	    position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
+	    level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+	    letter_id = json_obj['id']
+	    update_pdf(letter_id, sender_name, sender_state,
+		       district, name, position, level, signature);	    
+	}
+    });
+})
+
+$('#edit-letter').click(function(e) {
+    letter_id = document.querySelector('#pdf_view').getAttribute('value');
+    insert_letter_text_into_edit_box(letter_id=letter_id);
+    document.getElementById("letter-edit-modal").style.display = "block";
+});
+
+// When the user clicks on <span> (x), close the modal
+$('#letter-edit-close').click(function(e) {
+    document.getElementById("letter-edit-modal").style.display = "none";
+});
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == document.getElementById("letter-edit-modal")) {
+	document.getElementById("letter-edit-modal").style.display = "none";	
+    }
+}

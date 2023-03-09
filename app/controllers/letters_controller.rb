@@ -1,7 +1,8 @@
 class LettersController < ApplicationController
-  before_action :logged_in_user, except: [:show, :find_policy]
+  before_action :logged_in_user, except: [:show, :find_policy, :copy_and_update_body]
   before_action	:logged_in_admin, only: [:edit, :update, :destroy]
   before_action :set_letter, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token, only: [:copy_and_update_body]
 
   # GET /letters
   # GET /letters.json
@@ -122,7 +123,7 @@ class LettersController < ApplicationController
     end
     
 
-    @sender_region_verified = ""
+    @sender_region_verified = ""    
     if params.has_key?(:sender_verified)
       @sender_region_verified = "<br><i><small>"
       if ActiveModel::Type::Boolean.new.cast(params[:sender_verified])
@@ -136,6 +137,7 @@ class LettersController < ApplicationController
     
     respond_to do |format|
       format.html
+      format.json
       format.pdf do
         render template: "/letters/letter", pdf: "Letter ID: #{@letter.id}", layout: 'pdf'
       end
@@ -191,6 +193,22 @@ class LettersController < ApplicationController
     end
   end
 
+  def copy_and_update_body
+    if params.has_key?(:derived_from)
+      @letter = Letter.where(id: params[:derived_from]).first
+      @letter_copy = @letter.dup
+      @letter_copy.save
+      
+      respond_to do |format|
+        if @letter_copy.update(derived_from: params[:derived_from], body: params[:body], email: params[:email])
+          format.json { render :copy_and_update_body, status: :created }
+        else
+          format.json { render json: @letter_copy.errors, status: :unprocessable_entity }
+        end
+      end  
+    end
+  end
+
   # Search /find_policy.json
   def find_policy
     category = params[:category]
@@ -225,7 +243,7 @@ class LettersController < ApplicationController
     def letter_params
       params.require(:letter)
         .permit(:category, :policy_or_law, :tags, :sentiment, :body,
-                :target_level, :target_state, :editable)
+                :target_level, :target_state, :editable, :email)
         .merge(user_id: current_user.id)
         .merge(organization_id: current_user.organization.id)
     end
