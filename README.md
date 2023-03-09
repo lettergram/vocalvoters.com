@@ -1,12 +1,11 @@
 [VocalVoters.com](https://vocalvoters.com)
 ==========
 
-**Generate & Send a Letter, Fax or E-Mail Your Government Representatives in 30 Seconds or Less.**
+*Send an AI Generated Letter, Fax or E-Mail to Your Government Representatives in 30 Seconds or Less.*
 
 --------------------------
-### Example Letter
 
-How well does it work? 
+**How well does it work?** 
 
 See the example below, generated with the prompt: `Free candy on mondays`
 
@@ -61,15 +60,9 @@ username: vocalvoters_app
 password: <%= ENV['VOCALVOTERS_DATABASE_PASSWORD'] %>
 ```
 
-### Initial Setup
+### Read More
 
-1. Launch application, no users or organizations will be present
-2. Signup with a user account
-3. Log into database and make user admin (authenticate if you have not done so)
-4. Create an organization (e.g. "VocalVoters")
-5. Go to user profile and add to organization
-6. Create new letters
-
+Checkout the [About Page](https://vocalvoters.com/about) for more details about the project.
 
 ### Disclaimers
 
