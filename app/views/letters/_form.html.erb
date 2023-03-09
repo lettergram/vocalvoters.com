@@ -118,6 +118,7 @@
       <%= form.label :body %>
       <%= form.text_area :body, class: 'form-control' %>
     </div>
+    <%= form.hidden_field :email, value: current_user.email %>
     <div class="col-md-4 col-md-offset-4">
       <%= form.submit yield(:button_text), class: "btn btn-primary" %>
     </div>

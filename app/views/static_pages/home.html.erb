@@ -98,7 +98,7 @@
 		class: "btn btn-primary" %>
 	    <span id="shared_letter_id"
 		  style="display:none"
-		  value="<%= @shared_letter_id %>"></span>
+		  value=<%= @shared_letter_id %>></span>
 	    <br>
 	    <small>
 	      <i>
@@ -287,15 +287,41 @@
 <div class="row">
   <div id="iframe_container" class="col-md-8 col-md-offset-2" style="display:none;">
     <h3>
+      <br>
       <small>
 	<b>
-	  <span style="float:left;">Sample of Communication</span>
-	  <span id="org_letter" style="float:right;white-space:nowrap;"></span>
+	  <div class="col-md-4">
+	    <span style="float:left;">Sample Letter</span>
+	  </div>
+	  <div class="col-md-4">
+	    <center>
+	      <span id="edit-letter" style="cursor:pointer">Edit Letter</span>
+	    </center>
+	  </div>
+	  <div class="col-md-4">
+	    <span id="org_letter" style="float:right;white-space:nowrap;"></span>
+	  </div>
 	</b>
       </small>
     </h3>
     <iframe id="pdf_view" style="border:none;margin-top:0.5em;"></iframe>
   </div>
+</div>
+
+<div id="letter-edit-modal" class="edit-modal">
+  <div class='col-md-6 col-md-offset-3'>
+    <div class="edit-modal-content">
+      <span id="letter-edit-close" class="close">&times;</span>
+      <h3>Edit Letter Body</h3>
+      <textarea id="edit-letter-text-area"></textarea>
+      <br>
+      <%= button_tag 'Submit Changes',
+	  id: 'letter_change_button',
+	  style: 'margin-top:1em;',
+	  data: { disable_with: "Please wait..." },
+	  class: "btn btn-primary" %>
+    </div>
+  </div>        
 </div>
 
 <span id="stripe_pk" value="<%= @stripe_pk %>"></span>

@@ -6,10 +6,10 @@ class StaticPagesController < ApplicationController
   def home
     
     @stripe_pk = ENV['STRIPE_PUBLISHABLE_KEY_VOCALVOTERS']
-
-    @letter_id = ""
+    
+    @shared_letter_id = ""
     if params.has_key?(:letter_id)
-      @letter_id = params[:letter_id]
+      @shared_letter_id = params[:letter_id]
     end    
     
   end

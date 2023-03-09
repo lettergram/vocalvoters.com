@@ -18,7 +18,9 @@
     No Organizational Affiliation
   <% end %><br>
   <strong>Created by:</strong>
-  <%= User.find_by(id: @letter.user_id).name %>
+  <%= User.find_by(id: @letter.user_id).name %><br>
+  <strong>Email:</strong>
+  <%= @letter.email %><br>  
 </p>
 
 <p>
