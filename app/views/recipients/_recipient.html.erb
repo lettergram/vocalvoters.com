@@ -15,17 +15,18 @@
       <%= recipient.district.to_i.ordinalize %>
       Congressional District
     <% end %>
-  <% else %>
+  <% elsif recipient.level == 'state' %>
     <%= recipient.state %>
     <% if recipient.position != 'governor' %>
-      <% if recipient.position == 'senator' %>
-        Senator District
-      <% else %>
-        House District          
-      <% end %>
-      <%= recipient.district.to_i.ordinalize %>
-    <% else %>
       Governor
+    <% elsif recipient.position == 'senator' %>
+      Senator District
+    <% elsif recipient.position == 'representative' %>
+      House District          
+    <% elsif recipient.position == 'attorney_general' %>
+      Attorney General
+    <% elsif recipient.position == 'secretary_of_state' %>
+      Secretary of State
     <% end %>
   <% end %>
   <br>Phone #:
