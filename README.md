@@ -1,7 +1,7 @@
-VocalVoters.com
+[VocalVoters.com](https://vocalvoters.com)
 ==========
 
-Fax, Mail, E-Mail Your Government Representatives in 30 Seconds or Less.
+Generate & Send a Letter, Fax or E-Mail Your Government Representatives in 30 Seconds or Less.
 
 ------------------------
 
