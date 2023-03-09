@@ -42,6 +42,11 @@ export STRIPE_PUBLISHABLE_KEY_VOCALVOTERS=
 export STRIPE_SECRET_KEY_VOCALVOTERS=
 ```
 
+[openai](https://openai.com/) - used for letter generation
+```
+export OPENAI_KEY=
+```
+
 Production database setup:
 ```
 adapter: postgresql
