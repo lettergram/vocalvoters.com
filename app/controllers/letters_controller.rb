@@ -91,13 +91,15 @@ class LettersController < ApplicationController
         level = params[:sender_state] + " " + level
       end
     end
-    
+
     @recipient_location = ""
     if @recipient_position.present?
       if @recipient_position == "Senator"
         @recipient_location = level + " Senate"
       elsif @recipient_position == "Representative"
         @recipient_location = level + " House"
+      else
+        @sender_region = ""
       end
     end
 
