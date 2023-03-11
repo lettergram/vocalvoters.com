@@ -124,7 +124,8 @@ function generate_concerns(letter_id=null){
     
     // Hide bottom buffer once communications_selection displayed
     $("#concerns_selection_bottom_buffer").attr('style', 'display:none');
-    $('#communications_selection').attr('style', 'display:block');	
+    $('#communications_selection').attr('style', 'display:block');
+    $("#edit-letter-container").attr('style', 'display:block');
     
     document.getElementById("share_button").onclick = function(){
 	copyLetterToClipboard();
@@ -268,6 +269,11 @@ function update_pdf(letter_id, sender_name, sender_state, sender_district,
     $('#pdf_view').attr('height', '780');
     $('#pdf_view').attr('value', letter_id);
     $('#iframe_container').attr('style', 'display:block');
+    
+    $('#referral_org_id').attr(
+	'style',
+	"padding:0.2em 0.2em 0.2em 0.2em;margin: 0.1em 0.1em 0.1em 0.1em;float:right;white-space:nowrap;display:inline;"
+    );
 }
 
 function update_prices() {
@@ -306,6 +312,7 @@ function attach_stripe_checkout_on_click() {
 	    document.getElementById('communication_mode').innerText,
 	    document.getElementById('email').value,
 	    $('.recipient_card.selected_card').length,
+	    $('#referral_org_name').attr('value')
 	);
 
 	recipient_count = $('.recipient_card.selected_card').length;
@@ -590,14 +597,17 @@ var sendCommunication = function(paymentIntentId, method) {
     })    
 }
 
+
 function copyLetterToClipboard(){
 
-    letter_id = $('#pdf_view').attr('value');    
+    letter_id = $('#pdf_view').attr('value');
+    referral_org_id = $('#referral_org_id').attr('value')
 
     var get_url = window.location;
-    var base_url = get_url.protocol + "//" + get_url.host + "?"
+    var base_url = get_url.protocol + "//" + get_url.host;
     
-    var param_url = "letter_id=" + encodeURIComponent(letter_id)
+    var param_url = "?letter_id=" + encodeURIComponent(letter_id);
+    param_url += "&referral_org_id=" + encodeURIComponent(referral_org_id);
     navigator.clipboard.writeText(base_url + param_url);
     
     document.getElementById("share_button").innerHTML = "Copied Link!"
@@ -605,7 +615,9 @@ function copyLetterToClipboard(){
 
 function generate_letter(){
     topic = document.getElementById('topic_search_bar').value;
-    lookup_url = '/generate/letter.json?topic='+topic
+    org_id = $('#referral_org_id').attr('value')
+    user_id = $('#current_user_id').attr('value')
+    lookup_url = '/generate/letter.json?topic='+topic+'&organization_id='+org_id
     
     document.getElementById('generate_letter_button').disabled = true;
     document.getElementById('generate_letter_button').innerHTML = '<span class="small-loader"></span> Please wait...'
@@ -648,7 +660,8 @@ $('#letter_change_button').click(function(e) {
     document.getElementById('letter_change_button').innerHTML = 'Please wait...'
 
     copy_url = '/copy_and_update_body.json'
-
+    referral_org_id = $('#referral_org_name').attr('value')
+    
     $("body").bind("ajaxSend", function(elm, xhr, s){
 	if (s.type == "POST") {
 	    xhr.setRequestHeader('X-CSRF-Token', document.querySelector('meta[name="csrf-token"]').content);
@@ -657,6 +670,7 @@ $('#letter_change_button').click(function(e) {
 
     data = {
 	'derived_from': document.querySelector('#pdf_view').getAttribute('value'),
+	'referral_org_id': referral_org_id,
 	'body': $('#edit-letter-text-area').val(),
 	'email': document.querySelector('#email').value,
 	'CSRF': document.querySelector('meta[name="csrf-token"]').content

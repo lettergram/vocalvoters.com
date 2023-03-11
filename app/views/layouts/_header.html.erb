@@ -38,11 +38,28 @@
 		</ul>
 	      </li>
 	    <% elsif current_user.organization.present? %>
-	      <li>
-		<%= link_to "Organization",
-		    organization_path(current_user.organization) %>
+	       <li>
+	    	 <a id="organizatonss"
+		    href="#" class="dropdown-toggle" data-toggle="dropdown">
+		   Organization <b class="caret"></b>
+		 </a>
+		 <ul class="dropdown-menu">
+		   <li><%= link_to "Admin Page",
+			   organization_path(current_user.organization) %></li>
+		   <li><%= link_to "Letters", letters_path %></li>
+		 </ul>
 	      </li>
-	       <li><%= link_to "Letters", letters_path %></li>
+	      <li class="dropdown">
+		<a id="communications"
+		   href="#" class="dropdown-toggle" data-toggle="dropdown">
+		  Communications <b class="caret"></b>
+		</a>
+		<ul class="dropdown-menu">
+		  <li><%= link_to "Fax", faxes_path %></li>
+		  <li><%= link_to "Post", posts_path %></li>
+		  <li><%= link_to "Email", emails_path %></li>
+		</ul>
+	      </li>	  
 	    <% end %>  
 	    <li class="dropdown">
 	      <a id="account" href="#" class="dropdown-toggle" data-toggle="dropdown">

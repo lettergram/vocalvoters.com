@@ -16,11 +16,15 @@
     <%= @letter.organization.name %>
   <% else %>
     No Organizational Affiliation
-  <% end %><br>
-  <strong>Created by:</strong>
-  <%= User.find_by(id: @letter.user_id).name %><br>
-  <strong>Email:</strong>
-  <%= @letter.email %><br>  
+  <% end %>
+  </p>
+<p>
+  <b>Share Button:
+    <%= button_tag 'Copy Link',
+	id: 'share_button',
+	style: "font-size:0.8em;padding:0.2em 0.2em 0.2em 0.2em;margin:0.1em 0.1em 0.1em; 0.1em;",
+	class: 'btn btn-default' %>
+  </b>
 </p>
 
 <p>
@@ -43,3 +47,12 @@
     src='/letters/<%= @letter.id %>.pdf' width="100%" height="780"
     style="border:none;"></iframe>    
 </p>
+    letter_id = $('#letter_id').attr('value');
+    referral_org_id = $('#referral_org_id').attr('value')
+
+<span id="letter_id" value="<%= @letter.id %>" style="display:none;"></span>
+<span id="referral_org_id"
+      value="<%= current_user.organization.id %>"
+      style="display:none;"></span>
+
+<%= javascript_pack_tag 'letters' %>
