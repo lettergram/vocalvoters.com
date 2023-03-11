@@ -10,8 +10,26 @@ class StaticPagesController < ApplicationController
     @shared_letter_id = ""
     if params.has_key?(:letter_id)
       @shared_letter_id = params[:letter_id]
-    end    
+    end
+
+    @referral_org_id = ""
+    if params.has_key?(:referral_org_id)
+      org = Organization.find_by(id: params[:referral_org_id])
+    else
+      if current_user.present?
+        org = current_user.organization
+      else
+        org = Organization.first
+      end
+    end
     
+    @referral_org_id = org.id
+    @referral_org_name = org.name
+
+    @current_user_id = 1
+    if current_user.present?
+      @current_user_id = current_user.id
+    end
   end
 
   def help

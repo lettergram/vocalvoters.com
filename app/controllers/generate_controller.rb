@@ -55,6 +55,15 @@ class GenerateController < ApplicationController
         else
           x = -1.0
         end
+
+        @organization_id = 1
+        if params.has_key?(:organization_id)
+          @organization_id = params[:organization_id]
+        end
+        @user_id = 1
+        if params.has_key?(:user_id)
+          @user_id = param[:user_id]
+        end
         
         @generated_letter['topic'] = output_as_list[0].strip
         @generated_letter['sentiment'] = x
@@ -65,8 +74,8 @@ class GenerateController < ApplicationController
           tags:  @generated_letter['topic'],
           sentiment: @generated_letter['sentiment'],
           policy_or_law: @generated_letter['policy_or_law'],
-          organization_id: 1,
-          user_id: 1,
+          organization_id: @organization_id,
+          user_id: @user_id,
         )
         @letter.save
         @generated_letter['letter_id'] = @letter.id

@@ -1,17 +1,18 @@
 class LettersController < ApplicationController
   before_action :logged_in_user, except: [:show, :find_policy, :copy_and_update_body]
-  before_action	:logged_in_admin, only: [:edit, :update, :destroy]
+  before_action	:logged_in_admin, only: [:update, :destroy]
   before_action :set_letter, only: [:show, :edit, :update, :destroy]
+  before_action :validate_org_or_admin, except: [:show, :find_policy, :copy_and_update_body, :index]
   skip_before_action :verify_authenticity_token, only: [:copy_and_update_body]
 
   # GET /letters
   # GET /letters.json
   def index
     if current_user.admin?
-      @letters = Letter.where(derived_from: nil)
+      @letters = Letter.where(derived_from: nil).order(created_at: :desc)
     else 
       @letters = Letter.where(organization: current_user.organization)
-                   .where(derived_from: nil)
+                   .where(derived_from: nil).order(created_at: :desc)
     end
   end
 
@@ -143,7 +144,8 @@ class LettersController < ApplicationController
       format.pdf do
         render template: "/letters/letter", pdf: "Letter ID: #{@letter.id}", layout: 'pdf'
       end
-    end    
+    end
+
   end
 
   # GET /letters/new
@@ -239,6 +241,12 @@ class LettersController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_letter
       @letter = Letter.find(params[:id])
+    end
+
+    def validate_org_or_admin
+      if current_user.present?
+        current_user.organization != @letter.organization and !current_user.admin
+      end
     end
 
     # Only allow a list of trusted parameters through.

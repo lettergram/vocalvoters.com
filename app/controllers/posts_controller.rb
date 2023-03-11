@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :logged_in_user, except: [:new, :create]
-  before_action	:logged_in_admin, except: [:new, :create]  
+  before_action	:logged_in_admin, only: [:show, :edit, :destroy]
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
   # GET /posts
