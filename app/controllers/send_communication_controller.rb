@@ -77,8 +77,7 @@ class SendCommunicationController < ApplicationController
           letter_url = ENV['ROOT_VOCALVOTERS_URL'] + letter_url
         end
 
-        letter = Letter.find_by(id: letter_id)
-        
+        letter = Letter.find_by(id: letter_id)        
         approval_status = "pending"
         success_flag = nil
         if params.has_key?(:approval_status)
