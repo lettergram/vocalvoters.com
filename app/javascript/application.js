@@ -4,8 +4,6 @@ import "vendor/jquery.min";
 import "vendor/signature_pad.min";
 import "stripe";
 import "polyfill";
-import "custom/landing_page";
-import "custom/letters";
 
 import "bootstrap";
 import "chartkick";

@@ -223,7 +223,11 @@ class LettersController < ApplicationController
       @letter_copy.save
       
       respond_to do |format|
-        if @letter_copy.update(derived_from: params[:derived_from], body: params[:body], email: params[:email])
+        if @letter_copy.update(derived_from: params[:derived_from],
+                               category: params[:category],
+                               sentiment: params[:sentiment],
+                               body: params[:body],
+                               email: params[:email])
           format.json { render :copy_and_update_body, status: :created }
         else
           format.json { render json: @letter_copy.errors, status: :unprocessable_entity }

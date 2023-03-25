@@ -123,10 +123,10 @@ var generate_concerns = function(letter_id=null){
     $("#concerns_selection_bottom_buffer").attr('style', 'display:none');
     $('#communications_selection').attr('style', 'display:block');
     $("#edit-letter-container").attr('style', 'display:block');
-    
     document.getElementById("share_button").onclick = function(){
 	copyLetterToClipboard();
     }
+    $('#edit-letter').click()
 
     return true
 
@@ -649,7 +649,9 @@ function insert_letter_text_into_edit_box(letter_id=null) {
         url: letter_url,
 	cache: false,
         success: function(letter_json_obj){
-	    $('#edit-letter-text-area').val(letter_json_obj['body'])
+	    $('#edit-letter-sentiment').val(letter_json_obj['sentiment']);
+	    $('#edit-letter-category').val(letter_json_obj['category']);
+	    $('#edit-letter-body').val(letter_json_obj['body']);
 	}
     });
 }
@@ -658,8 +660,8 @@ var update_letter = function(e) {
     document.getElementById('letter_change_button').disabled = true;
     document.getElementById('letter_change_button').innerHTML = 'Please wait...'
 
-    copy_url = '/copy_and_update_body.json'
-    referral_org_id = $('#referral_org_name').attr('value')
+    var copy_url = '/copy_and_update_body.json'
+    var referral_org_id = $('#referral_org_name').attr('value')
     
     $("body").bind("ajaxSend", function(elm, xhr, s){
 	if (s.type == "POST") {
@@ -667,10 +669,12 @@ var update_letter = function(e) {
 	}
     });
 
-    data = {
+    var data = {
 	'derived_from': document.querySelector('#pdf_view').getAttribute('value'),
 	'referral_org_id': referral_org_id,
-	'body': $('#edit-letter-text-area').val(),
+	'sentiment': $('#edit-letter-sentiment').val(),		
+	'category': $('#edit-letter-category').val(),	
+	'body': $('#edit-letter-body').val(),	
 	'email': document.querySelector('#email').value,
 	'CSRF': document.querySelector('meta[name="csrf-token"]').content
     }
@@ -707,8 +711,7 @@ var update_letter = function(e) {
 	    update_pdf(letter_id, sender_name, sender_state,
 		       sender_address_line_1, sender_address_line_2,
 		       sender_address_city, sender_address_zipcode,
-		       district, recipient_name, recipient_position,
-		       recipient_level, signature)
+		       district, name, position, level, signature)
 	}
     });
 }

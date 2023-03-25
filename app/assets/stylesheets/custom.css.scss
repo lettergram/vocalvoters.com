@@ -1682,7 +1682,7 @@ input {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 80px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -1698,10 +1698,13 @@ input {
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
-  textarea {
-      min-width: 400px;      
-      min-height: 400px;
+  @media (max-width: 900px){
+      width: 100%;  
+  }
+  width: 80%;  
+  textarea { /* todo */      
+      min-width: 300px;      
+      min-height: 300px;
       font-size: 1.1em;
   }
 }
