@@ -18,6 +18,7 @@ class LettersController < ApplicationController
 
   # GET /letters/1
   # GET /letters/1.json
+  # GET /letters/1.pdf
   def show
 
     @template = false
@@ -86,7 +87,8 @@ class LettersController < ApplicationController
     if params.has_key?(:sender_state)
 
       recipient_state = Recipient.where(state: params[:sender_state])
-            
+
+      @sender_state = params[:sender_state]
       @sender_region += ", " + params[:sender_state]
       if level == "State"
         level = params[:sender_state] + " " + level
@@ -136,6 +138,23 @@ class LettersController < ApplicationController
       end
       @sender_region_verified += "in District via Billing Address"
       @sender_region_verified += "</small></i>"
+    end
+
+    @sender_address_line_1 = ""
+    @sender_address_line_2 = ""
+    @sender_address_city = ""
+    @sender_address_zipcode = ""
+    if params.has_key?(:sender_address_line_1)
+      @sender_address_line_1 = params[:sender_address_line_1]
+    end
+    if params.has_key?(:sender_address_line_2)
+      @sender_address_line_2 = params[:sender_address_line_2]
+    end
+    if params.has_key?(:sender_address_city)
+      @sender_address_city = params[:sender_address_city]
+    end
+    if params.has_key?(:sender_address_zipcode)
+      @sender_address_zipcode = params[:sender_address_zipcode]
     end
     
     respond_to do |format|

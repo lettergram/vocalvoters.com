@@ -63,10 +63,18 @@ var create_signature = function(){
 	    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
 	    var signature = data;
 	    var letter_id = document.querySelector('#pdf_view').getAttribute('value');
+
+	    var sender_address_line_1 = document.querySelector('#sender_line_1').getAttribute('value');
+	    var sender_address_line_2 = document.querySelector('#sender_line_2').getAttribute('value');
+	    var sender_address_city = document.querySelector('#sender_city').getAttribute('value');
+	    var sender_address_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
+
+	    // document.querySelector('#sender_state').getAttribute('value'),
 	    
 	    update_pdf(letter_id, sender_name, sender_state,
-		       district, name, position, level, signature);
-	    
+		       sender_address_line_1, sender_address_line_2,
+		       sender_address_city, sender_address_zipcode,		       
+		       district, name, position, level, signature);	    
 	    // save data to backend
 	    // load data for PDF
 	});
@@ -98,9 +106,18 @@ var generate_concerns = function(letter_id=null){
     var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
     var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
     var signature = null;
+
+    var sender_address_line_1 = document.querySelector('#sender_line_1').getAttribute('value');
+    var sender_address_line_2 = document.querySelector('#sender_line_2').getAttribute('value');
+    var sender_address_city = document.querySelector('#sender_city').getAttribute('value');
+    var sender_address_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
+    
+    // document.querySelector('#sender_state').getAttribute('value'),
     
     update_pdf(letter_id, sender_name, sender_state,
-	       district, name, position, level, signature);
+	       sender_address_line_1, sender_address_line_2,
+	       sender_address_city, sender_address_zipcode,		       
+	       district, name, position, level, signature);    
     
     // Hide bottom buffer once communications_selection displayed
     $("#concerns_selection_bottom_buffer").attr('style', 'display:none');
@@ -223,13 +240,20 @@ function find_legislators(){
     document.getElementById('legislator_button').innerText = "Please wait..."
 }
 
-function update_pdf(letter_id, sender_name, sender_state, sender_district,
-		    recipient_name, recipient_position, recipient_level,
-		    signature) {
+function update_pdf(letter_id, sender_name, sender_state,
+		    sender_address_line_1, sender_address_line_2,
+		    sender_address_city, sender_address_zipcode,
+		    sender_district, recipient_name, recipient_position,
+		    recipient_level, signature) {
 
     var src_url  = '/letters/' + letter_id + '.pdf?sender_name=' + sender_name;
     src_url += '&sender_state='+sender_state;
     src_url += '&sender_district='+sender_district;
+
+    src_url += '&sender_address_line_1='+sender_address_line_1;
+    src_url += '&sender_address_line_2='+sender_address_line_2;
+    src_url += '&sender_address_city='+sender_address_city;
+    src_url += '&sender_address_zipcode='+sender_address_zipcode;
     
     src_url += '&recipient_name='+recipient_name;
     src_url += '&recipient_level='+recipient_level;
@@ -239,7 +263,7 @@ function update_pdf(letter_id, sender_name, sender_state, sender_district,
 	// Split: data:image/png <here, take --> base64,iVBOrw....
 	src_url += '&signature='+JSON.stringify(signature).split(';')[1]
     }
-    
+
     src_url += '&sender_verified=true'
 
     $('#pdf_view').attr('src', src_url);
@@ -672,8 +696,19 @@ var update_letter = function(e) {
 	    var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
 	    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
 	    var letter_id = json_obj['id']
+
+	    var sender_address_line_1 = document.querySelector('#sender_line_1').getAttribute('value');
+	    var sender_address_line_2 = document.querySelector('#sender_line_2').getAttribute('value');
+	    var sender_address_city = document.querySelector('#sender_city').getAttribute('value');
+	    var sender_address_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
+
+	    // document.querySelector('#sender_state').getAttribute('value'),
+
 	    update_pdf(letter_id, sender_name, sender_state,
-		       district, name, position, level, signature);	    
+		       sender_address_line_1, sender_address_line_2,
+		       sender_address_city, sender_address_zipcode,
+		       district, recipient_name, recipient_position,
+		       recipient_level, signature)
 	}
     });
 }
