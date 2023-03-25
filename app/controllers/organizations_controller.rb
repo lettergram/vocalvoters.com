@@ -33,6 +33,8 @@ class OrganizationsController < ApplicationController
       @letters.group(:target_level).count)
 
     @letters_by_type = @letters.count
+
+    @affiliate_link = request.base_url+'?referral_org_id='+@organization.id.to_s
     
   end
 
