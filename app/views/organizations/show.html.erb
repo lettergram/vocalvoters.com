@@ -1,18 +1,21 @@
-
 <div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <h2>
+      <%= @organization.name %>
+    </h2>
+    <h1>
+      <%= image_tag @organization.logo_link, class: "splashlogo" %>
+    </h1>
+    <h4>
+      <%= @organization.description.html_safe %>
+    </h4>    
+  </div>
   <div class="col-md-12">
-    <p>
-      <strong>Name:</strong>
-      <%= @organization.name %><br>      
-      <strong>Description:</strong>
-      <%= @organization.description %>
-    </p>
-    
-    <p>
-      <strong>Approvals required:</strong>
-      <%= @organization.approvals_required %>
-    </p>
-    
+    <hr>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
     <p>
       <strong>Associated Users:</strong>
       -> <u><b><%= link_to "Invite New User", new_user_path  %></b></u>
@@ -22,29 +25,51 @@
 	  <li>
 	    <% if user.org_admin %>
 	      <b>Org Admin</b> - 
+	    <% else %>
+	      Org User
 	    <% end %>
-	    <%= user.name %>, <%= user.email %>
 	    <% if current_user.org_admin or current_user.admin %>
-	      -
 	      <small>
-		<%= link_to "Remove", remove_user_from_org_path(
+		<%= link_to "Remove User", remove_user_from_org_path(
 		    user_id: user.id, id: @organization.id) %>
-	      </small>
+	      </small><br>
 	    <% end %>
+	    <%= user.name %>
+	    <br><%= user.email %>
 	  </li>
 	<% end %>
       </ul>
       <br>
     </p>
   </div>
+  <div class="col-md-4">    
+    <p>
+      <center>
+	<% if @organization.approvals_required %>
+	  <strong>Approval Required to Send Letters</strong>
+	<% else %>
+	  <strong>Approvals <u>NOT</u> Required to Send Letters</strong>
+	<% end %>  
+	  <hr>
+	  <b><%= link_to "Review Letters", posts_path %></b><br>
+	  <b><%= link_to "Review Faxes", faxes_path %></b>
+      </center>
+    </p>
+  </div>  
+  <div class="col-md-4">
+    <center>
+      <% if current_user.org_admin or current_user.admin %>
+        <%= link_to 'Edit Organization Settings', edit_organization_path(@organization) %>
+      <% end %>
+    </center>
+  </div>
 </div>
 <div class="row">
-  <% if current_user.org_admin or current_user.admin %>
-    <%= link_to 'Edit Organization Settings', edit_organization_path(@organization) %>
-  <% end %>
-  <br>
-  <hr>
-  <br>  
+  <div class="col-md-12">
+    <hr>
+    <h2>Statistics</h2>
+    <hr>
+  </div>
 </div>
 <div class="row">
   <div class="col-md-6">
