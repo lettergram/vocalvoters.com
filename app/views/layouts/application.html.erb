@@ -12,11 +12,11 @@
     <%= csp_meta_tag %>
     
     <%= stylesheet_link_tag 'application', media: 'all',
-	'data-turbolinks-track': 'reload', nonce: true %>
+	'data-turbolinks-track': 'reload' %>
 
-    <%= render 'layouts/shim', nonce: true %>
+    <%= render 'layouts/shim' %>
 
-    <%= wicked_pdf_stylesheet_link_tag "pdf", nonce: true %>
+    <%= wicked_pdf_stylesheet_link_tag "pdf" %>
     
     <%= javascript_importmap_tags %>
         
