@@ -84,7 +84,7 @@
       <div class="col-md-8">
 	<div id='generation_container' class="form-group" >
 	  <input id="topic_search_bar" class="form-control"
-		 placeholder='supporting marijuana deregulation',
+		 placeholder='Please, fix the highway roads',
 		 type="text"><br>
 	  <center>
 	    <%= button_tag 'Generate Letter',
@@ -316,17 +316,44 @@
   <div class='col-md-6 col-md-offset-3'>
     <div class="edit-modal-content">
       <span id="letter-edit-close" class="close">&times;</span>
-      <h3>Edit Letter Body</h3>
-      <textarea id="edit-letter-text-area"></textarea>
-      <br>
-      <%= button_tag 'Submit Changes',
-	  id: 'letter_change_button',
-	  style: 'margin-top:1em;',
-	  data: { disable_with: "Please wait..." },
-	  class: "btn btn-primary" %>
+      <div class="col-xs-12">
+	<h4>
+	  <center><b>Edit Your Letter</b></center>
+	  <hr>
+	</h4>
+      </div>
+      <div class="col-xs-12">
+	<div class="col-sm-6">
+	  <b><small>Sentiment</small></b>
+	  <%= select_tag "edit-letter-sentiment",
+	      options_for_select([
+	      ["Support", 1],
+	      ["Oppose", -1]
+	      ]), class: "form-control" %>
+	</div>
+	<div class="col-sm-6">
+	  <b><small>Subject</small></b>
+	  <input id="edit-letter-category" class="form-control" type="text"><br>
+	</div>
+      </div>
+      <div class="col-xs-12">
+	<b><small>Letter Body</small></b>
+      </div>
+      <textarea id="edit-letter-body"></textarea>
+      <center>
+	<%= button_tag 'Submit Changes',
+	    id: 'letter_change_button',
+	    data: { disable_with: "Please wait..." },
+	    class: "btn btn-primary" %>
+      </center>
     </div>
   </div>        
 </div>
 
 <span id="current_user_id" value="<%= @current_user_id %>"></span>
 <span id="stripe_pk" value="<%= @stripe_pk %>"></span>
+<% content_for :head do %>
+  <%= javascript_import_module_tag "custom/landing_page" %>
+  <%= javascript_import_module_tag "custom/letters" %>
+<% end %>
+
