@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_24_153452) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_25_200705) do
   create_table "emails", force: :cascade do |t|
     t.string "email_address"
     t.boolean "success", default: true
@@ -68,6 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_24_153452) do
     t.boolean "approvals_required", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "logo_link"
   end
 
   create_table "pay_charges", force: :cascade do |t|

@@ -1,14 +1,23 @@
 <% provide(:title, "Home") %>
 <div class="center jumbotron">
-  <h1>
-    <%= image_tag 'vocalvoters_logos/vocalvoters-beta.png', class: "splashlogo" %>
-  </h1>  
-  <h2>
-    Share Your Opinion With Your Representatives<br>
-    <small>
-      Send a Letter or Fax in 30 Seconds or Less
-    </small>
-  </h2>
+  <% if @referral_org_logo_link.present? %>
+    <h1>
+      <%= image_tag @referral_org_logo_link, class: "splashlogo" %>
+    </h1>
+    <h4>
+      <%= @referral_org_description.html_safe %>
+    </h4>
+  <% else %>
+    <h1>
+      <%= image_tag 'vocalvoters_logos/vocalvoters-beta.png', class: "splashlogo" %>
+    </h1>
+    <h2>
+      Share Your Opinion With Your Representatives<br>
+      <small>
+	Send a Letter or Fax in 30 Seconds or Less
+      </small>
+    </h2>
+  <% end %>
 </div>
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
@@ -151,7 +160,7 @@
 		class: 'btn btn-info send_button' %><br>
             <small>
               <span id="letter_price">0</span><br>
-	      <b>Max Impact</b><br>
+	      <b>High Impact</b><br>
 	      14-21 Days
             </small>
 	  </center>
