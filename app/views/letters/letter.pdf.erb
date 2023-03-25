@@ -59,16 +59,20 @@
   <%= simple_format(@letter.body) %>
   
   <p>
-    Thank you,<br>
-
+    Thank you,
+    <br>
     <% if @sender_signature.present? %>
       <img src="data:image/jpeg;<%= @sender_signature %>" />
-      <br>
     <% end %>
-    
+    <br>    
     <%= @sender_name.html_safe %><br>
+    <%= @sender_address_line_1.html_safe %><br>
+    <% if @sender_address_line_2.present? %>
+        <%= @sender_address_line_2.html_safe %><br>
+    <% end %>
+    <%= @sender_address_city.html_safe %>  <%= @sender_state.html_safe %>,
+    <%= @sender_address_zipcode.html_safe %><br>
     <%= @sender_region.html_safe %>
-    <%= @sender_region_verified.html_safe %><br>
   </p>
 </div>
 
