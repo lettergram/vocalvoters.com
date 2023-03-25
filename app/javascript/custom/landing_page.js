@@ -122,7 +122,7 @@ var generate_concerns = function(letter_id=null){
     // Hide bottom buffer once communications_selection displayed
     $("#concerns_selection_bottom_buffer").attr('style', 'display:none');
     $('#communications_selection').attr('style', 'display:block');
-    $("#edit-letter-container").attr('style', 'display:block');
+    // $("#edit-letter-container").attr('style', 'display:block');
     document.getElementById("share_button").onclick = function(){
 	copyLetterToClipboard();
     }
@@ -738,6 +738,9 @@ document.addEventListener("turbo:load", function() {
     $('#letter-edit-close').click(function(e) {
 	document.getElementById("letter-edit-modal").style.display = "none";
     });
+    $('#no_letter_change_button').click(function(e) {
+	document.getElementById("letter-edit-modal").style.display = "none";
+    });    
     
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
