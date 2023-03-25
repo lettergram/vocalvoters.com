@@ -5,24 +5,21 @@
     <%= favicon_link_tag 'vocalvoters_logos/vocalvoters-favicon-256.png' %>
     <title><%= full_title(yield(:title)) %></title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content=" Share thoughts with your government representatives in seconds">    
  
     <%= csrf_meta_tags %>
-    
     <%= csp_meta_tag %>
-
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>    
     
     <%= stylesheet_link_tag 'application', media: 'all',
-	'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', media: 'all',
-	'data-turbolinks-track': 'reload' %>
+	'data-turbolinks-track': 'reload', nonce: true %>
 
-    <%= render 'layouts/shim' %>
+    <%= render 'layouts/shim', nonce: true %>
 
-    <%= wicked_pdf_stylesheet_link_tag "pdf" %>
+    <%= wicked_pdf_stylesheet_link_tag "pdf", nonce: true %>
     
+    <%= javascript_importmap_tags %>
+        
   </head>
 
   <body <%= "onload='number_pages'" if request.original_url.include? '.pdf' %>>

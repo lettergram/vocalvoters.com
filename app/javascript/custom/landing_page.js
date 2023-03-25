@@ -1,14 +1,14 @@
-function validate_email(email) {
+var validate_email = function(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
 
-function validate_form(ids_to_validate){
-    safe_flag = true
+var validate_form = function(ids_to_validate){
+    var safe_flag = true
     for (const element of ids_to_validate){
 
-	containerElement = document.getElementById(element+'_container');
-	containerValue = document.getElementById(element).value;
+	var containerElement = document.getElementById(element+'_container');
+	var containerValue = document.getElementById(element).value;
 	
 	// Check if there's no data in given field
 	if ((containerValue.length==0)
@@ -33,12 +33,12 @@ function validate_form(ids_to_validate){
     return safe_flag
 }
 
-function create_signature(){
+var create_signature = function(){
 
     if (document.getElementById('signature_container').style.display != 'inline') {
 	document.getElementById('signature_container').style.display = 'inline';
 	
-	const SignaturePad = require("signature_pad").default;
+	// const SignaturePad = require("signature_pad").default;
 	var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
 	    backgroundColor: 'rgba(255, 255, 255)',
 	    penColor: 'rgb(0, 0, 0)',
@@ -51,18 +51,19 @@ function create_signature(){
 	    const data = signaturePad.toDataURL("image/jpeg", 0.5) // save as jpeg base64
 	    document.getElementById('signature-data').value = data;
 
-	    sender_name = document.getElementById('name').value;
-	    sender_state = document.querySelector('#sender_state').getAttribute('value');
-	    selected_cards = document.getElementsByClassName('recipient_card selected_card');
+	    var sender_name = document.getElementById('name').value;
+	    var sender_state = document.querySelector('#sender_state').getAttribute('value');
+	    var selected_cards = document.getElementsByClassName('recipient_card selected_card');
 	    
-	    recipient_id = selected_cards[0].getAttribute('value');
+	    var recipient_id = selected_cards[0].getAttribute('value');
 	    
-	    district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
-	    name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
-	    position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
-	    level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
-	    signature = data;
-	
+	    var district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
+	    var name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
+	    var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
+	    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+	    var signature = data;
+	    var letter_id = document.querySelector('#pdf_view').getAttribute('value');
+	    
 	    update_pdf(letter_id, sender_name, sender_state,
 		       district, name, position, level, signature);
 	    
@@ -80,44 +81,23 @@ function create_signature(){
     window.location.hash = "#signature_container";
 }
 
-/* If enter, update   */
-$('#address,#name').keyup(function(e) {
-    if (e.which == 13) {
-	form_element_ids = ['name', 'email', 'address']
-	if(validate_form(form_element_ids)){
-	    find_legislators()
-	}
-    }
-})
-
-$('#legislator_button').click(function(e) {
-    form_element_ids = ['name', 'email', 'address']
-    if(validate_form(form_element_ids)){
-	find_legislators()
-    }
-})
-
-function generate_concerns(letter_id=null){
+var generate_concerns = function(letter_id=null){
 
     // Ensure name, email, address are present
-    form_element_ids = ['name', 'email', 'address']
-    if(!validate_form(form_element_ids)){
-	return false
-    }
+    const form_element_ids = ['name', 'email', 'address']
+    if(!validate_form(form_element_ids)){ return false }
 
     if(!letter_id){ return false }
-
-    sender_name = document.getElementById('name').value;
-    sender_state = document.querySelector('#sender_state').getAttribute('value');
-    selected_cards = document.getElementsByClassName('recipient_card selected_card');
     
-    recipient_id = selected_cards[0].getAttribute('value');
-	
-    district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
-    name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
-    position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
-    level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
-    signature = null;
+    var sender_name = document.getElementById('name').value;
+    var sender_state = document.querySelector('#sender_state').getAttribute('value');
+    var selected_cards = document.getElementsByClassName('recipient_card selected_card');    
+    var recipient_id = selected_cards[0].getAttribute('value');   
+    var district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
+    var name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
+    var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
+    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+    var signature = null;
     
     update_pdf(letter_id, sender_name, sender_state,
 	       district, name, position, level, signature);
@@ -135,17 +115,18 @@ function generate_concerns(letter_id=null){
 
 }
 
-function create_sender(){
-    sender_name = document.getElementById('name').value;
-    sender_email = document.getElementById('email').value;
-    sender_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
-    sender_state = document.querySelector('#sender_state').getAttribute('value');
-    sender_county = document.querySelector('#sender_county').getAttribute('value');
-    sender_district_federal = document.querySelector('#sender_district_federal').getAttribute('value');
+var create_sender = function(){
+    var sender_name = document.getElementById('name').value;
+    var sender_email = document.getElementById('email').value;
+    var sender_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
+    var sender_state = document.querySelector('#sender_state').getAttribute('value');
+    var sender_county = document.querySelector('#sender_county').getAttribute('value');
+    var sender_district_federal = document.querySelector('#sender_district_federal').getAttribute('value');
 
-    create_sender = '/sender'
-    $.post({
-	url: create_sender,
+    $.ajax({
+        type: "POST",
+	url: '/sender.json',	
+	cache: false,
 	data: {
 	    'name': sender_name,
 	    'email': sender_email,
@@ -157,15 +138,15 @@ function create_sender(){
 	success: function(response) {
 	    console.log(response)
 	}
-    })
+    });
 
 }
 
 function find_legislators(){
-    sender_name = document.getElementById('name').value;
-    sender_email = document.getElementById('email').value;
-    sender_address = document.getElementById('address').value;
-    lookup_url = '/govlookup?'+'name='+sender_name+'&address='+sender_address
+    var sender_name = document.getElementById('name').value;
+    var sender_email = document.getElementById('email').value;
+    var sender_address = document.getElementById('address').value;
+    var lookup_url = '/govlookup?'+'name='+sender_name+'&address='+sender_address
     lookup_url+= '&layout=false'
 
     $.ajax({
@@ -182,7 +163,7 @@ function find_legislators(){
 	    $('.send_button').click(function(e) {
 
 		// Clear any old selections
-		selected_buttons = document.getElementsByClassName("selected_button");
+		var selected_buttons = document.getElementsByClassName("selected_button");
 		for (var i = 0; i < selected_buttons.length; i++) {
 		    selected_buttons[i].classList.remove('selected_button');
 		}
@@ -193,26 +174,26 @@ function find_legislators(){
 		create_signature();
 	    });
 	    
-	    sender_address = document.getElementById('sender_address').getAttribute('value')
-	    sender_state = document.getElementById('sender_state').getAttribute('value')
-	    sender_district_federal = document.getElementById('sender_district_federal').getAttribute('value')
+	    var sender_address = document.getElementById('sender_address').getAttribute('value')
+	    var sender_state = document.getElementById('sender_state').getAttribute('value')
+	    var sender_district_federal = document.getElementById('sender_district_federal').getAttribute('value')
 	    window.location.hash = "#legislator_selection";
 
-	    recipient_cards = document.getElementsByClassName('recipient_card');
+	    var recipient_cards = document.getElementsByClassName('recipient_card');
 	    for (var i=0; i < recipient_cards.length; i++) {
 		if (i == 0) {
-		    id = recipient_cards[i].getAttribute('value')
-		    recipient_name = document.getElementById('recipient_name_'+id).getAttribute('value')
-		    recipient_position = document.getElementById('recipient_position_'+id).getAttribute('value')
-		    recipient_level = document.getElementById('recipient_level_'+id).getAttribute('value')
+		    var id = recipient_cards[i].getAttribute('value')
+		    var recipient_name = document.getElementById('recipient_name_'+id).getAttribute('value')
+		    var recipient_position = document.getElementById('recipient_position_'+id).getAttribute('value')
+		    var recipient_level = document.getElementById('recipient_level_'+id).getAttribute('value')
 		}
 		
 		recipient_cards[i].onclick = function(card) {
 
-		    id = document.getElementById(event.srcElement.id).getAttribute('value')
-		    recipient_name = document.getElementById('recipient_name_'+id).getAttribute('value')
-		    recipient_position = document.getElementById('recipient_position_'+id).getAttribute('value')
-		    recipient_level = document.getElementById('recipient_level_'+id).getAttribute('value')
+		    var id = document.getElementById(event.srcElement.id).getAttribute('value')
+		    var recipient_name = document.getElementById('recipient_name_'+id).getAttribute('value')
+		    var recipient_position = document.getElementById('recipient_position_'+id).getAttribute('value')
+		    var recipient_level = document.getElementById('recipient_level_'+id).getAttribute('value')
 		    
 		    /* Select the recipient cards */
 		    if (event.srcElement.classList.contains('selected_card')) {
@@ -222,14 +203,11 @@ function find_legislators(){
 		    }
 
 		    disableCommunications();
-		    
 		    update_prices();
-
 		    update_checkout_price();
-
-		    shared_letter_id = document.getElementById('shared_letter_id').getAttribute('value')
+		    var shared_letter_id = document.getElementById('shared_letter_id').getAttribute('value')
 		    if (shared_letter_id) {
-			generate_concerns(letter_id=shared_letter_id)
+			generate_concerns(shared_letter_id)
 		    }else{
 			generate_concerns();
 		    }
@@ -249,7 +227,7 @@ function update_pdf(letter_id, sender_name, sender_state, sender_district,
 		    recipient_name, recipient_position, recipient_level,
 		    signature) {
 
-    src_url  = '/letters/' + letter_id + '.pdf?sender_name=' + sender_name;
+    var src_url  = '/letters/' + letter_id + '.pdf?sender_name=' + sender_name;
     src_url += '&sender_state='+sender_state;
     src_url += '&sender_district='+sender_district;
     
@@ -276,8 +254,8 @@ function update_pdf(letter_id, sender_name, sender_state, sender_district,
     );
 }
 
-function update_prices() {
-    r_count = $('.recipient_card.selected_card').length;
+var update_prices = function() {
+    var r_count = $('.recipient_card.selected_card').length;
     if(r_count == 0){
 	document.getElementById('payment_container').style.display = 'none';
     }
@@ -294,19 +272,19 @@ function update_prices() {
     document.getElementById('priority_price').innerHTML = 'Price: $' + (r_count*5+fee).toString() + ' (x' + r_count.toString()+ ')';
 }
 
-function attach_stripe_checkout_on_click() {
+var attach_stripe_checkout_on_click = function() {
 
     $('#submit-signature,#skip-signature').click(function(e) {
 		
-	send_buttons = document.getElementsByClassName("send_button");
+	var send_buttons = document.getElementsByClassName("send_button");
 	for (var i = 0; i < send_buttons.length; i++) {
 	    send_buttons[i].classList.remove('selected_card');
 	}
 
-	id = document.getElementsByClassName("selected_button")[0].id;
+	var id = document.getElementsByClassName("selected_button")[0].id;
 	document.getElementsByClassName("selected_button")[0].classList.add('selected_card');
 	
-	count = update_checkout_price(id);
+	var count = update_checkout_price(id);
 
 	load_stripe_checkout(
 	    document.getElementById('communication_mode').innerText,
@@ -315,7 +293,7 @@ function attach_stripe_checkout_on_click() {
 	    $('#referral_org_name').attr('value')
 	);
 
-	recipient_count = $('.recipient_card.selected_card').length;
+	var recipient_count = $('.recipient_card.selected_card').length;
 	if(recipient_count == 0){
 	    document.getElementById('payment_container').style.display = 'none';
 	}
@@ -326,13 +304,13 @@ function attach_stripe_checkout_on_click() {
 function update_checkout_price(id=null) {
 
     if (id == null) {
-	id = document.getElementById('communication_mode').getAttribute('value')
+	var id = document.getElementById('communication_mode').getAttribute('value')
     }
     
-    recipient_count = $('.recipient_card.selected_card').length;
-    price = 0;
-    single_phrasing = "";
-    multiple_phrasing = "";
+    var recipient_count = $('.recipient_card.selected_card').length;
+    var price = 0;
+    var single_phrasing = "";
+    var multiple_phrasing = "";
     
     if (id == 'email') {
 	price = document.getElementById('email_price').getAttribute('value');
@@ -365,22 +343,22 @@ function update_checkout_price(id=null) {
 
 // Disable communication modes based on the available options
 var disableCommunications = function() {
-    selected_cards = document.getElementsByClassName('recipient_card selected_card');
+    var selected_cards = document.getElementsByClassName('recipient_card selected_card');
 
-    // communication_option = ['email', 'fax', 'letter', 'priority'];
-    communication_option = ['fax', 'letter', 'priority'];
+    // const communication_option = ['email', 'fax', 'letter', 'priority'];
+    const communication_option = ['fax', 'letter', 'priority'];
     
     for (var j = 0; j < communication_option.length; j++) {
-	c_option = communication_option[j];
+	var c_option = communication_option[j];
 	document.querySelector('button#'+c_option).disabled = false;
     }
 
     
     for (var i = 0; i < selected_cards.length; i++) {
-	id = selected_cards[i].getAttribute('value');
+	var id = selected_cards[i].getAttribute('value');
 	
 	for (var j = 0; j < communication_option.length; j++) {
-	    c_option = communication_option[j];	    
+	    var c_option = communication_option[j];	    
 	    if(document.getElementById(
 		c_option+'_'+id).getAttribute('value').length == 0) {
 		document.querySelector('button#'+c_option).disabled = true;
@@ -398,7 +376,21 @@ var disableCommunications = function() {
     document.querySelector('button#email').disabled = true;
 }
 
-function load_stripe_checkout(id=null, email=null, count=null, org=null) {
+// Show a spinner on payment submission
+var loading = function(isLoading) {
+    if (isLoading) {
+	// Disable the button and show a spinner
+	document.querySelector("#submit").disabled = true;
+	document.querySelector("#spinner").classList.remove("hidden");
+	document.querySelector("#button-text").classList.add("hidden");
+    } else {
+	document.querySelector("#submit").disabled = false;
+	document.querySelector("#spinner").classList.add("hidden");
+	document.querySelector("#button-text").classList.remove("hidden");
+    }
+};
+
+var load_stripe_checkout = function(id=null, email=null, count=null, org=null) {
 
     document.getElementById('payment_container').style.display = 'block';
     window.location.hash = "#payment_container";
@@ -422,7 +414,8 @@ function load_stripe_checkout(id=null, email=null, count=null, org=null) {
     fetch("/create-payment-intent.json", {
 	method: "POST",
 	headers: {
-	    "Content-Type": "application/json"
+	    "Content-Type": "application/json",
+	    "dataType": "json"
 	},
 	body: JSON.stringify(purchase)
     }).then(function(result) {
@@ -434,7 +427,7 @@ function load_stripe_checkout(id=null, email=null, count=null, org=null) {
 	var stripe = Stripe(stripe_pk);
 
 	// Clear card elements in case anything is already there (happens on reload)
-	cardElements = document.getElementById("card-element");
+	var cardElements = document.getElementById("card-element");
 	while (cardElements.firstChild) {
 	    cardElements.removeChild(cardElements.lastChild);
 	}
@@ -467,25 +460,27 @@ function load_stripe_checkout(id=null, email=null, count=null, org=null) {
 	    document.querySelector("#submit").disabled = event.empty;
 	    document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
 	});
-	
-	var form = document.getElementById("payment-form");
 
-	// Remove and add new
-	form.removeEventListener('submit', arguments.callee, false);
-	
-	form.addEventListener("submit", function(event) {
+	var pay_with_card_on_submit = function(event) {
 	    event.preventDefault();
 	
 	    // Complete payment when the submit button is clicked
 	    payWithCard(stripe, card, data.clientSecret);
-	});
+	}
+	
+	// clone should remove the event listeners 
+	var form = document.getElementById("payment-form")
+
+	// Remove and add new
+	form.removeEventListener('submit', pay_with_card_on_submit);	
+	form.addEventListener('submit', pay_with_card_on_submit);
     });
     
     // Calls stripe.confirmCardPayment
     // If the card requires authentication Stripe shows a pop-up modal to
     // prompt the user to enter authentication details without leaving your page.
     var payWithCard = function(stripe, card, clientSecret) {
-	method = document.querySelector('.send_button.selected_card').getAttribute('id');
+	var method = document.querySelector('.send_button.selected_card').getAttribute('id');
 	loading(true);	
 	stripe
 	    .confirmCardPayment(clientSecret, {
@@ -538,25 +533,11 @@ function load_stripe_checkout(id=null, email=null, count=null, org=null) {
 	    errorMsg.textContent = "";
 	}, 4000);
     };
-    
-    // Show a spinner on payment submission
-    var loading = function(isLoading) {
-	if (isLoading) {
-	    // Disable the button and show a spinner
-	    document.querySelector("#submit").disabled = true;
-	    document.querySelector("#spinner").classList.remove("hidden");
-	    document.querySelector("#button-text").classList.add("hidden");
-	} else {
-	    document.querySelector("#submit").disabled = false;
-	    document.querySelector("#spinner").classList.add("hidden");
-	    document.querySelector("#button-text").classList.remove("hidden");
-	}
-    };
 }
 
 var sendCommunication = function(paymentIntentId, method) {
 
-    data = {
+    var data = {
 	'method': method,
 	'sender': {
 	    'name': document.querySelector('#name').value,
@@ -582,26 +563,29 @@ var sendCommunication = function(paymentIntentId, method) {
 	}
     }
     
-    selected_cards = document.getElementsByClassName('selected_card')
+    var selected_cards = document.getElementsByClassName('selected_card')
     for (const element of selected_cards){
 	if(element.getAttribute('value') != null){
 	    data['recipients'].push(element.getAttribute('value'));
 	}
     }
-        
-    send_communication_url = '/send_communication'
-    $.post({
-        url: send_communication_url,
+
+    $.ajax({
+        type: "POST", 
+        url: '/send_communication.json',
         cache: false,
-	data: data
-    })    
+	data: data,
+	success: function(response) {
+	    console.log(response)
+	}
+    });
 }
 
 
 function copyLetterToClipboard(){
 
-    letter_id = $('#pdf_view').attr('value');
-    referral_org_id = $('#referral_org_id').attr('value')
+    var letter_id = $('#pdf_view').attr('value');
+    var referral_org_id = $('#referral_org_id').attr('value')
 
     var get_url = window.location;
     var base_url = get_url.protocol + "//" + get_url.host;
@@ -614,10 +598,10 @@ function copyLetterToClipboard(){
 }
 
 function generate_letter(){
-    topic = document.getElementById('topic_search_bar').value;
-    org_id = $('#referral_org_id').attr('value')
-    user_id = $('#current_user_id').attr('value')
-    lookup_url = '/generate/letter.json?topic='+topic+'&organization_id='+org_id
+    var topic = document.getElementById('topic_search_bar').value;
+    var org_id = $('#referral_org_id').attr('value')
+    var user_id = $('#current_user_id').attr('value')
+    var lookup_url = '/generate/letter.json?topic='+topic+'&organization_id='+org_id
     
     document.getElementById('generate_letter_button').disabled = true;
     document.getElementById('generate_letter_button').innerHTML = '<span class="small-loader"></span> Please wait...'
@@ -627,25 +611,16 @@ function generate_letter(){
 	cache: false,
         success: function(json_obj){
 	    document.getElementById('generate_letter_button').disabled = false;
-	    document.getElementById('generate_letter_button').innerText = "Generate Letter"
-	    generate_concerns(letter_id=json_obj['letter_id'])
+	    document.getElementById('generate_letter_button').innerText = "Generate Letter";
+	    var letter_id = json_obj['letter_id'];
+	    generate_concerns(letter_id);
 	}
     })
 }
 
-$('#generate_letter_button').click(function(e) {
-    generate_letter()
-});
-
-$("#topic_search_bar").on('keyup', function (e) {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-	generate_letter()
-    }
-});
-
 function insert_letter_text_into_edit_box(letter_id=null) {
     if (!letter_id){ return false; }
-    letter_url = "letters/"+letter_id+".json"
+    var letter_url = "letters/"+letter_id+".json"
     $.ajax({
         url: letter_url,
 	cache: false,
@@ -655,7 +630,7 @@ function insert_letter_text_into_edit_box(letter_id=null) {
     });
 }
 
-$('#letter_change_button').click(function(e) {
+var update_letter = function(e) {
     document.getElementById('letter_change_button').disabled = true;
     document.getElementById('letter_change_button').innerHTML = 'Please wait...'
 
@@ -686,37 +661,68 @@ $('#letter_change_button').click(function(e) {
 	    document.getElementById('letter_change_button').innerText = "Submit Changes"
 	    document.getElementById("letter-edit-modal").style.display = "none";
 	    
-	    signature = document.getElementById('signature-data').value
+	    var signature = document.getElementById('signature-data').value
 	    document.getElementById('signature-data').value = data;
-	    sender_name = document.getElementById('name').value;
-	    sender_state = document.querySelector('#sender_state').getAttribute('value');
-	    selected_cards = document.getElementsByClassName('recipient_card selected_card');
-	    recipient_id = selected_cards[0].getAttribute('value');
-	    district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
-	    name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
-	    position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
-	    level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
-	    letter_id = json_obj['id']
+	    var sender_name = document.getElementById('name').value;
+	    var sender_state = document.querySelector('#sender_state').getAttribute('value');
+	    var selected_cards = document.getElementsByClassName('recipient_card selected_card');
+	    var recipient_id = selected_cards[0].getAttribute('value');
+	    var district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
+	    var name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
+	    var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
+	    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+	    var letter_id = json_obj['id']
 	    update_pdf(letter_id, sender_name, sender_state,
 		       district, name, position, level, signature);	    
 	}
     });
-})
-
-$('#edit-letter').click(function(e) {
-    letter_id = document.querySelector('#pdf_view').getAttribute('value');
-    insert_letter_text_into_edit_box(letter_id=letter_id);
-    document.getElementById("letter-edit-modal").style.display = "block";
-});
-
-// When the user clicks on <span> (x), close the modal
-$('#letter-edit-close').click(function(e) {
-    document.getElementById("letter-edit-modal").style.display = "none";
-});
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == document.getElementById("letter-edit-modal")) {
-	document.getElementById("letter-edit-modal").style.display = "none";	
-    }
 }
+
+
+document.addEventListener("turbo:load", function() {
+
+    $('#letter_change_button').click(function(e){ update_letter(e) });
+    $('#generate_letter_button').click(function(e) { generate_letter() });
+
+    $("#topic_search_bar").on('keyup', function (e) {
+	if (e.key === 'Enter' || e.keyCode === 13) {
+	    generate_letter()
+	}
+    });
+    
+    $('#edit-letter').click(function(e) {
+	var letter_id = document.querySelector('#pdf_view').getAttribute('value');
+	insert_letter_text_into_edit_box(letter_id);
+	document.getElementById("letter-edit-modal").style.display = "block";
+    });
+    
+    // When the user clicks on <span> (x), close the modal
+    $('#letter-edit-close').click(function(e) {
+	document.getElementById("letter-edit-modal").style.display = "none";
+    });
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+	if (event.target == document.getElementById("letter-edit-modal")) {
+	    document.getElementById("letter-edit-modal").style.display = "none";	
+	}
+    }
+    
+    /* If enter, update   */
+    $('#address,#name').keyup(function(e) {
+	if (e.which == 13) {
+	    const form_element_ids = ['name', 'email', 'address']
+	    if(validate_form(form_element_ids)){ find_legislators() }
+	}
+    })
+    
+    $('#legislator_button').click(function(e) {
+	const form_element_ids = ['name', 'email', 'address']
+	if(validate_form(form_element_ids)){ find_legislators() }
+    })
+
+    document.querySelectorAll('form').forEach(function (element) {
+	element.dataset.turbo = false
+    })
+
+});

@@ -1,8 +1,7 @@
 <% provide(:title, "Home") %>
 <div class="center jumbotron">
   <h1>
-    <%= image_tag 'vocalvoters_logos/vocalvoters-beta.png',
-	style: 'width:50%', class: "spashlogo" %>
+    <%= image_tag 'vocalvoters_logos/vocalvoters-beta.png', class: "splashlogo" %>
   </h1>  
   <h2>
     Share Your Opinion With Your Representatives<br>
@@ -13,7 +12,7 @@
 </div>
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <%= form_with url: govlookup_path, method: :get do |form| %>
+    <%= form_with url: govlookup_path, data: { turbo:false }, method: :get do |form| %>
       <div class="row" id="address_form">
 	<div class="col-md-3">
 	  <div id='name_container' class="form-group" >
@@ -33,7 +32,6 @@
 	  <div id='address_container' class="form-group" >
 	    <%= form.text_field :address,
 		placeholder: 'Address: 123 Street Address, ST 11111',
-		style: 'margin-bottom:1px',
 		class: 'form-control' %>
 	  </div>
 	</div>
@@ -44,7 +42,6 @@
 	 <center>
 	   <%= button_tag 'Contact Legislators',
 	       id: 'legislator_button',
-	       style: 'margin-top:1em;',
 	       data: { disable_with: "Please wait..." },
 	       class: "btn btn-info" %>
 	 </center>
@@ -70,7 +67,7 @@
 </div>
 
 <div class="row" >
-  <div class="col-md-8 col-md-offset-2" id="concerns_selection" style="display:none;">
+  <div class="col-md-8 col-md-offset-2" id="concerns_selection">
     <br>
     <br>
     <h3>
@@ -88,16 +85,13 @@
 	<div id='generation_container' class="form-group" >
 	  <input id="topic_search_bar" class="form-control"
 		 placeholder='supporting marijuana deregulation',
-		 type="text",
-		 style: 'margin-bottom:1px'><br>
+		 type="text"><br>
 	  <center>
 	    <%= button_tag 'Generate Letter',
 		id: 'generate_letter_button',
-		style: 'margin-top:1em;',
 		data: { disable_with: "Please wait..." },
 		class: "btn btn-primary" %>
 	    <span id="shared_letter_id"
-		  style="display:none"
 		  value=<%= @shared_letter_id %>></span>
 	    <br>
 	    <small>
@@ -122,7 +116,7 @@
 </div>
 
 <div class="row">  
-  <div class="col-md-6 col-md-offset-3" id="communications_selection" style="display:none;">
+  <div class="col-md-6 col-md-offset-3" id="communications_selection">
     <br>
     <br>
     <br>
@@ -132,18 +126,17 @@
 	<h3>
 	  <center>
             <b>Send Concerns via</b><br>
-            <small style="font-size:0.5em">
+            <small id='price_description'>
               ( Per: $5 Priority / $3 Letter / $2 Fax + $2 Review)
             </small>
 	  </center>
 	</h3>
       </div>
-      <div id="edit-letter-container" class="col-md-4 col-md-offset-4" style="display:none;">
+      <div id="edit-letter-container" class="col-md-4 col-md-offset-4">
 	<center>
 	  <small>
 	  <%= button_tag 'Edit Letter',
 	      id: 'edit-letter',
-	      style: "font-size:1.5em;padding:0em 0.7em 0em 0.7em;margin:0.5em 0 0 0;",
 	      class: "btn btn-secondary" %>
 	  </small>
 	  <br><br>
@@ -154,7 +147,6 @@
 	<div class="col-md-4">
 	  <center>
             <%= button_tag 'Priority Mail', id: 'priority',
-		style: "font-size:1.5em;padding:0em 0.7em 0em 0.7em;margin:0.5em 0 0 0;",
 		class: 'btn btn-info send_button' %><br>
             <small>
               <span id="priority_price">0</span>
@@ -164,7 +156,6 @@
 	<div class="col-md-4">
 	  <center>
             <%= button_tag 'Letter', id: 'letter',
-		style: "font-size:1.5em;padding:0em 2em 0em 2em;margin:0.5em 0 0 0;",
 		class: 'btn btn-info send_button' %><br>
             <small>
               <span id="letter_price">0</span>
@@ -174,7 +165,6 @@
 	<div class="col-md-4">
 	  <center>
             <%= button_tag 'Fax', id: 'fax',
-		style: "font-size:1.5em;padding:0em 2em 0em 2em;margin:0.5em 0 0 0;",
 		class: 'btn btn-info send_button' %><br>
             <small>
 	      <span id="fax_price">0</span>
@@ -184,9 +174,8 @@
 	<div class="col-md-4" style="display:none;">
 	  <center>
             <%= button_tag 'Email', id: 'email',
-		style: "font-size:1.5em;padding:0em 2em 0em 2em;margin:0.5em 0 0 0;",
 		class: 'btn btn-info send_button' %><br>
-            <small>(Coming Soon<span style="display:none;" id="email_price">0</span>)</small>
+            <small>(Coming Soon <span id="email_price"></span>)</small>
 	  </center>
 	</div>
       </div>
@@ -222,19 +211,16 @@
 
 	<%= button_tag 'Submit',
 	    id: 'submit-signature',
-	    style: 'font-size:0.9em',
 	    data: { disable_with: "Please wait..." },
 	    class: "btn btn-primary" %>
 	
 	<%= button_tag 'Skip Signature',
 	    id: 'skip-signature',
-	    style: 'font-size:0.9em;',
 	    data: { disable_with: "Please wait..." },
 	    class: "btn btn-info" %>
 
 	<%= button_tag 'Clear',
 	    id: 'reset-signature',
-	    style: 'font-size:0.9em',
 	    data: { disable_with: "Please wait..." },
 	    class: "btn btn-default" %>
       </center>
@@ -242,8 +228,7 @@
   </div>
 </div>
 
-
-<div id="payment_container" class="row" style="display:none;">
+<div id="payment_container" class="row">
   <br>
   <br>
   <br>
@@ -264,7 +249,7 @@
   </div>
   <div class="col-md-4 col-md-offset-4">
     <div id="payment_info">
-      <form id="payment-form">
+      <form id="payment-form" data-turbo="false">
 	<div id="card-element"><!--Stripe.js injects the Card Element--></div>
 	<button id="submit">
 	  <div class="spinner hidden" id="spinner"></div>
@@ -291,7 +276,7 @@
   </div>
 </div>
 <div class="row">
-  <div id="iframe_container" class="col-md-8 col-md-offset-2" style="display:none;">
+  <div id="iframe_container" class="col-md-8 col-md-offset-2">
     <h3>
       <br>
       <small>
@@ -345,4 +330,3 @@
 
 <span id="current_user_id" value="<%= @current_user_id %>"></span>
 <span id="stripe_pk" value="<%= @stripe_pk %>"></span>
-<%= javascript_pack_tag 'landing_page' %>
