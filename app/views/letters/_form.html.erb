@@ -44,7 +44,11 @@
       <%= form.select :target_level,
 	 options_for_select([['All', 'all'], ['Federal', 'federal'],
 	 ['State', 'state'],['Local', 'local']], @letter.target_level),
-	 {}, { :class => 'form-control' } %>
+	  {}, { :class => 'form-control' } %>
+      <%= form.label :Editable_by_Sender %>
+      <%= form.select :editable,
+	  options_for_select([['True', true], ['False', false]], @letter.editable),
+	  {}, { :class => 'form-control' } %>      
     </div>    
 
     <div class="col-md-4">
@@ -106,10 +110,16 @@
     </div>
 
     <div class="col-md-4">
-      <%= form.label :Editable_by_Sender %>
-      <%= form.select :editable,
-	  options_for_select([['True', true], ['False', false]], @letter.editable),
-	  {}, { :class => 'form-control' } %>
+      <label for="letter_Target_positions">
+	Target positions
+	<small>
+	  (All selected by default)
+      </small>
+      </label>
+	<small>(select multiple with: ctrl+click)</small>
+      <%= form.select :target_positions,	  
+	  options_for_select(@recipient_position_list, @targeted_positions),
+	  {:style=>"form-control"}, multiple: true %>
     </div>    
   </div>
   

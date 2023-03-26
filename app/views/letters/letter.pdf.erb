@@ -35,8 +35,8 @@
 </div>
 <div class="to">
   <div class="recipient">
-    <%= @recipient_position.html_safe %> <%= @recipient_name.html_safe %><br>
-    <%= @recipient_location.html_safe %><br>
+    <%= @recipient_position %> <%= @recipient_name %><br>
+    <%= @recipient_location %><br>
     <% if @recipient.present? %>
       <%= @recipient.address_line_1 %><br>
       <%= @recipient.address_line_2 %>
@@ -48,11 +48,11 @@
 
 <div class="main">
   <p>
-    <%= @recipient_name.html_safe %>,
+    <%= @recipient_name %>,
   </p>
   
   <p>
-    My name is <%= @sender_name.html_safe %> and I am writing to express that I 
+    My name is <%= @sender_name %> and I am writing to express that I 
     <b><%= @sentiment %> <%= @letter.category %></b>.
   </p>
   
@@ -65,14 +65,14 @@
       <img src="data:image/jpeg;<%= @sender_signature %>" />
     <% end %>
     <br>    
-    <%= @sender_name.html_safe %><br>
-    <%= @sender_address_line_1.html_safe %><br>
+    <%= @sender_name %><br>
+    <%= @sender_address_line_1 %><br>
     <% if @sender_address_line_2.present? %>
-        <%= @sender_address_line_2.html_safe %><br>
+        <%= @sender_address_line_2 %><br>
     <% end %>
-    <%= @sender_address_city.html_safe %>  <%= @sender_state.html_safe %>,
-    <%= @sender_address_zipcode.html_safe %><br>
-    <%= @sender_region.html_safe %>
+    <%= @sender_address_city %>  <%= @sender_state %>,
+    <%= @sender_address_zipcode %><br>
+    <%= @sender_region %>
   </p>
 </div>
 

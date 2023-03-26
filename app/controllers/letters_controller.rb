@@ -3,6 +3,7 @@ class LettersController < ApplicationController
   before_action	:logged_in_admin, only: [:update, :destroy]
   before_action :set_letter, only: [:show, :edit, :update, :destroy]
   before_action :validate_org_or_admin, except: [:show, :new, :update, :find_policy, :copy_and_update_body, :index]
+  before_action :recipient_position_list, only: [:new, :edit]
   skip_before_action :verify_authenticity_token, only: [:copy_and_update_body]
 
   # GET /letters
@@ -169,11 +170,17 @@ class LettersController < ApplicationController
 
   # GET /letters/new
   def new
-    @letter = Letter.new
+    @letter = Letter.new    
+    @targeted_positions = @recipient_position_list
   end
 
   # GET /letters/1/edit
   def edit
+    if @letter.target_positions.present?
+      @targeted_positions = @letter.target_positions
+    else
+      @targeted_positions = @recipient_position_list
+    end
   end
 
   # POST /letters
@@ -276,9 +283,13 @@ class LettersController < ApplicationController
     def letter_params
       params.require(:letter)
         .permit(:category, :policy_or_law, :tags, :sentiment, :body,
-                :target_level, :target_state, :editable, :email)
+                :target_level, :target_state, :editable, :email, :target_positions => [])
         .merge(user_id: current_user.id)
         .merge(organization_id: current_user.organization.id)
+    end
+
+    def recipient_position_list
+      @recipient_position_list = Recipient.distinct.pluck(:position)
     end
 
 end

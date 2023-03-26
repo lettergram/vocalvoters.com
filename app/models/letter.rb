@@ -4,8 +4,10 @@ class Letter < ApplicationRecord
   belongs_to :organization
   has_many :post
   has_many :fax
-  has_many :email
+  # has_many :email
   before_save :downcase_fields
+
+  serialize :target_positions
 
   def sentiment_in_text
     
