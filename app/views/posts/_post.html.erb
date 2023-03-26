@@ -1,25 +1,24 @@
 <li>
   <div class="col-md-10" id="<%= post.id %>">
-    <% letter = Letter.find(post.letter_id) %>
+      <strong style="color:gray">
+	<u><%= post.letter.organization.name %></u>
+      </strong><br>
     <% if post.approval_status == 'pending' or (post.approval_status == "approved" and not post.success) %>
-      <% recipient = Recipient.find(post.recipient_id) %>
-      To:
-      <strong><%= recipient.name.titleize %></strong>,
-      <%= recipient.state %>
-      <%= recipient.level.titleize %>
-      <%= recipient.position.titleize %>
+      To: <strong><%= post.recipient.name.titleize %></strong>,
+      <%= post.recipient.state %>
+      <%= post.recipient.level.titleize %>
+      <%= post.recipient.position.titleize %>
       <br>
     <% elsif post.approval_status == "declined" %>
-      <% sender = Sender.find(post.sender_id) %>
-      Issue refund to: <strong><u><%= sender.email %></u></strong>
+      Issue refund to: <strong><u><%= post.sender.email %></u></strong>
       <br>
     <% end %>
-    Category: <strong><%= letter.category %></strong><br>
-    Policy: <strong><%= letter.policy_or_law %></strong><br>    
+    Category: <strong><%= post.letter.category %></strong><br>
+    Policy: <strong><%= post.letter.policy_or_law %></strong><br>    
     <details style="color:black;font-size:1em;">
       <summary style="color:gray;">> Read Text Body</summary>
       <pre style="white-space:pre-wrap;">
-	<%= letter.body %>
+	<%= post.letter.body %>
       </pre>
     </details>
     <br>

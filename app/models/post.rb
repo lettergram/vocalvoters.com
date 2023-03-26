@@ -2,6 +2,10 @@ require 'json'
 require 'clicksend_client'
 
 class Post < CommunicationRecord
+  belongs_to :letter, required: false
+  belongs_to :recipient, required: false
+  belongs_to :sender, required: false
+
   
   def self.send_post(letter_url, name, return_address_id, address_line_1, address_line_2,
                      address_city, address_state, address_zipcode, priority_flag=false)
