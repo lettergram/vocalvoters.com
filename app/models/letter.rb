@@ -2,6 +2,9 @@ class Letter < ApplicationRecord
 
   belongs_to :user
   belongs_to :organization
+  has_many :post
+  has_many :fax
+  has_many :email
   before_save :downcase_fields
 
   def sentiment_in_text

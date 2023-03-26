@@ -133,7 +133,9 @@ class OrganizationsController < ApplicationController
         
     # Only allow a list of trusted parameters through.
     def organization_params
-      params.require(:organization).permit(:name, :description, :approvals_required, :logo_link)
+      params.require(:organization).permit(
+        :name, :description, :approvals_required, :logo_link, :generation_option
+      )
     end
 
     def sentiment_to_text(sentiment)

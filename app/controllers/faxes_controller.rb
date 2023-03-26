@@ -1,13 +1,16 @@
 class FaxesController < ApplicationController  
   before_action :logged_in_user, except: [:new, :create]
-  before_action	:logged_in_admin, except: [:new, :create]
+  before_action :logged_in_admin, only: [:show, :edit, :destroy]
   before_action :set_fax, only: [:show, :edit, :update, :destroy]
 
   # GET /faxes
   # GET /faxes.json
   def index
-    @faxes = Fax.order(created_at: :desc).all                          
-               .paginate(page: params[:page]) # Will have to modify
+    @faxes = Fax.includes(:letter)
+    if not current_user.admin?
+      @faxes = @faxes.where(letters: {organization_id: @current_user.organization_id})
+    end
+    @faxes = @faxes.order(created_at: :desc).all.paginate(page: params[:page])    
   end
 
   # GET /faxes/1

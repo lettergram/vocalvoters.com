@@ -6,8 +6,11 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.order(created_at: :desc).all
-               .paginate(page: params[:page]) # Will have to modify
+    @posts = Post.includes(:letter)
+    if not current_user.admin?
+      @posts = @posts.where(letters: {organization_id: @current_user.organization_id})
+    end
+    @posts = @posts.order(created_at: :desc).all.paginate(page: params[:page]) 
   end
 
   # GET /posts/1
