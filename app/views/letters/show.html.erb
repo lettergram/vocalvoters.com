@@ -55,4 +55,7 @@
       value="<%= current_user.organization.id %>"
       style="display:none;"></span>
 
-<%= javascript_pack_tag 'letters' %>
+<% content_for :head do %>
+  <%= javascript_import_module_tag "custom/letters" %>
+<% end %>
+
