@@ -1724,6 +1724,7 @@ input {
   cursor: pointer;
 }
 
+#legislator_container { display:none; }
 #concerns_selection { display:none; }
 #topic_search_bar { margin-bottom:1px;  }
 #legislator_button { margin-top:1em; }
@@ -1755,4 +1756,3 @@ input {
 #reset-signature{ font-size:0.9em; }
 #payment_container{ display:none; }
 #iframe_container{ display:none; }
-

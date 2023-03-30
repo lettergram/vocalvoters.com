@@ -283,7 +283,8 @@ class LettersController < ApplicationController
     def letter_params
       params.require(:letter)
         .permit(:category, :policy_or_law, :tags, :sentiment, :body,
-                :target_level, :target_state, :editable, :email, :target_positions => [])
+                :target_level, :target_state, :editable, :email, :promoted,
+                :target_positions => [])
         .merge(user_id: current_user.id)
         .merge(organization_id: current_user.organization.id)
     end

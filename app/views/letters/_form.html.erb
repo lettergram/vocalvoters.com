@@ -120,13 +120,23 @@
       <%= form.select :target_positions,	  
 	  options_for_select(@recipient_position_list, @targeted_positions),
 	  {:style=>"form-control"}, multiple: true %>
-    </div>    
+    </div>
   </div>
-  
+
   <div class="row">
     <div class="col-md-12">
       <%= form.label :body %>
       <%= form.text_area :body, class: 'form-control' %>
+    </div>
+    <div class="col-md-12">
+      <div class="col-md-6 col-md-offset-2">
+	<center>
+	<%= form.label :remember_me, class: "checkbox inline" do %>
+	<%= form.check_box :promoted, style: "margin-left:2em;" %>
+        <span><b>Promote Letter</b></span>
+	<% end %>
+	</center>
+      </div>
     </div>
     <%= form.hidden_field :email, value: current_user.email %>
     <div class="col-md-4 col-md-offset-4">
