@@ -50,31 +50,10 @@ var create_signature = function(){
 	    // const data = signaturePad.toData() // saves more detailed data
 	    const data = signaturePad.toDataURL("image/jpeg", 0.5) // save as jpeg base64
 	    document.getElementById('signature-data').value = data;
-
-	    var sender_name = document.getElementById('name').value;
-	    var sender_state = document.querySelector('#sender_state').getAttribute('value');
-	    var selected_cards = document.getElementsByClassName('recipient_card selected_card');
 	    
-	    var recipient_id = selected_cards[0].getAttribute('value');
-	    
-	    var district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
-	    var name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
-	    var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
-	    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
-	    var signature = data;
 	    var letter_id = document.querySelector('#pdf_view').getAttribute('value');
-
-	    var sender_address_line_1 = document.querySelector('#sender_line_1').getAttribute('value');
-	    var sender_address_line_2 = document.querySelector('#sender_line_2').getAttribute('value');
-	    var sender_address_city = document.querySelector('#sender_city').getAttribute('value');
-	    var sender_address_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
-
-	    // document.querySelector('#sender_state').getAttribute('value'),
 	    
-	    update_pdf(letter_id, sender_name, sender_state,
-		       sender_address_line_1, sender_address_line_2,
-		       sender_address_city, sender_address_zipcode,		       
-		       district, name, position, level, signature);	    
+	    update_pdf(letter_id);
 	    // save data to backend
 	    // load data for PDF
 	});
@@ -91,33 +70,13 @@ var create_signature = function(){
 
 var generate_concerns = function(letter_id=null){
 
-    // Ensure name, email, address are present
-    const form_element_ids = ['name', 'email', 'address']
-    if(!validate_form(form_element_ids)){ return false }
-
     if(!letter_id){ return false }
     
-    var sender_name = document.getElementById('name').value;
-    var sender_state = document.querySelector('#sender_state').getAttribute('value');
-    var selected_cards = document.getElementsByClassName('recipient_card selected_card');    
-    var recipient_id = selected_cards[0].getAttribute('value');   
-    var district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
-    var name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
-    var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
-    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
-    var signature = null;
-
-    var sender_address_line_1 = document.querySelector('#sender_line_1').getAttribute('value');
-    var sender_address_line_2 = document.querySelector('#sender_line_2').getAttribute('value');
-    var sender_address_city = document.querySelector('#sender_city').getAttribute('value');
-    var sender_address_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
+    // Ensure name, email, address are present
+    const form_element_ids = ['name', 'email', 'address']
+    if(!validate_form(form_element_ids)){ return false; }
     
-    // document.querySelector('#sender_state').getAttribute('value'),
-    
-    update_pdf(letter_id, sender_name, sender_state,
-	       sender_address_line_1, sender_address_line_2,
-	       sender_address_city, sender_address_zipcode,		       
-	       district, name, position, level, signature);    
+    update_pdf(letter_id);
     
     // Hide bottom buffer once communications_selection displayed
     $("#concerns_selection_bottom_buffer").attr('style', 'display:none');
@@ -156,7 +115,81 @@ var create_sender = function(){
 	    console.log(response)
 	}
     });
+}
 
+
+var letter_selection = function(){
+
+    var generation_flag = document.getElementById('generation_option').getAttribute('value');
+    if(generation_flag === 'true'){ return }
+    
+    var org_id = $('#referral_org_id').attr('value')
+    var letter_selection_url = '/letter_selection?org_id='+org_id
+    letter_selection_url += '&layout=false'
+    $.ajax({
+	url: letter_selection_url,
+	cache: false,
+	success: function(html){
+	    $("#letter_selection").html(html);
+	    var letter_cards = document.getElementsByClassName('letter_card');
+	    for (var i=0; i < letter_cards.length; i++) {
+		
+		letter_cards[i].onclick = function(card) {
+		    var id = document.getElementById(card.srcElement.id).getAttribute('value');
+
+		    disableCommunications();
+		    // update_prices();
+		    // update_checkout_price();
+		    
+		    generate_concerns(id);
+		    var letter_id = document.querySelector('#pdf_view').getAttribute('value')
+		    update_pdf(id);
+
+		    var letter_cards = document.getElementsByClassName('letter_card');
+		    for (var i=0; i < letter_cards.length; i++) {
+			if(letter_cards[i].classList.contains('selected_letter')){
+			    letter_cards[i].classList.remove('selected_letter');
+			}
+		    }
+		    card.srcElement.classList.add('selected_letter');
+		}
+	    }
+	}
+    });
+}
+
+var find_selected_target_positions = function(){
+    var selected_letters = document.getElementsByClassName('selected_letter');
+    if(selected_letters.length != 1){ return }
+    var letter_id = selected_letters[0].getAttribute('value');
+    var target_positions = document.getElementById(
+	'letter_target_'+letter_id).getAttribute('value').split(';');
+    var target_level = document.getElementById(
+	'letter_level_'+letter_id).getAttribute('value').split(';');    
+
+    var recipient_cards = document.getElementsByClassName('recipient_card');
+    
+    // Remove anything selected
+    for (var i=0; i < recipient_cards.length; i++) {
+	if(recipient_cards[i].classList.contains('selected_card')){
+	    recipient_cards[i].classList.remove('selected_card');	    
+	}		
+    }
+
+    // Add any selected
+    for (var i=0; i < recipient_cards.length; i++) {
+	var recipient_id = recipient_cards[i].getAttribute('value');
+	var position = document.getElementById(
+	    'recipient_position_'+recipient_id).getAttribute('value');
+	var level = document.getElementById(
+	    'recipient_level_'+recipient_id).getAttribute('value');
+
+	var level_flag = target_level == level || target_level == "all"	
+	if(target_positions.includes(position) && level_flag){
+	    recipient_cards[i].click();
+	}
+    }
+    window.location.hash = "#communications_selection";
 }
 
 function find_legislators(){
@@ -165,6 +198,11 @@ function find_legislators(){
     var sender_address = document.getElementById('address').value;
     var lookup_url = '/govlookup?'+'name='+sender_name+'&address='+sender_address
     lookup_url+= '&layout=false'
+
+    $('#concerns_selection').attr('style', 'display:block');
+    window.location.hash = "#concerns_selection";
+    
+    letter_selection();    
 
     $.ajax({
 	url: lookup_url,
@@ -194,7 +232,6 @@ function find_legislators(){
 	    var sender_address = document.getElementById('sender_address').getAttribute('value')
 	    var sender_state = document.getElementById('sender_state').getAttribute('value')
 	    var sender_district_federal = document.getElementById('sender_district_federal').getAttribute('value')
-	    window.location.hash = "#legislator_selection";
 
 	    var recipient_cards = document.getElementsByClassName('recipient_card');
 	    for (var i=0; i < recipient_cards.length; i++) {
@@ -207,16 +244,16 @@ function find_legislators(){
 		
 		recipient_cards[i].onclick = function(card) {
 
-		    var id = document.getElementById(event.srcElement.id).getAttribute('value')
+		    var id = document.getElementById(card.srcElement.id).getAttribute('value')
 		    var recipient_name = document.getElementById('recipient_name_'+id).getAttribute('value')
 		    var recipient_position = document.getElementById('recipient_position_'+id).getAttribute('value')
 		    var recipient_level = document.getElementById('recipient_level_'+id).getAttribute('value')
 		    
 		    /* Select the recipient cards */
-		    if (event.srcElement.classList.contains('selected_card')) {
-			event.srcElement.classList.remove('selected_card')
+		    if (card.srcElement.classList.contains('selected_card')) {
+			card.srcElement.classList.remove('selected_card')
 		    }else{
-			event.srcElement.classList.add('selected_card')
+			card.srcElement.classList.add('selected_card')
 		    }
 
 		    disableCommunications();
@@ -228,9 +265,9 @@ function find_legislators(){
 		    }else{
 			generate_concerns();
 		    }
-		    $('#concerns_selection').attr('style', 'display:block');
-		    window.location.hash = "#communications_selection";		    
-
+		    window.location.hash = "#communications_selection";
+		    var letter_id = document.querySelector('#pdf_view').getAttribute('value')
+		    update_pdf(letter_id);		    
 		}	 
 	    }	    
 	}
@@ -240,12 +277,32 @@ function find_legislators(){
     document.getElementById('legislator_button').innerText = "Please wait..."
 }
 
-function update_pdf(letter_id, sender_name, sender_state,
-		    sender_address_line_1, sender_address_line_2,
-		    sender_address_city, sender_address_zipcode,
-		    sender_district, recipient_name, recipient_position,
-		    recipient_level, signature) {
+function update_pdf(letter_id) {
 
+    var signature = document.getElementById('signature-data').value
+    var sender_name = document.getElementById('name').value;
+    var sender_state = document.querySelector('#sender_state').getAttribute('value');
+
+    var recipient_id = null;
+    var recipient_district ="N/A"
+    var recipient_name = "Select a Rep"
+    var recipient_position = "N/A"
+    var recipient_level = "N/A"
+    var selected_cards = document.getElementsByClassName('recipient_card selected_card');
+    if(selected_cards.length > 0) {
+	recipient_id = selected_cards[0].getAttribute('value');
+	recipient_district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
+	recipient_name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
+	recipient_position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
+	recipient_level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
+    }
+    
+    var sender_address_line_1 = document.querySelector('#sender_line_1').getAttribute('value');
+    var sender_address_line_2 = document.querySelector('#sender_line_2').getAttribute('value');
+    var sender_address_city = document.querySelector('#sender_city').getAttribute('value');
+    var sender_address_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
+    var sender_district = document.querySelector('#sender_district_federal').getAttribute('value');
+    
     var src_url  = '/letters/' + letter_id + '.pdf?sender_name=' + sender_name;
     src_url += '&sender_state='+sender_state;
     src_url += '&sender_district='+sender_district;
@@ -688,38 +745,15 @@ var update_letter = function(e) {
 	    document.getElementById('letter_change_button').disabled = false;
 	    document.getElementById('letter_change_button').innerText = "Submit Changes"
 	    document.getElementById("letter-edit-modal").style.display = "none";
-	    
-	    var signature = document.getElementById('signature-data').value
-	    document.getElementById('signature-data').value = data;
-	    var sender_name = document.getElementById('name').value;
-	    var sender_state = document.querySelector('#sender_state').getAttribute('value');
-	    var selected_cards = document.getElementsByClassName('recipient_card selected_card');
-	    var recipient_id = selected_cards[0].getAttribute('value');
-	    var district = document.querySelector('#recipient_district_'+recipient_id).getAttribute('value');
-	    var name = document.querySelector('#recipient_name_'+recipient_id).getAttribute('value');
-	    var position = document.querySelector('#recipient_position_'+recipient_id).getAttribute('value');	
-	    var level = document.querySelector('#recipient_level_'+recipient_id).getAttribute('value');
-	    var letter_id = json_obj['id']
-
-	    var sender_address_line_1 = document.querySelector('#sender_line_1').getAttribute('value');
-	    var sender_address_line_2 = document.querySelector('#sender_line_2').getAttribute('value');
-	    var sender_address_city = document.querySelector('#sender_city').getAttribute('value');
-	    var sender_address_zipcode = document.querySelector('#sender_zipcode').getAttribute('value');
 
 	    // document.querySelector('#sender_state').getAttribute('value'),
-
-	    update_pdf(letter_id, sender_name, sender_state,
-		       sender_address_line_1, sender_address_line_2,
-		       sender_address_city, sender_address_zipcode,
-		       district, name, position, level, signature)
+	    update_pdf(json_obj['id']);
 	}
     });
 }
 
-
-document.addEventListener("turbo:load", function() {
-
-    $('#letter_change_button').click(function(e){ update_letter(e) });
+var pageSetUp = function(){
+    
     $('#generate_letter_button').click(function(e) { generate_letter() });
 
     $("#topic_search_bar").on('keyup', function (e) {
@@ -738,9 +772,6 @@ document.addEventListener("turbo:load", function() {
     $('#letter-edit-close').click(function(e) {
 	document.getElementById("letter-edit-modal").style.display = "none";
     });
-    $('#no_letter_change_button').click(function(e) {
-	document.getElementById("letter-edit-modal").style.display = "none";
-    });    
     
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -750,20 +781,35 @@ document.addEventListener("turbo:load", function() {
     }
     
     /* If enter, update   */
-    $('#address,#name').keyup(function(e) {
+    $('#address,#name,#email').keyup(function(e) {
 	if (e.which == 13) {
 	    const form_element_ids = ['name', 'email', 'address']
-	    if(validate_form(form_element_ids)){ find_legislators() }
+	    if(validate_form(form_element_ids)){ find_legislators(); }
 	}
     })
     
     $('#legislator_button').click(function(e) {
 	const form_element_ids = ['name', 'email', 'address']
-	if(validate_form(form_element_ids)){ find_legislators() }
+	if(validate_form(form_element_ids)){ find_legislators(); }
     })
 
     document.querySelectorAll('form').forEach(function (element) {
 	element.dataset.turbo = false
     })
 
-});
+    $('#no_letter_change_button').click(function(e) {
+	document.getElementById("legislator_container").style.display = "block";
+	window.location.hash = "#legislator_selection";
+	document.getElementById("letter-edit-modal").style.display = "none";
+	find_selected_target_positions();
+    });
+    $('#letter_change_button').click(function(e) {
+	update_letter(e);
+	document.getElementById("legislator_container").style.display = "block";	
+	window.location.hash = "#legislator_selection";
+	find_selected_target_positions();
+    });
+}
+
+document.addEventListener("turbo:render", pageSetUp());
+

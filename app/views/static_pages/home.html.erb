@@ -70,15 +70,17 @@
 </div>
 
 <div class="row">
-  <div class="col-md-10 col-md-offset-1">
-    <div id="legislator_selection"></div>
-  </div>
-</div>
-
-<div class="row" >
+  
   <div class="col-md-8 col-md-offset-2" id="concerns_selection">
+    <span id="shared_letter_id"
+	  value=<%= @shared_letter_id %>></span>
+    <span id="generation_option" value=<%= @generation_option %>></span>
     <br>
     <br>
+    <div id="letter_selection"></div>        
+    <br>
+    <br>
+    <% if @generation_option %>
     <h3>
       <center>
 	<b>Enter Your Concerns</b><br>
@@ -87,7 +89,6 @@
 	</small>
       </center>
     </h3>
-
     <div class="row" id="concerns_generation_form">
       <div class="col-md-2"></div>
       <div class="col-md-8">
@@ -100,8 +101,6 @@
 		id: 'generate_letter_button',
 		data: { disable_with: "Please wait..." },
 		class: "btn btn-primary" %>
-	    <span id="shared_letter_id"
-		  value=<%= @shared_letter_id %>></span>
 	    <br>
 	    <small>
 	      <i>
@@ -112,6 +111,7 @@
 	</div>
       </div>
     </div>
+    <% end %>
     <div id="concerns_selection_bottom_buffer">
       <br>
       <br>
@@ -121,6 +121,12 @@
       <br>
       <br>    
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1" id="legislator_container">
+    <div id="legislator_selection"></div>
   </div>
 </div>
 

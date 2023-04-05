@@ -1,8 +1,8 @@
 class LettersController < ApplicationController
-  before_action :logged_in_user, except: [:show, :find_policy, :copy_and_update_body]
+  before_action :logged_in_user, except: [:show, :selection, :find_policy, :copy_and_update_body]
   before_action	:logged_in_admin, only: [:update, :destroy]
   before_action :set_letter, only: [:show, :edit, :update, :destroy]
-  before_action :validate_org_or_admin, except: [:show, :new, :update, :find_policy, :copy_and_update_body, :index]
+  before_action :validate_org_or_admin, except: [:show, :new, :update, :find_policy, :copy_and_update_body, :index, :selection]
   before_action :recipient_position_list, only: [:new, :edit]
   skip_before_action :verify_authenticity_token, only: [:copy_and_update_body]
 
@@ -266,6 +266,23 @@ class LettersController < ApplicationController
     @policy_or_laws = @policy_or_laws.distinct.pluck(
       :id, :sentiment, :category, :policy_or_law, :name)
   end
+
+  def selection
+    org_id = params[:org_id]
+    @letters = Letter.where(organization: org_id)
+                 .where(derived_from: nil)
+                 .where(promoted: true)
+                 .order(created_at: :desc)
+    respond_to do |format|
+      format.html {
+        if params[:layout] == 'false'
+          render :layout => false
+        end
+      }
+      format.json
+    end
+
+  end
   
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -283,7 +300,8 @@ class LettersController < ApplicationController
     def letter_params
       params.require(:letter)
         .permit(:category, :policy_or_law, :tags, :sentiment, :body,
-                :target_level, :target_state, :editable, :email, :target_positions => [])
+                :target_level, :target_state, :editable, :email, :promoted,
+                :target_positions => [])
         .merge(user_id: current_user.id)
         .merge(organization_id: current_user.organization.id)
     end

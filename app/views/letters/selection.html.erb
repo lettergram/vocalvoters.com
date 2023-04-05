@@ -1,0 +1,25 @@
+<div class="row">
+  <div class='col-md-12'>
+    <h3>
+      <center>
+	<br>
+	<br>
+	<br>
+	<br>
+	<b>Select Your Concern</b><br>
+	<small>
+	   What do you want to write your representative(s) about?
+	</small>
+      </center>
+    </h3>
+  </div>
+  <% i = 1 %>
+  <% for letter in @letters %>
+     <% if i % 3 == 0 %><div class="row"><% end %>      
+       <div class="col-md-4">
+	 <%= render letter, :layout => false %>
+       </div>
+     <% if i % 3 == 0 %></div><% end %>             
+     <% i += 1 %>
+  <% end %>
+</div>

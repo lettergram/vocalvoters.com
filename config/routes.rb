@@ -39,6 +39,7 @@ Rails.application.routes.draw do
 
   get 'govlookup',   to: 'recipients#lookup'
   get 'find_policy', to: 'letters#find_policy'
+  get 'letter_selection', to: 'letters#selection'
 
   post 'create-payment-intent', to: 'static_pages#create_payment_intent'
   get 'create-payment-intent', to: 'static_pages#create_payment_intent'

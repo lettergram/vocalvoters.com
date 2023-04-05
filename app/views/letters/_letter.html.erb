@@ -1,0 +1,23 @@
+<div class="letter_card <%= letter.target_level %>_card"
+     id="letter_card_<%= letter.id %>"
+     value="<%= letter.id %>" style="cursor:pointer">
+  <span id="letter_target_<%= letter.id %>"
+	value=<%= letter.target_positions.join(';'); %>></span>
+  <span id="letter_level_<%= letter.id %>"
+	value=<%= letter.target_level %>></span>  
+  <span style="font-size:1.1em;font-weight:bold;">
+    <% if letter.sentiment > 0 %>
+      Support
+    <% else %>
+      Oppose
+    <% end %>
+  </span><br>
+  <b><%= letter.category %></b><br>
+  <%= letter.policy_or_law %><br>
+  <% target_level = "Federal, State & Local" %>
+  <% if letter.target_level != "all" %>
+      <% target_level = letter.target_level.titleize %>
+  <% end %>
+  Send letter to: <%= target_level %><br>
+  <%= letter.target_positions.reject { |c| c.empty? }.map { |c| c.gsub("_", " ").titleize }.join(", ") %>
+</div>
