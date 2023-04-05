@@ -28,6 +28,7 @@ class StaticPagesController < ApplicationController
     @referral_org_name = org.name
     @referral_org_logo_link = org.logo_link
     @referral_org_description = org.description
+    @generation_option = org.generation_option
 
     @current_user_id = 1
     if current_user.present?
