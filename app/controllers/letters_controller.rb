@@ -187,7 +187,7 @@ class LettersController < ApplicationController
   # POST /letters.json
   def create
     @letter = Letter.new(letter_params)
-
+    @letter.update_attributes(:target_positions => params[:target_positions])
     respond_to do |format|
       if @letter.save
         format.html { redirect_to @letter, notice: 'Letter was successfully created.' }
@@ -204,6 +204,10 @@ class LettersController < ApplicationController
   def update
     respond_to do |format|
       if @letter.update(letter_params)
+        puts "\n\n"
+        puts params[:target_position]
+        puts "\n\n"
+        @letter.update(:target_positions => params[:letter][:target_positions])
         format.html { redirect_to @letter, notice: 'Letter was successfully updated.' }
         format.json { render :show, status: :ok, location: @letter }
       else
@@ -301,7 +305,7 @@ class LettersController < ApplicationController
       params.require(:letter)
         .permit(:category, :policy_or_law, :tags, :sentiment, :body,
                 :target_level, :target_state, :editable, :email, :promoted,
-                :target_positions => {})
+                :target_positions => [])
         .merge(user_id: current_user.id)
         .merge(organization_id: current_user.organization.id)
     end
