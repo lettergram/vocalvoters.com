@@ -7,7 +7,7 @@ class Letter < ApplicationRecord
   # has_many :email
   before_save :downcase_fields
 
-  serialize :target_positions
+  serialize :target_positions, Array  
 
   def sentiment_in_text
     
