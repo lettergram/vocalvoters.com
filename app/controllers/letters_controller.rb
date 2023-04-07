@@ -2,7 +2,7 @@ class LettersController < ApplicationController
   before_action :logged_in_user, except: [:show, :selection, :find_policy, :copy_and_update_body]
   before_action	:logged_in_admin, only: [:update, :destroy]
   before_action :set_letter, only: [:show, :edit, :update, :destroy]
-  before_action :validate_org_or_admin, except: [:show, :new, :update, :find_policy, :copy_and_update_body, :index, :selection]
+  before_action :validate_org_or_admin, except: [:show, :new, :create, :update, :find_policy, :copy_and_update_body, :index, :selection]
   before_action :recipient_position_list, only: [:new, :edit]
   skip_before_action :verify_authenticity_token, only: [:copy_and_update_body]
 
