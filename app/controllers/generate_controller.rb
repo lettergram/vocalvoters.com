@@ -74,6 +74,7 @@ class GenerateController < ApplicationController
           tags:  @generated_letter['topic'],
           sentiment: @generated_letter['sentiment'],
           policy_or_law: @generated_letter['policy_or_law'],
+          target_positions: ["all"],
           organization_id: @organization_id,
           user_id: @user_id,
         )
