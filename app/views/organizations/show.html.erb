@@ -4,10 +4,14 @@
       <%= @organization.name %>
     </h2>
     <h1>
-      <%= image_tag @organization.logo_link, class: "splashlogo" %>
+      <% if @organization.logo_link.present? %>
+        <%= image_tag @organization.logo_link, class: "splashlogo" %>
+      <% end %>
     </h1>
     <h4>
-      <%= @organization.description.html_safe %>
+      <% if @organization.description.present? %>      
+        <%= @organization.description.html_safe %>
+      <% end %>
     </h4>    
   </div>
   <div class="col-md-12">
