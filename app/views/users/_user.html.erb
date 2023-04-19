@@ -2,7 +2,7 @@
   <%= link_to user.name, user %>
   <% if current_user.admin? && !current_user?(user) %>
     | <%= link_to "edit", edit_user_path(user) %>
-    | <%= link_to "delete", user, method: :delete,
-                                  data: { confirm: "You sure?" } %>
+    | <%= link_to 'Delete', user_path(user),
+	  data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
   <% end %>  
 </li>
