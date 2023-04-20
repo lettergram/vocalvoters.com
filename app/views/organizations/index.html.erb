@@ -22,7 +22,7 @@
             <td><%= organization.approvals_required %></td>
             <td><%= link_to 'Show', organization %></td>
             <td><%= link_to 'Edit', edit_organization_path(organization) %></td>
-	    <td><%= link_to 'Delete', organization_path(user),
+	    <td><%= link_to 'Delete', organization_path(organization),
 		    data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %></td>
 	  </tr>
 	<% end %>
