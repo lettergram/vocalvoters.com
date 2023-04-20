@@ -91,11 +91,11 @@ class StaticPagesController < ApplicationController
       end
       
       if ['Priority Mail'].include? item
-        return 500 * count + processing
-      elsif ['Letter', 'Letters'].include? item
         return 300 * count + processing
-      elsif ['Fax', 'Faxes'].include? item
+      elsif ['Letter', 'Letters'].include? item
         return 200 * count + processing
+      elsif ['Fax', 'Faxes'].include? item
+        return 100 * count + processing
       elsif ['Email', 'Emails'].include? item
         return 100 * count + processing
       end

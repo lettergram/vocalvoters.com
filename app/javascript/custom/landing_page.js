@@ -343,14 +343,14 @@ var update_prices = function() {
 
     var fee = 2
     document.getElementById('email_price').setAttribute('value', r_count * 1 + fee);
-    document.getElementById('fax_price').setAttribute('value', r_count * 2 + fee);
-    document.getElementById('letter_price').setAttribute('value', r_count * 3 + fee);
-    document.getElementById('priority_price').setAttribute('value', r_count * 5 + fee);
+    document.getElementById('fax_price').setAttribute('value', r_count * 1 + fee);
+    document.getElementById('letter_price').setAttribute('value', r_count * 2 + fee);
+    document.getElementById('priority_price').setAttribute('value', r_count * 3 + fee);
     
     document.getElementById('email_price').innerHTML = 'Price: $' + (r_count*1+fee).toString() + ' (x' + r_count.toString()+')';
-    document.getElementById('fax_price').innerHTML = 'Price: $' + (r_count*2+fee).toString() + ' (x' + r_count.toString()+ ')';
-    document.getElementById('letter_price').innerHTML = 'Price: $' + (r_count*3+fee).toString() + ' (x' + r_count.toString()+ ')';
-    document.getElementById('priority_price').innerHTML = 'Price: $' + (r_count*5+fee).toString() + ' (x' + r_count.toString()+ ')';
+    document.getElementById('fax_price').innerHTML = 'Price: $' + (r_count*1+fee).toString() + ' (x' + r_count.toString()+ ')';
+    document.getElementById('letter_price').innerHTML = 'Price: $' + (r_count*2+fee).toString() + ' (x' + r_count.toString()+ ')';
+    document.getElementById('priority_price').innerHTML = 'Price: $' + (r_count*3+fee).toString() + ' (x' + r_count.toString()+ ')';
 }
 
 var attach_stripe_checkout_on_click = function() {
