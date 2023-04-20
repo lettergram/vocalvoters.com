@@ -5,10 +5,11 @@
 <table>
   <thead>
     <tr>
+      <th>Organization</th>
       <th>Category</th>
       <th>Policy or law</th>
       <th>Sentiment</th>
-      <th>Editable by Sender</th>
+      <th>Editable</th>
       <th>Body</th>      
       <th colspan="3"></th>
     </tr>
@@ -16,7 +17,8 @@
 
   <tbody>
     <% @letters.each do |letter| %>
-      <tr>
+    <tr>
+      <td><%= letter.organization.name %></td>
         <td><%= letter.category %></td>
         <td><%= letter.policy_or_law %></td>
         <td><%= letter.sentiment %></td>
