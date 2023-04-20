@@ -17,19 +17,20 @@ class StaticPagesController < ApplicationController
     if params.has_key?(:referral_org_id)
       org = Organization.find_by(id: params[:referral_org_id])
     else
-      if current_user.present?
+      if current_user.present? and current_user.organization.present?
         org = current_user.organization
       else
         org = Organization.all.first
       end
     end
-    
+
+
     @referral_org_id = org.id
     @referral_org_name = org.name
     @referral_org_logo_link = org.logo_link
     @referral_org_description = org.description
     @generation_option = org.generation_option
-
+    
     @current_user_id = 1
     if current_user.present?
       @current_user_id = current_user.id
