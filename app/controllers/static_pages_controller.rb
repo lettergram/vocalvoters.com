@@ -20,7 +20,7 @@ class StaticPagesController < ApplicationController
       if current_user.present?
         org = current_user.organization
       else
-        org = Organization.first
+        org = Organization.all.first
       end
     end
     
