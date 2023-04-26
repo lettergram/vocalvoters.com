@@ -198,16 +198,24 @@ function find_legislators(){
     var sender_address = document.getElementById('address').value;
     var lookup_url = '/govlookup?'+'name='+sender_name+'&address='+sender_address
     lookup_url+= '&layout=false'
-
-    $('#concerns_selection').attr('style', 'display:block');
-    window.location.hash = "#concerns_selection";
     
-    letter_selection();    
+    document.getElementById('address-error-text').textContent = ""
 
     $.ajax({
 	url: lookup_url,
 	cache: false,
+	error: function (request, status, error) {
+	    console.log(request.responseJSON['error']);
+	    document.getElementById('address-error-text').textContent = request.responseJSON['error'];
+	    document.getElementById('legislator_button').innerText = "Contact Legislators";
+	    document.getElementById('legislator_button').enable = true;
+	},
 	success: function(html){
+	    
+	    letter_selection();
+	    
+	    $('#concerns_selection').attr('style', 'display:block');
+	    window.location.hash = "#concerns_selection";
 	    
 	    document.querySelector("#privacy_terms_box").classList.add("hidden");
 

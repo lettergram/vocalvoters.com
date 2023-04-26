@@ -70,8 +70,13 @@ class RecipientsController < ApplicationController
     
     obj = get_congressional_districts()
 
-    @address_accuracy = obj['results'][0]['accuracy']
-
+    if obj.key? "error" or  obj['error'].present?
+      render status: :bad_request, json: { error: obj['error'] }
+      return 
+    else
+      @address_accuracy = obj['results'][0]['accuracy']
+    end
+    
     if @address_accuracy > 0.7
       @accuracy_class = ""
     elsif @address_accuracy > 0.5
