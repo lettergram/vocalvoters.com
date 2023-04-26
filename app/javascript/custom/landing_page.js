@@ -811,5 +811,6 @@ var pageSetUp = function(){
     });
 }
 
+document.addEventListener('DOMContentLoaded', pageSetUp());
 document.addEventListener("turbo:render", pageSetUp());
 
