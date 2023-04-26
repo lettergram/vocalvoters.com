@@ -64,7 +64,7 @@
     <center>
       <strong>
 	Affiliate Link<br>
-	<%= link_to @affiliate_link, @affiliate_link %> <br><br>
+	<%= link_to @affiliate_link, @affiliate_link, data: { turbo: false} %> <br><br>
 	<% if current_user.org_admin or current_user.admin %>
           <%= link_to 'Edit Organization Settings', edit_organization_path(@organization) %>
 	<% end %>
