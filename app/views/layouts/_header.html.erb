@@ -9,8 +9,8 @@
       </button>
       	<%= link_to image_tag("vocalvoters_logos/vocalvoters.png",
 	  alt:"VocalVoters Logo", size: "132x27"),
-	  root_path, id: "logo", 
-	  data: { no_turbolink: true },
+	    root_path, id: "logo",
+	    data: { turbo: false},
 	    class: "navbar-brand-logo" %>
     </div>
     <div id="mynavbar" class="collapse navbar-collapse">
@@ -22,9 +22,9 @@
 		  Data <b class="caret"></b>
 		</a>
 		<ul class="dropdown-menu">
-		  <li><%= link_to "Letters", letters_path %></li>
-		  <li><%= link_to "Senders", senders_path %></li>
-		  <li><%= link_to "Recipients", recipients_path %></li>
+		  <li><%= link_to "Letters", letters_path, data: { turbo: false} %></li>
+		  <li><%= link_to "Senders", senders_path, data: { turbo: false} %></li>
+		  <li><%= link_to "Recipients", recipients_path, data: { turbo: false} %></li>
 		</ul>
 	      </li>
 	      <li class="dropdown">
@@ -32,9 +32,9 @@
 		  Communications <b class="caret"></b>
 		</a>
 		<ul class="dropdown-menu">
-		  <li><%= link_to "Fax", faxes_path %></li>
-		  <li><%= link_to "Post", posts_path %></li>
-		  <li><%= link_to "Email", emails_path %></li>
+		  <li><%= link_to "Fax", faxes_path, data: { turbo: false} %></li>
+		  <li><%= link_to "Post", posts_path, data: { turbo: false} %></li> 
+		  <li><%= link_to "Email", emails_path, data: { turbo: false} %></li>
 		</ul>
 	      </li>
 	    <% elsif current_user.organization.present? %>
@@ -46,8 +46,9 @@
 		 </a>
 		 <ul class="dropdown-menu">
 		   <li><%= link_to "Admin Page",
-			   organization_path(current_user.organization) %></li>
-		   <li><%= link_to "Letters", letters_path %></li>
+			   organization_path(current_user.organization),
+			   data: { turbo: false} %></li>
+		   <li><%= link_to "Letters", letters_path, data: { turbo: false} %></li>
 		 </ul>
 	      </li>
 	      <li class="dropdown">
@@ -56,9 +57,9 @@
 		  Communications <b class="caret"></b>
 		</a>
 		<ul class="dropdown-menu">
-		  <li><%= link_to "Fax", faxes_path %></li>
-		  <li><%= link_to "Post", posts_path %></li>
-		  <li><%= link_to "Email", emails_path %></li>
+		  <li><%= link_to "Fax", faxes_path, data: { turbo: false} %></li>
+		  <li><%= link_to "Post", posts_path, data: { turbo: false} %></li>
+		  <li><%= link_to "Email", emails_path, data: { turbo: false} %></li>
 		</ul>
 	      </li>	  
 	    <% end %>  
@@ -68,11 +69,12 @@
 	      </a>
 	      <ul class="dropdown-menu">
 		<% if current_user.admin %>
-		  <li><%= link_to "Organizations", organizations_path %></li>
-		  <li><%= link_to "Users", users_path %></li>
+		<li><%= link_to "Organizations", organizations_path,
+			data: { turbo: false} %></li>
+		  <li><%= link_to "Users", users_path, data: { turbo: false} %></li>
 		<% end %>
-		<li><%= link_to "Profile", current_user %></li>
-		<li><%= link_to "Settings", edit_user_path(current_user) %></li>
+		<li><%= link_to "Profile", current_user, data: { turbo: false} %></li>
+		<li><%= link_to "Settings", edit_user_path(current_user), data: { turbo: false} %></li>
 		<li class="divider"></li>
 		<li>
                   <%= link_to "Log out", logout_path, data: { "turbo-method": :delete } %>
