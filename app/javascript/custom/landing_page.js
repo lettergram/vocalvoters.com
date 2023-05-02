@@ -85,7 +85,6 @@ var generate_concerns = function(letter_id=null){
     document.getElementById("share_button").onclick = function(){
 	copyLetterToClipboard();
     }
-    $('#edit-letter').click()
 
     return true
 
@@ -119,7 +118,7 @@ var create_sender = function(){
 
 
 var letter_selection = function(){
-
+    
     var generation_flag = document.getElementById('generation_option').getAttribute('value');
     if(generation_flag === 'true'){ return }
     
@@ -152,6 +151,7 @@ var letter_selection = function(){
 			}
 		    }
 		    card.srcElement.classList.add('selected_letter');
+		    $('#edit-letter').click();		
 		}
 	    }
 	}
@@ -213,10 +213,7 @@ function find_legislators(){
 	success: function(html){
 	    
 	    letter_selection();
-	    
-	    $('#concerns_selection').attr('style', 'display:block');
-	    window.location.hash = "#concerns_selection";
-	    
+
 	    document.querySelector("#privacy_terms_box").classList.add("hidden");
 
 	    $("#legislator_selection").html(html);
@@ -267,18 +264,28 @@ function find_legislators(){
 		    disableCommunications();
 		    update_prices();
 		    update_checkout_price();
-		    var shared_letter_id = document.getElementById('shared_letter_id').getAttribute('value')
+		    var shared_letter_id = document.getElementById('shared_letter_id').getAttribute('value');
 		    if (shared_letter_id) {
 			generate_concerns(shared_letter_id)
 		    }else{
 			generate_concerns();
 		    }
-		    window.location.hash = "#communications_selection";
+		    
 		    var letter_id = document.querySelector('#pdf_view').getAttribute('value')
 		    update_pdf(letter_id);		    
 		}	 
-	    }	    
-	}
+	    }
+	    
+	    var shared_letter_id = document.getElementById('shared_letter_id').getAttribute('value');
+	    if (shared_letter_id) {
+		generate_concerns(shared_letter_id)
+		$('#edit-letter').click();		
+	    }else{
+		$('#concerns_selection').attr('style', 'display:block');
+		window.location.hash = "#concerns_selection";
+	    }
+	    
+	}	    
     });
     
     document.getElementById('legislator_button').disabled = true;
@@ -817,6 +824,9 @@ var pageSetUp = function(){
 	window.location.hash = "#legislator_selection";
 	find_selected_target_positions();
     });
+    document.getElementById("share_button").onclick = function(){
+	copyLetterToClipboard();
+    }    
 }
 
 document.addEventListener('DOMContentLoaded', pageSetUp());
