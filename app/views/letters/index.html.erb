@@ -24,8 +24,8 @@
         <td><%= letter.sentiment %></td>
 	<td><%= letter.editable %></td>
         <td><%= letter.body %></td>
-        <td><%= link_to 'Show', letter %></td>
-        <td><%= link_to 'Edit', edit_letter_path(letter) %></td>
+        <td><%= link_to 'Show', letter, data: { turbo: false} %></td>
+        <td><%= link_to 'Edit', edit_letter_path(letter), data: { turbo: false} %></td>
         <td><%= link_to 'Destroy', letter, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

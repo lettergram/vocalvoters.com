@@ -22,7 +22,9 @@
   <div class="col-md-4">
     <p>
       <strong>Associated Users:</strong>
-      -> <u><b><%= link_to "Invite New User", new_user_path  %></b></u>
+      -> <u><b>
+	  <%= link_to "Invite New User", new_user_path, data: { turbo: false} %>
+      </b></u>
       <br>
       <ul>
 	<% @organization.users.each do |user| %>
@@ -55,8 +57,8 @@
 	  <strong>Approvals <u>NOT</u> Required to Send Letters</strong>
 	<% end %>  
 	  <hr>
-	  <b><%= link_to "Review Letters", posts_path %></b><br>
-	  <b><%= link_to "Review Faxes", faxes_path %></b>
+	  <b><%= link_to @posts_to_review, posts_path, data: { turbo: false} %></b><br>
+	  <b><%= link_to @faxes_to_review, faxes_path, data: { turbo: false} %></b>
       </center>
     </p>
   </div>  
@@ -66,7 +68,8 @@
 	Affiliate Link<br>
 	<%= link_to @affiliate_link, @affiliate_link, data: { turbo: false} %> <br><br>
 	<% if current_user.org_admin or current_user.admin %>
-          <%= link_to 'Edit Organization Settings', edit_organization_path(@organization) %>
+        <%= link_to 'Edit Organization Settings',
+	    edit_organization_path(@organization), data: { turbo: false} %>
 	<% end %>
       </strong>
     </center>

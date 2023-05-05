@@ -35,7 +35,16 @@ class OrganizationsController < ApplicationController
     @letters_by_type = @letters.count
 
     @affiliate_link = request.base_url+'?referral_org_id='+@organization.id.to_s
+
+    pending_post_count = Post.left_outer_joins(:letter).where(
+      'organization_id = ?', @organization.id).where(approval_status: "pending").count
     
+    pending_fax_count = Fax.left_outer_joins(:letter).where(
+      'organization_id = ?', @organization.id).where(approval_status: "pending").count
+
+    @posts_to_review = "Letters to Review (" + pending_post_count.to_s + ")"
+    @faxes_to_review = "Faxes to Review (" + pending_fax_count.to_s + ")"
+
   end
 
   # GET /organizations/new

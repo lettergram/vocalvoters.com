@@ -208,7 +208,7 @@ function find_legislators(){
 	    console.log(request.responseJSON['error']);
 	    document.getElementById('address-error-text').textContent = request.responseJSON['error'];
 	    document.getElementById('legislator_button').innerText = "Contact Legislators";
-	    document.getElementById('legislator_button').enable = true;
+	    document.getElementById('legislator_button').disabled = false;
 	},
 	success: function(html){
 	    
