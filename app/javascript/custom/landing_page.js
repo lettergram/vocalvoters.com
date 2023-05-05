@@ -710,6 +710,7 @@ function generate_letter(){
 	    document.getElementById('generate_letter_button').innerText = "Generate Letter";
 	    var letter_id = json_obj['letter_id'];
 	    generate_concerns(letter_id);
+	    $('#edit-letter').click();		
 	}
     })
 }
