@@ -134,6 +134,11 @@ var letter_selection = function(){
 	    for (var i=0; i < letter_cards.length; i++) {
 		
 		letter_cards[i].onclick = function(card) {
+		    
+		    console.log(card);
+		    console.log(card.srcElement);
+		    console.log(card.srcElement.id);
+		    
 		    var id = document.getElementById(card.srcElement.id).getAttribute('value');
 
 		    disableCommunications();
@@ -519,7 +524,7 @@ var load_stripe_checkout = function(id=null, email=null, count=null, org=null) {
     }).then(function(data) {
 
 	// A reference to Stripe.js initialized with your real test publishable API key.
-	stripe_pk = document.getElementById('stripe_pk').getAttribute('value');
+	var stripe_pk = document.getElementById('stripe_pk').getAttribute('value');
 	var stripe = Stripe(stripe_pk);
 
 	// Clear card elements in case anything is already there (happens on reload)
