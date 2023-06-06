@@ -9,7 +9,7 @@ class SendCommunicationController < ApplicationController
 
     Stripe.api_key = ENV['STRIPE_SECRET_KEY_VOCALVOTERS']
     
-    method = params['method']
+    method = params['method']    
     payment_id = params['payment']['id']
     payment = Stripe::PaymentIntent.retrieve(payment_id)
 
@@ -90,12 +90,12 @@ class SendCommunicationController < ApplicationController
           return_address_id = Post.get_return_address_id(
             sender.name, sender_line_1, sender_line_2,
             sender_city, sender_state, sender_zipcode)
-          letter_url += "&template=true"          
+          letter_url += "&template=true"
+          
+          priority_flag = (method == "priority")
           
           # Should only be set to approval once
-          if approval_status == "approved"            
-            priority_flag = (method == "priority")
-            
+          if approval_status == "approved"                        
             success_flag = Post.send_post(            
               letter_url, recipient[:name], return_address_id,
               recipient[:address_line_1], recipient[:address_line_2],
